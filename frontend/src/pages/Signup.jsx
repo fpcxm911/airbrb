@@ -15,15 +15,8 @@ import { useNavigate } from 'react-router-dom';
 // TODO remove, this demo shouldn't need to reset the theme.
 
 export default function SignUp () {
-  const [openRegister, setOpenRegister] = React.useState(false);
+  const [openRegister, setOpenRegister] = React.useState(true);
   const navigate = useNavigate();
-  React.useEffect(() => {
-    if (location.pathname === '/register') {
-      setOpenRegister(true);
-    } else {
-      setOpenRegister(false);
-    }
-  }, [location.pathname]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -43,6 +36,7 @@ export default function SignUp () {
         open={openRegister}
         onClose={() => {
           setOpenRegister(false);
+          navigate('/');
         }}
         sx={{
           display: 'flex',
