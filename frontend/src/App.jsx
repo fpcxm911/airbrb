@@ -2,7 +2,11 @@ import React from 'react';
 
 function App () {
   return (
-    <>Let&apos;s go!</>
+    <div>
+
+      <>Let&apos;s go!</>
+      <p>hi</p>
+    </div>
   );
 }
 
