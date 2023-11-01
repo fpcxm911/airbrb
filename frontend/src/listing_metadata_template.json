@@ -1,0 +1,96 @@
+{
+  "listings": [
+    {
+      "id": 1,
+      "title": "Luxury Villa",
+      "Owner": "alina@unsw.edu.au",
+      "Address": {
+        "Street": "1 Kensington Street",
+        "City": "Kensington",
+        "Postcode": "2032",
+        "Country": "Australia"
+      },
+      "price": 150,
+      "thumbnail": "data:image/png;base64,iVBO",
+      "propertyType": "House",
+      "numberOfBathrooms": 2,
+      "Bedrooms": [
+        {
+          "numberOfBeds": 2,
+          "roomType": "loft"
+        },
+        {
+          "numberOfBeds": 1,
+          "roomType": "Dungeon"
+        }
+      ],
+      "amenities": [],
+      "reviews": [
+        {
+          "rating": 5,
+          "comment": "great accommodation"
+        },
+        {
+          "rating": 1,
+          "comment": "poor service"
+        }
+      ],
+      "availability": [
+        {
+          "start": "2020-01-01",
+          "end": "2020-01-02"
+        },
+        {
+          "start": "2020-02-03",
+          "end": "2020-05-04"
+        }
+      ]
+    },
+    {
+        "id": 2,
+        "title": "Cozy Apartment",
+        "Owner": "alina@unsw.edu.au",
+        "Address": {
+          "Street": "1 Kensington Street",
+          "City": "Kensington",
+          "Postcode": "2032",
+          "Country": "Australia"
+        },
+        "price": 150,
+        "thumbnail": "data:image/png;base64,iVBO",
+        "propertyType": "House",
+        "numberOfBathrooms": 2,
+        "Bedrooms": [
+          {
+            "numberOfBeds": 2,
+            "roomType": "loft"
+          },
+          {
+            "numberOfBeds": 1,
+            "roomType": "Dungeon"
+          }
+        ],
+        "amenities": [],
+        "reviews": [
+          {
+            "rating": 5,
+            "comment": "great accommodation"
+          },
+          {
+            "rating": 1,
+            "comment": "poor service"
+          }
+        ],
+        "availability": [
+          {
+            "start": "2020-01-01",
+            "end": "2020-01-02"
+          },
+          {
+            "start": "2020-02-03",
+            "end": "2020-05-04"
+          }
+        ]
+    }
+  ]
+}
