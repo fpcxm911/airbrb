@@ -9,40 +9,67 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import ErrorDialog from '../components/ErrorPopup';
+import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 
 export default function Login () {
+  const [showLoginModal, setLoginModal] = React.useState(true);
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [showErrModal, setShowErrModal] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
+
   const navigate = useNavigate();
+  const closeModal = () => {
+    setShowErrModal(false);
+  }
 
-  const [openLogin, setOpenLogin] = React.useState(false);
-
-  // return home when login is closed
-  const handleCloseLogin = () => {
-    setOpenLogin(false);
-  };
-
-  const handleClickOpenLogin = () => {
-    setOpenLogin(true);
-  };
-
-  const handleLoginForm = (e) => {
-    // TODO
-    e.preventDefault();
-    console.log(e);
-    const data = new FormData(e.currentTarget);
-    console.log(data);
-    setOpenLogin(false);
+  // close modal when closed
+  const returnHome = () => {
+    setLoginModal(false);
     navigate('/');
   };
 
+  const handleLoginForm = async (e) => {
+    e.preventDefault();
+    console.log(email, password);
+
+    if (validLoginInput()) {
+      const res = await apiCallPostNoAuthen('user/auth/login', {
+        email,
+        password
+      });
+      if (res.error) {
+        setErrorMessage({ title: 'Please Try Again', body: res.error });
+        setShowErrModal(true);
+      } else {
+        localStorage.setItem('token', res.token);
+        setLoginModal(false);
+        navigate('/');
+      }
+    }
+  };
+
+  const validLoginInput = () => {
+    if (!EMAIL_REGEX.test(email)) {
+      setErrorMessage({ title: 'Invalid Email', body: 'Enter a valid email.' });
+      setShowErrModal(true);
+      return false;
+    }
+    if (password.length === 0) {
+      setErrorMessage({ title: 'Invalid Password', body: 'Please enter your password.' });
+      setShowErrModal(true);
+      return false;
+    }
+    setShowErrModal(false);
+    return true;
+  }
+
   return (
-    <>
       <React.Fragment>
-        <Button variant='outlined' onClick={handleClickOpenLogin}>
-          Login
-        </Button>
-        <Dialog open={openLogin} onClose={handleCloseLogin}>
+        <Dialog open={showLoginModal} onClose={returnHome}>
           <IconButton
-            onClick={handleCloseLogin}
+            onClick={returnHome}
             sx={{ position: 'absolute', right: 8, top: 8 }}
             aria-label='close'>
               <CloseIcon />
@@ -54,29 +81,28 @@ export default function Login () {
             </DialogContentText>
             <TextField
               autoFocus
+              fullWidth
               margin='dense'
-              id='name'
               label='Email Address'
               type='email'
-              fullWidth
-              variant='standard'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
-              autoFocus
+              fullWidth
               margin='dense'
-              id='name'
               label='Password'
               type='password'
-              fullWidth
-              variant='standard'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseLogin}>Cancel</Button>
+            <Button onClick={returnHome}>Cancel</Button>
             <Button onClick={handleLoginForm}>Login</Button>
           </DialogActions>
+          {showErrModal && (<ErrorDialog close = {closeModal} content = {errorMessage} />)}
         </Dialog>
       </React.Fragment>
-    </>
   );
 }
