@@ -46,7 +46,7 @@ export default function Login () {
         // localStorage.setItem('token', res.token);
         // localStorage.setItem('email', email);
         // setOpen(false);
-        // navigate('/');
+        navigate('/');
       }
     }
   };
