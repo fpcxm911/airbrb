@@ -6,11 +6,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import ErrorDialog from '../components/ErrorPopup';
+import Avatar from '@mui/material/Avatar';
 import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
+import { Typography } from '@mui/material';
 
 export default function Login () {
   const [showLoginModal, setLoginModal] = React.useState(true);
@@ -44,6 +45,7 @@ export default function Login () {
         setShowErrModal(true);
       } else {
         localStorage.setItem('token', res.token);
+        localStorage.setItem('email', email);
         setLoginModal(false);
         navigate('/');
       }
@@ -67,17 +69,25 @@ export default function Login () {
 
   return (
       <React.Fragment>
-        <Dialog open={showLoginModal} onClose={returnHome}>
+        <Dialog open={showLoginModal} onClose={returnHome} PaperProps={{ sx: { borderRadius: 6 } }}>
           <IconButton
             onClick={returnHome}
             sx={{ position: 'absolute', right: 8, top: 8 }}
             aria-label='close'>
               <CloseIcon />
           </IconButton>
-          <DialogTitle>Login</DialogTitle>
-          <DialogContent>
+          <DialogContent sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} />
+            <Typography component='h1' variant='h5'>
+              Welcome Back
+            </Typography>
             <DialogContentText>
-              To manage booking, please enter your email address and password.
+              Please enter your email address and password.
             </DialogContentText>
             <TextField
               autoFocus
