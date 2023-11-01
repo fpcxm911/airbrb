@@ -56,15 +56,15 @@ export default function SignUp () {
       setShowModal(true);
       return false;
     } else if (!USERNAME_REGEX.test(data.get('name'))) {
-      setErrorMessage({ tittle: 'Invalid Name', body: 'Usernames must be 3-20 characters long and can contain only letters, numbers, and underscores.' });
+      setErrorMessage({ title: 'Invalid Name', body: 'Usernames must be 3-20 characters long and can contain only letters, numbers, and underscores.' });
       setShowModal(true);
       return false;
     } else if (!PASSWORD_REGEX.test(data.get('password'))) {
-      setErrorMessage({ tittle: 'Invalid Password', body: 'Passwords must be at least 8 characters long and include a letter, a digit, and may contain special characters.' });
+      setErrorMessage({ title: 'Invalid Password', body: 'Passwords must be at least 8 characters long and include a letter, a digit, and may contain special characters.' });
       setShowModal(true);
       return false;
     } else if (data.get('password') !== data.get('confirm')) {
-      setErrorMessage({ tittle: 'Password Mismatch', body: 'Passwords do not match. Please try again.' });
+      setErrorMessage({ title: 'Password Mismatch', body: 'Passwords do not match. Please try again.' });
       setShowModal(true);
       return false;
     }
@@ -76,8 +76,8 @@ export default function SignUp () {
     <React.Fragment>
       <Dialog
         onClose={goBackMain}
-        aria-labelledby="customized-dialog-title"
         open={openRegister}
+        PaperProps={{ sx: { borderRadius: 6 } }}
       >
         <IconButton
           aria-label="close"
