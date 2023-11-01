@@ -11,28 +11,65 @@ import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
+import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX, apiCallPostNoAuthen } from './Helper'
+import ErrorDialog from '../components/ErrorPopup';
 
 export default function SignUp () {
   const [openRegister, setOpenRegister] = React.useState(true);
+  const [showModal, setShowModal] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const closeModal = () => {
+    setShowModal(false);
+  };
   const navigate = useNavigate();
-
   // handle close
   const goBackMain = () => {
     setOpenRegister(false);
     navigate('/');
-  }
+  };
 
   // handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-      name: data.get('name')
-    });
-    setOpenRegister(false)
-    navigate('/');
+    if (validRegisterForm(data)) {
+      const res = await apiCallPostNoAuthen('user/auth/register', {
+        email: data.get('email'),
+        password: data.get('password'),
+        name: data.get('name')
+      });
+      if (res.error) {
+        setErrorMessage({ title: 'Error', body: res.error });
+        setShowModal(true);
+      } else {
+        localStorage.setItem('token', res.token);
+        setOpenRegister(false)
+        navigate('/');
+      }
+      // Handle the response from the API
+    }
+  };
+
+  const validRegisterForm = (data) => {
+    if (!EMAIL_REGEX.test(data.get('email'))) {
+      setErrorMessage({ title: 'Invalid Email', body: 'Please use a valid email address.' });
+      setShowModal(true);
+      return false;
+    } else if (!USERNAME_REGEX.test(data.get('name'))) {
+      setErrorMessage({ tittle: 'Invalid Name', body: 'Usernames must be 3-20 characters long and can contain only letters, numbers, and underscores.' });
+      setShowModal(true);
+      return false;
+    } else if (!PASSWORD_REGEX.test(data.get('password'))) {
+      setErrorMessage({ tittle: 'Invalid Password', body: 'Passwords must be at least 8 characters long and include a letter, a digit, and may contain special characters.' });
+      setShowModal(true);
+      return false;
+    } else if (data.get('password') !== data.get('confirm')) {
+      setErrorMessage({ tittle: 'Password Mismatch', body: 'Passwords do not match. Please try again.' });
+      setShowModal(true);
+      return false;
+    }
+    setShowModal(false);
+    return true;
   };
 
   return (
@@ -120,6 +157,7 @@ export default function SignUp () {
             </Button>
           </Box>
         </DialogContent>
+        {showModal && (<ErrorDialog close = {closeModal} content = {errorMessage} />)}
       </Dialog>
     </React.Fragment>
   );
