@@ -1,12 +1,12 @@
 import React from 'react';
 // import SignUp from './pages/Register';
-import SignUp from './pages/Signup';
 import {
   BrowserRouter,
   Routes,
   Route
 } from 'react-router-dom';
 import Home from './pages/Home';
+import SignUp from './pages/Signup';
 
 function App () {
   return (
