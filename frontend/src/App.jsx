@@ -1,5 +1,4 @@
 import React from 'react';
-// import SignUp from './pages/Register';
 import {
   BrowserRouter,
   Routes,
@@ -8,6 +7,7 @@ import {
 import Home from './pages/Home';
 import SignUp from './pages/Signup';
 import HostedListing from './pages/HostedListing';
+import Login from './pages/Login';
 
 function App () {
   return (
@@ -16,6 +16,7 @@ function App () {
         < Route path='/' element={<Home/>} />
         < Route path='/register' element={<SignUp/>} />
         < Route path='/hosted' element={<HostedListing/>} />
+        < Route path='/login' element={<Login/>} />
       </Routes>
     </BrowserRouter>
   );
