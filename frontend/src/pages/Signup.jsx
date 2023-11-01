@@ -43,6 +43,7 @@ export default function SignUp () {
         setShowModal(true);
       } else {
         localStorage.setItem('token', res.token);
+        localStorage.setItem('email', data.get('email'));
         setOpenRegister(false)
         navigate('/');
       }

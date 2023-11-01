@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Home from './pages/Home';
 import SignUp from './pages/Signup';
+import HostedListing from './pages/HostedListing';
 
 function App () {
   return (
@@ -14,6 +15,7 @@ function App () {
       <Routes>
         < Route path='/' element={<Home/>} />
         < Route path='/register' element={<SignUp/>} />
+        < Route path='/hosted' element={<HostedListing/>} />
       </Routes>
     </BrowserRouter>
   );
