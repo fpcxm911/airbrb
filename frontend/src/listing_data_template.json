@@ -1,0 +1,57 @@
+{
+  "listings": [
+    {
+      "title": "Luxury Villa",
+      "Owner": "alina@unsw.edu.au",
+      "Address": {
+        "Street": "1 Kensington Street",
+        "City": "Kensington",
+        "Postcode": "2032",
+        "Country": "Australia"
+      },
+      "price": 150,
+      "thumbnail": "data:image/png;base64,iVBO",
+      "propertyType": "House",
+      "numberOfBathrooms": 2,
+      "Bedrooms": [
+        {
+          "numberOfBeds": 2,
+          "roomType": "loft"
+        },
+        {
+          "numberOfBeds": 1,
+          "roomType": "Dungeon"
+        }
+      ],
+      "Amenities": [],
+      "reviews": [
+        {
+          "Rating": 5,
+          "Comment": "great accommodation"
+        },
+        {
+          "Rating": 1,
+          "Comment": "poor service"
+        }
+      ],
+      "availability": [
+        {
+          "start": "2020-01-01",
+          "end": "2020-01-02"
+        },
+        {
+          "start": "2020-02-03",
+          "end": "2020-05-04"
+        }
+      ]
+    },
+    {
+      "title": "xxxx"
+    }
+  ]
+}
+
+
+
+
+
