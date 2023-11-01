@@ -1,5 +1,4 @@
 import React from 'react';
-// import SignUp from './pages/Register';
 import {
   useNavigate
 } from 'react-router-dom';
@@ -11,6 +10,11 @@ export default function Home () {
         navigate('./register')
       }}>
         Sign up
+      </button>
+      <button onClick={() => {
+        navigate('./login')
+      }}>
+        Login
       </button>
     </div>
   );
