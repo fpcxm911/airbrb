@@ -11,7 +11,6 @@ export default function LogoutBtn (props) {
     setters.setEmail(null);
     setters.setToken(null);
     setters.setLoggedIn(false);
-    console.log('context cleared');
     navigate('/');
   };
 

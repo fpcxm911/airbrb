@@ -7,6 +7,7 @@ import {
 export default function EditListing () {
   const params = useParams();
   const navigate = useNavigate();
+  // const [open, setOpen] = React.useState(true);
 
   const [id, setId] = React.useState('');
   if (!params.id) {
@@ -19,6 +20,10 @@ export default function EditListing () {
         </>
     );
   }
+
+  // const onClose = () => {
+  //   setOpen(false);
+  // }
 
   return (
     <div>
