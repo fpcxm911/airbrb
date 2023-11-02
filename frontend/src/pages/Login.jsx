@@ -13,7 +13,7 @@ import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
 import { useContext, Context } from '../context';
 
-export default function Login () {
+function Login () {
   const { setters } = useContext(Context);
 
   const [open, setOpen] = React.useState(true);
@@ -112,3 +112,5 @@ export default function Login () {
       </React.Fragment>
   );
 }
+
+export default Login;
