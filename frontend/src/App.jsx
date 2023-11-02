@@ -7,6 +7,7 @@ import {
 import { Context, initialValue } from './context';
 import Home from './pages/Home';
 import SignUp from './pages/Signup';
+import HostedListing from './pages/HostedListing';
 import Login from './pages/Login';
 import EditListing from './pages/EditListing';
 
@@ -30,7 +31,8 @@ function App () {
         <Routes>
           < Route path='/' element={<Home/>} />
           < Route path='/register' element={<SignUp/>} />
-          < Route path='/login' element={<Login/>} />
+          < Route path='/hosted' element={<HostedListing/>} />
+        < Route path='/login' element={<Login/>} />
           < Route path='/edit' element={<EditListing/>} />
           < Route path='/edit/:id' element={<EditListing/>} />
         </Routes>
