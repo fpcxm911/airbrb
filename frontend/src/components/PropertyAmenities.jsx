@@ -13,8 +13,7 @@ export default function PropertyAmenities () {
   const [hiddenInputValue, setHiddenInputValue] = React.useState([]);
 
   React.useEffect(() => {
-    // Update hidden input value whenever selectedAmenities changes
-    setHiddenInputValue(JSON.stringify(selectedAmenities.join(',')));
+    setHiddenInputValue((selectedAmenities.join(',')));
   }, [selectedAmenities]);
 
   const handleAmenitiesChange = (event, values) => {

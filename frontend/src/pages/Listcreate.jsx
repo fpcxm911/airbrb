@@ -17,38 +17,81 @@ import PropertyType from '../components/PropertyType';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import PropertyAmenities from '../components/PropertyAmenities';
 import ImageIcon from '@mui/icons-material/Image';
-import { fileToDataUrl } from './Helper';
 import DialogContentText from '@mui/material/DialogContentText';
-// import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX, apiCallPostNoAuthen } from './Helper'
+import { apiCallBodyAuthen, fileToDataUrl } from './Helper'
+import { useContext, Context } from '../context';
 
 export default function Listcreate (props) {
+  const { getters } = useContext(Context);
   const [errorMessage, setErrorMessage] = React.useState('');
-  // console.log(selectedCountry);
-  // console.log(selectedCity);
-  // console.log(selectedStreet);
-  // console.log(selectedPostcode);
+
+  const createMeta = (numberOfBathrooms, propertyType, amenities, youtubeUrl) => {
+    return {
+      propertyType,
+      numberOfBathrooms,
+      amenities,
+      bedrooms: [
+        {
+          numberOfBeds: 2,
+          roomType: 'loft'
+        },
+        {
+          numberOfBeds: 1,
+          roomType: 'Dungeon'
+        },
+        {
+          numberOfBeds: 3,
+          roomType: 'Single'
+        }
+      ],
+      youtubeUrl
+    }
+  }
+
+  const createAddress = (country, city, street, postcode) => {
+    return {
+      country,
+      city,
+      street,
+      postcode
+    }
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // console.log(data.get('title'));
-    // console.log(data.get('country'));
-    // console.log(data.get('city'));
-    // console.log(data.get('street'));
-    // console.log(data.get('postcode'));
-    // console.log(data.get('bath'));
-    // console.log(data.get('price'));
-    // console.log(data.get('prop'));
-    // console.log(data.get('photo'));
-    console.log(data);
     if (data.get('photo') && data.get('photo').name) {
-      const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',')
-      console.log(amenitiesList);
       try {
-        const imgUrl = await fileToDataUrl(data.get('photo'));
-        console.log(imgUrl)
+        const thumbnail = await fileToDataUrl(data.get('photo'));
+        const token = getters.token;
+        console.log(token);
+        const title = data.get('title');
+        const country = data.get('country');
+        const city = data.get('city');
+        const street = data.get('street');
+        const postcode = data.get('postcode');
+        const address = createAddress(country, city, street, postcode);
+        const bathNum = data.get('bath');
+        const price = data.get('price');
+        const propertyType = data.get('prop');
+        const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',')
+        const youtubeUrl = data.get('youtube') ? data.get('youtube') : null
+        const metadata = createMeta(bathNum, propertyType, amenitiesList, youtubeUrl)
+        const res = await apiCallBodyAuthen('listings/new', token, {
+          title,
+          address,
+          price,
+          thumbnail,
+          metadata
+        }, 'POST');
+        if (res.error) {
+          setErrorMessage(res.error)
+        } else {
+          props.update();
+          props.close();
+        }
       } catch (error) {
-        console.log(error)
+        setErrorMessage(error)
       }
     } else {
       setErrorMessage('Please upload a photo');

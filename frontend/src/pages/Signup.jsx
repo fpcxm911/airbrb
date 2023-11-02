@@ -16,6 +16,7 @@ import ErrorDialog from '../components/ErrorPopup';
 import { useContext, Context } from '../context';
 
 export default function SignUp () {
+  const { setters } = useContext(Context);
   const [openRegister, setOpenRegister] = React.useState(true);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -31,7 +32,6 @@ export default function SignUp () {
 
   // handle form submission
   const handleSubmit = async (event) => {
-    const { setters } = useContext(Context);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     if (validRegisterForm(data)) {
