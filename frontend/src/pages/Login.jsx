@@ -8,32 +8,29 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
-import ErrorDialog from '../components/ErrorPopup';
 import Avatar from '@mui/material/Avatar';
 import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
+import { useContext, Context } from '../context';
 
 export default function Login () {
-  const [showLoginModal, setLoginModal] = React.useState(true);
+  const { setters } = useContext(Context);
+
+  const [open, setOpen] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [showErrModal, setShowErrModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const navigate = useNavigate();
-  const closeModal = () => {
-    setShowErrModal(false);
-  }
 
   // close modal when closed
   const returnHome = () => {
-    setLoginModal(false);
+    setOpen(false);
     navigate('/');
   };
 
   const handleLoginForm = async (e) => {
     e.preventDefault();
-    console.log(email, password);
 
     if (validLoginInput()) {
       const res = await apiCallPostNoAuthen('user/auth/login', {
@@ -41,12 +38,14 @@ export default function Login () {
         password
       });
       if (res.error) {
-        setErrorMessage({ title: 'Please Try Again', body: res.error });
-        setShowErrModal(true);
+        setErrorMessage(res.error);
       } else {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('email', email);
-        setLoginModal(false);
+        setters.setToken(res.token);
+        setters.setEmail(email);
+        setters.setLoggedIn(true);
+        // localStorage.setItem('token', res.token);
+        // localStorage.setItem('email', email);
+        // setOpen(false);
         navigate('/');
       }
     }
@@ -54,22 +53,19 @@ export default function Login () {
 
   const validLoginInput = () => {
     if (!EMAIL_REGEX.test(email)) {
-      setErrorMessage({ title: 'Invalid Email', body: 'Enter a valid email.' });
-      setShowErrModal(true);
+      setErrorMessage('Enter a valid email.');
       return false;
     }
     if (password.length === 0) {
-      setErrorMessage({ title: 'Invalid Password', body: 'Please enter your password.' });
-      setShowErrModal(true);
+      setErrorMessage('Please enter your password.');
       return false;
     }
-    setShowErrModal(false);
     return true;
   }
 
   return (
       <React.Fragment>
-        <Dialog open={showLoginModal} onClose={returnHome} PaperProps={{ sx: { borderRadius: 6 } }}>
+        <Dialog open={open} onClose={returnHome} PaperProps={{ sx: { borderRadius: 6 } }}>
           <IconButton
             onClick={returnHome}
             sx={{ position: 'absolute', right: 8, top: 8 }}
@@ -106,12 +102,14 @@ export default function Login () {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <DialogContentText color='error'>
+              {errorMessage}
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={returnHome}>Cancel</Button>
             <Button onClick={handleLoginForm}>Login</Button>
           </DialogActions>
-          {showErrModal && (<ErrorDialog close = {closeModal} content = {errorMessage} />)}
         </Dialog>
       </React.Fragment>
   );
