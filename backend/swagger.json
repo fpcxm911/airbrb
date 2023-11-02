@@ -98,6 +98,10 @@
         "example": {
           "propertyType": "House",
           "numberOfBathrooms": 2,
+          "amenities": [
+            "Wifi",
+            "Pool"
+          ],
           "Bedrooms": [
             {
               "numberOfBeds": 2,
