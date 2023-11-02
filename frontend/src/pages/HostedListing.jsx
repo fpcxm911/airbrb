@@ -13,12 +13,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Copyright from '../components/Copyright';
-import { apiCallGetAuthen } from './Helper';
+import { apiCallGetAuthen, apiCallBodyAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 import Listcreate from './Listcreate';
 import { useContext, Context } from '../context';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
+import { useNavigate } from 'react-router-dom';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -29,6 +30,11 @@ export default function HostedListing () {
   const [errorMessage, setErrorMessage] = React.useState('');
   const [showCreate, setShowCreate] = React.useState(false);
   const [listingsUpdate, setListingsUpdate] = React.useState(0);
+  const navigate = useNavigate();
+
+  const goBackMain = () => {
+    navigate('/');
+  }
   const closeCreate = () => {
     setShowCreate(false);
   };
@@ -54,6 +60,18 @@ export default function HostedListing () {
     return (listing.metadata.bedrooms.reduce((accumulator, bedroom) => accumulator + bedroom.numberOfBeds, 0));
   }
 
+  const deleteListing = async (listing) => {
+    const res = await apiCallBodyAuthen(`listings/${listing.id}`, getters.token, {}, 'DELETE');
+    if (res.error) {
+      console.log(listing.id);
+      setErrorMessage({ title: 'Error', body: res.error });
+      setShowModal(true);
+    } else {
+      const newListings = HostedLists.filter(x => x.id !== listing.id)
+      setHostedLists(newListings)
+    }
+  }
+  console.log(HostedLists);
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings',);
     if (res.error) {
@@ -70,7 +88,9 @@ export default function HostedListing () {
           setErrorMessage({ title: 'Error', body: res.error });
           setShowModal(true);
         } else {
-          myListingsDetail.push(deatailRes.listing)
+          const collectListingData = deatailRes.listing;
+          collectListingData.id = listing.id
+          myListingsDetail.push(collectListingData)
         }
       }
       setHostedLists(myListingsDetail)
@@ -115,7 +135,7 @@ export default function HostedListing () {
               justifyContent="center"
             >
               <Button variant="contained" onClick={() => setShowCreate(true)}>Create new listing</Button>
-              <Button variant="outlined">Go back</Button>
+              <Button variant="outlined" onClick={goBackMain}>Go back</Button>
             </Stack>
           </Container>
         </Box>
@@ -183,7 +203,7 @@ export default function HostedListing () {
                   </CardContent>
                   <CardActions>
                     <Button size="small">EDIT</Button>
-                    <Button size="small">DELETE</Button>
+                    <Button size="small" onClick={() => deleteListing(listing)}>DELETE</Button>
                   </CardActions>
                 </Card>
               </Grid>
