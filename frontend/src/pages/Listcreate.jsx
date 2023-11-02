@@ -18,9 +18,11 @@ import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import PropertyAmenities from '../components/PropertyAmenities';
 import ImageIcon from '@mui/icons-material/Image';
 import { fileToDataUrl } from './Helper';
+import DialogContentText from '@mui/material/DialogContentText';
 // import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX, apiCallPostNoAuthen } from './Helper'
 
 export default function Listcreate (props) {
+  const [errorMessage, setErrorMessage] = React.useState('');
   // console.log(selectedCountry);
   // console.log(selectedCity);
   // console.log(selectedStreet);
@@ -29,24 +31,30 @@ export default function Listcreate (props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get('title'));
-    console.log(data.get('country'));
-    console.log(data.get('city'));
-    console.log(data.get('street'));
-    console.log(data.get('postcode'));
-    console.log(data.get('bath'));
-    console.log(data.get('price'));
-    console.log(data.get('prop'));
-    const amenitiesList = data.get('amenities').split(',')
-    console.log(amenitiesList);
-    console.log(data.get('photo'));
-    try {
-      const imgUrl = await fileToDataUrl(data.get('photo'));
-      console.log(imgUrl)
-    } catch (error) {
-      console.log('error')
+    // console.log(data.get('title'));
+    // console.log(data.get('country'));
+    // console.log(data.get('city'));
+    // console.log(data.get('street'));
+    // console.log(data.get('postcode'));
+    // console.log(data.get('bath'));
+    // console.log(data.get('price'));
+    // console.log(data.get('prop'));
+    // console.log(data.get('photo'));
+    if (data.get('photo') && data.get('photo').name) {
+      const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',')
+      console.log(amenitiesList);
+      try {
+        const imgUrl = await fileToDataUrl(data.get('photo'));
+        console.log(imgUrl)
+      } catch (error) {
+        console.log('error')
+      }
+      console.log('123');
+      setErrorMessage('Please upload a photo');
+    } else {
+      console.log('123');
+      setErrorMessage('Please upload a photo');
     }
-    console.log(data.get('amenities'));
   }
 
   return (
@@ -141,7 +149,7 @@ export default function Listcreate (props) {
                   fullWidth
                   type="number"
                   name="price"
-                  label="Price/Week"
+                  label="Price/Night"
                   required
                 />
               </Grid>
@@ -151,6 +159,14 @@ export default function Listcreate (props) {
               </Grid>
               <Grid item xs={12}>
                 <PropertyAmenities />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  type="text"
+                  name="youtube"
+                  label="Youtube url (Optional)"
+                />
               </Grid>
               <Grid item xs={12}>
                 <Button
@@ -166,6 +182,11 @@ export default function Listcreate (props) {
                     name = 'photo'
                   />
                 </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <DialogContentText color='error' sx={{ textAlign: 'center' }} xs={12}>
+                  {errorMessage}
+                </DialogContentText>
               </Grid>
 
             </Grid>
