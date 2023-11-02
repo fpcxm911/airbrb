@@ -15,6 +15,7 @@ import Container from '@mui/material/Container';
 import Copyright from '../components/Copyright';
 import { apiCallGetAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
+import Listcreate from './Listcreate';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -22,6 +23,11 @@ export default function HostedListing () {
   const [HostedLists, setHostedLists] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [showCreate, setShowCreate] = React.useState(false);
+  const closeCreate = () => {
+    setShowCreate(false);
+  };
+
   const closeModal = () => {
     setShowModal(false);
   };
@@ -85,7 +91,7 @@ export default function HostedListing () {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained">Create new listing</Button>
+              <Button variant="contained" onClick={() => setShowCreate(true)}>Create new listing</Button>
               <Button variant="outlined">Go back</Button>
             </Stack>
           </Container>
@@ -142,6 +148,7 @@ export default function HostedListing () {
       </Box>
       {/* End footer */}
       {showModal && (<ErrorDialog close = {closeModal} content = {errorMessage} />)}
+      {showCreate && (<Listcreate close = {closeCreate}/>)}
     </div>
   );
 }
