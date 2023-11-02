@@ -111,9 +111,9 @@
               "numberOfBeds": 1,
               "roomType": "Dungeon"
             }
-          ]
-        },
-        "youtubeUrl": "https://youtube.com/watch?v=dQw4w9WgXcQ"
+          ],
+          "youtubeUrl": "https://youtube.com/watch?v=dQw4w9WgXcQ"
+        }
       },
       "ListingReviews": {
         "type": "array",
