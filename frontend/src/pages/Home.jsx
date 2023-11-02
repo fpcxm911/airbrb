@@ -16,6 +16,11 @@ export default function Home () {
       }}>
         Login
       </button>
+      <button onClick={() => {
+        navigate('./hosted')
+      }}>
+        Hosted
+      </button>
     </div>
   );
 }
