@@ -40,6 +40,7 @@ export default function Listcreate (props) {
     // console.log(data.get('price'));
     // console.log(data.get('prop'));
     // console.log(data.get('photo'));
+    console.log(data);
     if (data.get('photo') && data.get('photo').name) {
       const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',')
       console.log(amenitiesList);
@@ -47,12 +48,9 @@ export default function Listcreate (props) {
         const imgUrl = await fileToDataUrl(data.get('photo'));
         console.log(imgUrl)
       } catch (error) {
-        console.log('error')
+        console.log(error)
       }
-      console.log('123');
-      setErrorMessage('Please upload a photo');
     } else {
-      console.log('123');
       setErrorMessage('Please upload a photo');
     }
   }
