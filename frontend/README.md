@@ -14,7 +14,21 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### Listing metadata structure
+### Listing metadata
+- title
+- createdDate
+- editedDate
+- published
+- propertyType
+- numberOfBathrooms
+- numberOfBeds
+- price
+- location
+#### to decide
+- date range
+
+
+### Listing data structure
 Each listing object in the "listings" array represents a specific property listing and contains the following properties:
 
 - id: A unique identifier for the listing.
@@ -39,8 +53,7 @@ Each listing object in the "listings" array represents a specific property listi
 - availability: An array of availability objects representing the availability of the listing.
     - start: The start date of the availability period.
     - end: The end date of the availability period.
-
-
+- youtubeUrl: For advanced feature thumbnail
 
 
 ```
@@ -90,7 +103,8 @@ Each listing object in the "listings" array represents a specific property listi
           "start": "2020-02-03",
           "end": "2020-05-04"
         }
-      ]
+      ],
+      "youtubeUrl": "https://youtube.com/watch?v=dQw4w9WgXcQ"
     },
     {
         "id": 2,
@@ -136,7 +150,8 @@ Each listing object in the "listings" array represents a specific property listi
             "start": "2020-02-03",
             "end": "2020-05-04"
           }
-        ]
+        ],
+        "youtubeUrl": "https://youtube.com/watch?v=dQw4w9WgXcQ"
     }
   ]
 }

@@ -10,6 +10,21 @@
         "Postcode": "2032",
         "Country": "Australia"
       },
+      "metadata": {
+        "title":"Cozy Apartment",
+        "createdDate": "2020-01-01",
+        "editedDate": "2020-01-01",
+        "published": false,
+        "propertyType": "House",
+        "numberOfBathrooms": 2,
+        "numberOfBeds": 2,
+        "price": 150,
+        "location": {
+          "suburb": "Kensington",
+          "state": "NSW",
+          "country": "Australia"
+        }
+      },
       "price": 150,
       "thumbnail": "data:image/png;base64,iVBO",
       "propertyType": "House",
