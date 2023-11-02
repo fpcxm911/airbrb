@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX, apiCallPostNoAuthen } from './Helper'
 import ErrorDialog from '../components/ErrorPopup';
+import { useContext, Context } from '../context';
 
 export default function SignUp () {
   const [openRegister, setOpenRegister] = React.useState(true);
@@ -30,6 +31,7 @@ export default function SignUp () {
 
   // handle form submission
   const handleSubmit = async (event) => {
+    const { setters } = useContext(Context);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     if (validRegisterForm(data)) {
@@ -42,8 +44,9 @@ export default function SignUp () {
         setErrorMessage({ title: 'Error', body: res.error });
         setShowModal(true);
       } else {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('email', data.get('email'));
+        setters.setToken(res.token);
+        setters.setEmail(data.get('email'));
+        setters.setLoggedIn(true);
         setOpenRegister(false)
         navigate('/');
       }
