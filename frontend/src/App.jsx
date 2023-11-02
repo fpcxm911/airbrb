@@ -4,10 +4,11 @@ import {
   Routes,
   Route
 } from 'react-router-dom';
+import { Context, initialValue } from './context';
 import Home from './pages/Home';
 import SignUp from './pages/Signup';
 import Login from './pages/Login';
-import { Context, initialValue } from './context';
+import EditListing from './pages/EditListing';
 
 function App () {
   const [email, setEmail] = React.useState(initialValue.email);
@@ -30,6 +31,8 @@ function App () {
           < Route path='/' element={<Home/>} />
           < Route path='/register' element={<SignUp/>} />
           < Route path='/login' element={<Login/>} />
+          < Route path='/edit' element={<EditListing/>} />
+          < Route path='/edit/:id' element={<EditListing/>} />
         </Routes>
       </BrowserRouter>
     </Context.Provider>
