@@ -43,9 +43,7 @@ export default function Login () {
         setters.setToken(res.token);
         setters.setEmail(email);
         setters.setLoggedIn(true);
-        // localStorage.setItem('token', res.token);
-        // localStorage.setItem('email', email);
-        // setOpen(false);
+        setOpen(false);
         navigate('/');
       }
     }

@@ -19,15 +19,9 @@
       "description": "Managing bookings"
     }
   ],
-  "schemes": [
-    "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "components": {
     "securitySchemes": {
       "bearerAuth": {
@@ -80,7 +74,13 @@
       },
       "ListingAddress": {
         "type": "object",
-        "description": "Address of the listing"
+        "description": "Address of the listing",
+        "example": {
+          "Street": "1 Kensington Street",
+          "City": "Kensington",
+          "Postcode": "2032",
+          "Country": "Australia"
+        }
       },
       "ListingPrice": {
         "type": "number",
@@ -94,20 +94,42 @@
       },
       "ListingMetadata": {
         "type": "object",
-        "description": "All other listing details as set by you"
+        "description": "All other listing details as set by you",
+        "example": {
+          "propertyType": "House",
+          "numberOfBathrooms": 2,
+          "Bedrooms": [
+            {
+              "numberOfBeds": 2,
+              "roomType": "loft"
+            },
+            {
+              "numberOfBeds": 1,
+              "roomType": "Dungeon"
+            }
+          ]
+        }
       },
       "ListingReviews": {
         "type": "array",
         "description": "All of the user reviews related to a listing",
         "items": {
-          "type": "object"
+          "type": "object",
+          "example": {
+            "rating": 5,
+            "comment": "This was a great place to stay"
+          }
         }
       },
       "ListingAvailability": {
         "type": "array",
         "description": "Date ranges between which a listing is available for bookings",
         "items": {
-          "type": "object"
+          "type": "object",
+          "example": {
+            "start": "2020-10-31",
+            "end": "2020-11-01"
+          }
         }
       },
       "ListingPublished": {
@@ -501,9 +523,7 @@
     "/user/auth/register": {
       "post": {
         "summary": "Send registration request for a new user to join AirBrB",
-        "tags": [
-          "User Auth"
-        ],
+        "tags": ["User Auth"],
         "parameters": [
           {
             "$ref": "#/components/parameters/AuthRegisterBody"
@@ -522,9 +542,7 @@
     "/user/auth/login": {
       "post": {
         "summary": "Given correct user credentials, return an authorised access token to make subsequent user calls",
-        "tags": [
-          "User Auth"
-        ],
+        "tags": ["User Auth"],
         "parameters": [
           {
             "$ref": "#/components/parameters/AuthLoginBody"
@@ -548,9 +566,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "User Auth"
-        ],
+        "tags": ["User Auth"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -569,9 +585,7 @@
     "/listings": {
       "get": {
         "summary": "Get a list of the meta-data for all AirBrB listings",
-        "tags": [
-          "Listing Management"
-        ],
+        "tags": ["Listing Management"],
         "responses": {
           "200": {
             "$ref": "#/components/responses/200/ListingsGetAll"
@@ -590,9 +604,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Listing Management"
-        ],
+        "tags": ["Listing Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -617,9 +629,7 @@
     "/listings/{listingid}": {
       "get": {
         "summary": "Collect all of the data pertaining to a particular AirBrB listing",
-        "tags": [
-          "Listing Management"
-        ],
+        "tags": ["Listing Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/ListingsIdQuery"
@@ -641,9 +651,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Listing Management"
-        ],
+        "tags": ["Listing Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -674,9 +682,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Listing Management"
-        ],
+        "tags": ["Listing Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -706,9 +712,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Listing Management"
-        ],
+        "tags": ["Listing Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -741,9 +745,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Listing Management"
-        ],
+        "tags": ["Listing Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -773,9 +775,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Listing Management"
-        ],
+        "tags": ["Listing Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -811,9 +811,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Booking Management"
-        ],
+        "tags": ["Booking Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -837,9 +835,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Booking Management"
-        ],
+        "tags": ["Booking Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -872,9 +868,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Booking Management"
-        ],
+        "tags": ["Booking Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -904,9 +898,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Booking Management"
-        ],
+        "tags": ["Booking Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
@@ -936,9 +928,7 @@
             "bearerAuth": []
           }
         ],
-        "tags": [
-          "Booking Management"
-        ],
+        "tags": ["Booking Management"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Authorization"
