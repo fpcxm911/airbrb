@@ -103,7 +103,6 @@ Each listing object in the "listings" array represents a specific property listi
             "roomType": "Dungeon"
           }
         ],
-        "amenities": [],
         "reviews": [
           {
             "rating": 5,
