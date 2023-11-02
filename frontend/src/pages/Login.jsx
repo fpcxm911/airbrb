@@ -13,7 +13,7 @@ import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
 import { useContext, Context } from '../context';
 
-function Login () {
+const Login = () => {
   const { setters } = useContext(Context);
 
   const [open, setOpen] = React.useState(true);

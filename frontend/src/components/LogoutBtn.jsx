@@ -4,7 +4,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-export default function LogoutBtn (props) {
+const LogoutBtn = (props) => {
   const { getters, setters } = useContext(Context);
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -32,3 +32,5 @@ export default function LogoutBtn (props) {
     </>
   );
 }
+
+export default LogoutBtn;
