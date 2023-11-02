@@ -16,8 +16,9 @@ import PropertyType from '../components/PropertyType';
 // import { data } from './Helper';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import PropertyAmenities from '../components/PropertyAmenities';
+import ImageIcon from '@mui/icons-material/Image';
+import { fileToDataUrl } from './Helper';
 // import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX, apiCallPostNoAuthen } from './Helper'
-// import ErrorDialog from '../components/ErrorPopup';
 
 export default function Listcreate (props) {
   // console.log(selectedCountry);
@@ -25,7 +26,7 @@ export default function Listcreate (props) {
   // console.log(selectedStreet);
   // console.log(selectedPostcode);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log(data.get('title'));
@@ -38,7 +39,14 @@ export default function Listcreate (props) {
     console.log(data.get('prop'));
     const amenitiesList = data.get('amenities').split(',')
     console.log(amenitiesList);
-    // console.log(data.get('amenities'));
+    console.log(data.get('photo'));
+    try {
+      const imgUrl = await fileToDataUrl(data.get('photo'));
+      console.log(imgUrl)
+    } catch (error) {
+      console.log('error')
+    }
+    console.log(data.get('amenities'));
   }
 
   return (
@@ -144,15 +152,30 @@ export default function Listcreate (props) {
               <Grid item xs={12}>
                 <PropertyAmenities />
               </Grid>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant="text"
+                  component="label"
+                  startIcon={<ImageIcon />}
+                >
+                  Upload Photo
+                  <input
+                    type="file"
+                    hidden
+                    name = 'photo'
+                  />
+                </Button>
+              </Grid>
 
             </Grid>
             <Button
               type='submit'
               fullWidth
               variant='contained'
-              sx={{ mt: 20, mb: 2 }}
+              sx={{ mt: 5, mb: 2 }}
             >
-              Sign Up
+              Submit
             </Button>
           </Box>
         </DialogContent>

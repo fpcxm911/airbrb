@@ -16,10 +16,12 @@ import Copyright from '../components/Copyright';
 import { apiCallGetAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 import Listcreate from './Listcreate';
+import { useContext, Context } from '../context';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 export default function HostedListing () {
+  const { getters } = useContext(Context);
   const [HostedLists, setHostedLists] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -38,7 +40,8 @@ export default function HostedListing () {
       setErrorMessage({ title: 'Error', body: res.error });
       setShowModal(true);
     } else {
-      const currentUserEmail = localStorage.getItem('email')
+      const currentUserEmail = getters.email;
+      console.log(currentUserEmail);
       const myListings = res.listings.filter(x => x.owner === currentUserEmail)
       const myListingsDetail = []
       for (const listing of myListings) {
