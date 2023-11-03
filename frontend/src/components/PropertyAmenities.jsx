@@ -40,7 +40,7 @@ export default function PropertyAmenities () {
           </li>
         )}
         renderInput={(params) => (
-          <TextField {...params} label="Amenities" placeholder="Optional" />
+          <TextField {...params} label="Amenities (Optional)" placeholder="Optional" />
         )}
       />
       <input type="hidden" name="amenities" value={hiddenInputValue} />
@@ -48,7 +48,6 @@ export default function PropertyAmenities () {
   );
 }
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const amenitiesOptions = [
   'Wifi',
   'Wash Machine',

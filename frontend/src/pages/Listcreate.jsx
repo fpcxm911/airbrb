@@ -10,10 +10,7 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-// import PropertyType from '../components/PropertyType';
-// import Autocomplete from '@mui/material/Autocomplete';
 import PropertyType from '../components/PropertyType';
-// import { data } from './Helper';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import PropertyAmenities from '../components/PropertyAmenities';
 import PropertyBedroom from '../components/PropertyBedroom';
@@ -24,25 +21,14 @@ import { apiCallBodyAuthen, fileToDataUrl } from './Helper'
 export default function Listcreate (props) {
   const [errorMessage, setErrorMessage] = React.useState('');
 
-  const createMeta = (numberOfBathrooms, propertyType, amenities, youtubeUrl) => {
+  const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtubeUrl) => {
+    console.log('creating meta');
+    console.log(bedrooms);
     return {
       propertyType,
       numberOfBathrooms,
       amenities,
-      bedrooms: [
-        {
-          numberOfBeds: 2,
-          roomType: 'loft'
-        },
-        {
-          numberOfBeds: 1,
-          roomType: 'Dungeon'
-        },
-        {
-          numberOfBeds: 3,
-          roomType: 'Single'
-        }
-      ],
+      bedrooms,
       youtubeUrl
     }
   }
@@ -59,11 +45,10 @@ export default function Listcreate (props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (data.get('photo') && data.get('photo').name) {
+    if (data.get('photo') && data.get('photo').name && JSON.parse(data.get('bedrooms')).length > 0) {
       try {
         const thumbnail = await fileToDataUrl(data.get('photo'));
         const token = localStorage.getItem('token');
-        console.log(token);
         const title = data.get('title');
         const country = data.get('country');
         const city = data.get('city');
@@ -73,9 +58,10 @@ export default function Listcreate (props) {
         const bathNum = data.get('bath');
         const price = data.get('price');
         const propertyType = data.get('prop');
+        const bedroomsArray = JSON.parse(data.get('bedrooms'));
         const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',')
         const youtubeUrl = data.get('youtube') ? data.get('youtube') : null
-        const metadata = createMeta(bathNum, propertyType, amenitiesList, youtubeUrl)
+        const metadata = createMeta(bathNum, propertyType, bedroomsArray, amenitiesList, youtubeUrl);
         const res = await apiCallBodyAuthen('listings/new', token, {
           title,
           address,
@@ -93,7 +79,8 @@ export default function Listcreate (props) {
         setErrorMessage(error)
       }
     } else {
-      setErrorMessage('Please upload a photo');
+      (JSON.parse(data.get('bedrooms')).length === 0) && setErrorMessage('Please add at least one bedroom');
+      (!data.get('photo') || !data.get('photo').name) && setErrorMessage('Please upload a photo');
     }
   }
 
@@ -223,6 +210,7 @@ export default function Listcreate (props) {
                     type="file"
                     hidden
                     name = 'photo'
+                    accept="image/jpeg, image/jpg, image/png"
                   />
                 </Button>
               </Grid>

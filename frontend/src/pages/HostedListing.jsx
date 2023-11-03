@@ -55,7 +55,7 @@ export default function HostedListing () {
   }
 
   const calculateNumBeds = (listing) => {
-    return (listing.metadata.bedrooms.reduce((accumulator, bedroom) => accumulator + bedroom.numberOfBeds, 0));
+    return (listing.metadata.bedrooms.reduce((accumulator, bedroom) => accumulator + Number(bedroom.numberOfBeds), 0));
   }
 
   const deleteListing = async (listing) => {
@@ -69,7 +69,6 @@ export default function HostedListing () {
       setHostedLists(newListings)
     }
   }
-  // console.log(HostedLists);
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings',);
     if (res.error) {

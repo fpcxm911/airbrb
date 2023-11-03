@@ -74,7 +74,7 @@ const apiCallBodyAuthen = async (path, token, body, method) => {
   }
 };
 
-export function fileToDataUrl (file) {
+const fileToDataUrl = (file) => {
   const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg']
   const valid = validFileTypes.find(type => type === file.type);
   // Bad data, let's walk away.
@@ -98,5 +98,6 @@ export {
   apiCallPostNoAuthen,
   apiCallPostAuthen,
   apiCallGetAuthen,
-  apiCallBodyAuthen
+  apiCallBodyAuthen,
+  fileToDataUrl
 };

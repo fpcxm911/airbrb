@@ -1,25 +1,33 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { Autocomplete, IconButton, Stack, TextField } from '@mui/material';
-import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 
 const PropertyBedroom = () => {
-  const [bedrooms, setBedrooms] = React.useState([['', '']]);
+  const [bedrooms, setBedrooms] = React.useState([{ numberOfBeds: '', roomType: '' }]);
+  const [hiddenBedroomsInput, setHiddenBedroomsInput] = React.useState('');
+
+  React.useEffect(() => {
+    setHiddenBedroomsInput(JSON.stringify(bedrooms));
+    console.log('hidden value');
+    console.log(typeof hiddenBedroomsInput)
+    console.log(hiddenBedroomsInput);
+  }, [bedrooms]);
 
   const handleOneMore = () => {
-    setBedrooms([...bedrooms, ['', '']]);
+    setBedrooms([...bedrooms, { numberOfBeds: '', roomType: '' }]);
   };
 
   const handleBedNumberChange = (value, idx) => {
     const newBedrooms = [...bedrooms];
-    newBedrooms[idx][0] = value;
+    newBedrooms[idx].numberOfBeds = value;
     setBedrooms(newBedrooms);
   };
 
   const handleRoomTypeChange = (value, idx) => {
     const newBedrooms = [...bedrooms];
-    newBedrooms[idx][1] = value;
+    newBedrooms[idx].roomType = value;
     setBedrooms(newBedrooms);
   };
 
@@ -33,25 +41,27 @@ const PropertyBedroom = () => {
     return (
       <Stack key={idx} direction='row' spacing={3} mb={1}>
         <Autocomplete
-          freeSolo
           fullWidth
+          id={`bedNumberInput${idx}`}
+          disableClearable
           options={bedNumberOption.map((type) => '' + type)}
           onInputChange={(event, value) => handleBedNumberChange(value, idx)}
           renderInput={(params) => (
-            <TextField {...params} label='Number of beds' id={`bedNumberInput${idx}`} />
+            <TextField {...params} required type='number' label='Number of beds' id={`bedNumberInput${idx}`} />
           )}
         />
         <Autocomplete
           fullWidth
+          id={`roomTypeInput${idx}`}
           disableClearable
           options={bedroomTypeOption.map((type) => '' + type)}
           onInputChange={(event, value) => handleRoomTypeChange(value, idx)}
           renderInput={(params) => (
-            <TextField {...params} label='Bedroom type' id={`roomTypeInput${idx}`} />
+            <TextField {...params} required label='Bedroom type' id={`roomTypeInput${idx}`} />
           )}
         />
-        <IconButton onClick={() => handleRemove(idx)} sx={{ ml: 0 }}>
-          <RemoveIcon/>
+        <IconButton onClick={() => handleRemove(idx)} >
+          <ClearOutlinedIcon/>
         </IconButton>
       </Stack>
     );
@@ -69,12 +79,13 @@ const PropertyBedroom = () => {
       >
         Add a bedroom
       </Button>
+      <input type='hidden' name='bedrooms' value={hiddenBedroomsInput} />
     </>
   );
 };
 
-const bedroomTypeOption = ['shared bedroom', 'private bedroom', 'studio'];
+const bedroomTypeOption = ['Shared room', 'Private room', 'Hotel room'];
 
-const bedNumberOption = ['1', '2', '3', '4', '5'];
+const bedNumberOption = ['1', '2', '3', '4', '5', '6'];
 
 export default PropertyBedroom;
