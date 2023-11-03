@@ -12,7 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
 
-const Login = () => {
+const Login = (props) => {
   const [open, setOpen] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -39,6 +39,7 @@ const Login = () => {
       } else {
         localStorage.setItem('token', res.token);
         localStorage.setItem('email', email);
+        props.setToken(res.token);
         setOpen(false);
         navigate('/');
       }

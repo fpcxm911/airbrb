@@ -11,7 +11,9 @@ const LogoutBtn = (props) => {
     if (res.error) {
       console.log(res.error);
     } else {
+      // clear token in local storage and props
       localStorage.clear();
+      props.setToken(null);
       navigate('/');
     }
   };
