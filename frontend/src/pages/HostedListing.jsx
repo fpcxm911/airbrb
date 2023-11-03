@@ -69,6 +69,25 @@ export default function HostedListing () {
       setHostedLists(newListings)
     }
   }
+
+  // TODO check if this works correctly
+  const unpublishListing = async (listing) => {
+    const res = await apiCallBodyAuthen(`listings/unpublish/${listing.id}`, localStorage.getItem('token'), {}, 'PUT');
+    if (res.error) {
+      console.log(listing.id);
+      setErrorMessage({ title: 'Error', body: res.error });
+      setShowModal(true);
+    } else {
+      const newListings = HostedLists.map(item => {
+        if (item.id === listing.id) {
+          return { ...item, published: false }
+        }
+        return item;
+      });
+      setHostedLists(newListings);
+    }
+  }
+
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings',);
     if (res.error) {
@@ -193,13 +212,14 @@ export default function HostedListing () {
                         </>
                       }
                     </Box>
-
                     <Typography variant="button" gutterBottom sx={{ fontWeight: 'bold' }}>
                       Price : {listing.price} AUD / NIGHT
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">EDIT</Button>
+                    <Button size="small" onClick={() => console.log('wanna edit id', listing.id)}>EDIT</Button>
+                    {!listing.published && <Button size="small" onClick={() => console.log('wanna publish')}>PUBLISH</Button>}
+                    {listing.published && <Button size="small" onClick={() => unpublishListing(listing.id)}>UNPUBLISH</Button>}
                     <Button size="small" onClick={() => deleteListing(listing)}>DELETE</Button>
                   </CardActions>
                 </Card>
