@@ -13,8 +13,7 @@ export default function PropertyAmenities () {
   const [hiddenInputValue, setHiddenInputValue] = React.useState([]);
 
   React.useEffect(() => {
-    // Update hidden input value whenever selectedAmenities changes
-    setHiddenInputValue(JSON.stringify(selectedAmenities.join(',')));
+    setHiddenInputValue((selectedAmenities.join(',')));
   }, [selectedAmenities]);
 
   const handleAmenitiesChange = (event, values) => {
@@ -41,7 +40,7 @@ export default function PropertyAmenities () {
           </li>
         )}
         renderInput={(params) => (
-          <TextField {...params} label="Amenities" placeholder="Favorites" />
+          <TextField {...params} label="Amenities" placeholder="Optional" />
         )}
       />
       <input type="hidden" name="amenities" value={hiddenInputValue} />

@@ -16,29 +16,86 @@ import PropertyType from '../components/PropertyType';
 // import { data } from './Helper';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import PropertyAmenities from '../components/PropertyAmenities';
-// import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX, apiCallPostNoAuthen } from './Helper'
-// import ErrorDialog from '../components/ErrorPopup';
+import ImageIcon from '@mui/icons-material/Image';
+import DialogContentText from '@mui/material/DialogContentText';
+import { apiCallBodyAuthen, fileToDataUrl } from './Helper'
+import { useContext, Context } from '../context';
 
 export default function Listcreate (props) {
-  // console.log(selectedCountry);
-  // console.log(selectedCity);
-  // console.log(selectedStreet);
-  // console.log(selectedPostcode);
+  const { getters } = useContext(Context);
+  const [errorMessage, setErrorMessage] = React.useState('');
 
-  const handleSubmit = (event) => {
+  const createMeta = (numberOfBathrooms, propertyType, amenities, youtubeUrl) => {
+    return {
+      propertyType,
+      numberOfBathrooms,
+      amenities,
+      bedrooms: [
+        {
+          numberOfBeds: 2,
+          roomType: 'loft'
+        },
+        {
+          numberOfBeds: 1,
+          roomType: 'Dungeon'
+        },
+        {
+          numberOfBeds: 3,
+          roomType: 'Single'
+        }
+      ],
+      youtubeUrl
+    }
+  }
+
+  const createAddress = (country, city, street, postcode) => {
+    return {
+      country,
+      city,
+      street,
+      postcode
+    }
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get('title'));
-    console.log(data.get('country'));
-    console.log(data.get('city'));
-    console.log(data.get('street'));
-    console.log(data.get('postcode'));
-    console.log(data.get('bath'));
-    console.log(data.get('price'));
-    console.log(data.get('prop'));
-    const amenitiesList = data.get('amenities').split(',')
-    console.log(amenitiesList);
-    // console.log(data.get('amenities'));
+    if (data.get('photo') && data.get('photo').name) {
+      try {
+        const thumbnail = await fileToDataUrl(data.get('photo'));
+        const token = getters.token;
+        console.log(token);
+        const title = data.get('title');
+        const country = data.get('country');
+        const city = data.get('city');
+        const street = data.get('street');
+        const postcode = data.get('postcode');
+        const address = createAddress(country, city, street, postcode);
+        const bathNum = data.get('bath');
+        const price = data.get('price');
+        const propertyType = data.get('prop');
+        const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',')
+        const youtubeUrl = data.get('youtube') ? data.get('youtube') : null
+        const metadata = createMeta(bathNum, propertyType, amenitiesList, youtubeUrl)
+        const res = await apiCallBodyAuthen('listings/new', token, {
+          title,
+          address,
+          price,
+          thumbnail,
+          metadata
+        }, 'POST');
+        if (res.error) {
+          setErrorMessage(res.error)
+        } else {
+          props.update();
+          props.close();
+        }
+      } catch (error) {
+        setErrorMessage(error)
+      }
+    } else {
+      setErrorMessage('Please upload a photo');
+    }
   }
 
   return (
@@ -133,7 +190,7 @@ export default function Listcreate (props) {
                   fullWidth
                   type="number"
                   name="price"
-                  label="Price/Week"
+                  label="Price/Night"
                   required
                 />
               </Grid>
@@ -144,15 +201,43 @@ export default function Listcreate (props) {
               <Grid item xs={12}>
                 <PropertyAmenities />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  type="text"
+                  name="youtube"
+                  label="Youtube url (Optional)"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant="text"
+                  component="label"
+                  startIcon={<ImageIcon />}
+                >
+                  Upload Photo
+                  <input
+                    type="file"
+                    hidden
+                    name = 'photo'
+                  />
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <DialogContentText color='error' sx={{ textAlign: 'center' }} xs={12}>
+                  {errorMessage}
+                </DialogContentText>
+              </Grid>
 
             </Grid>
             <Button
               type='submit'
               fullWidth
               variant='contained'
-              sx={{ mt: 20, mb: 2 }}
+              sx={{ mt: 5, mb: 2 }}
             >
-              Sign Up
+              Submit
             </Button>
           </Box>
         </DialogContent>
