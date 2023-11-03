@@ -16,6 +16,7 @@ import PropertyType from '../components/PropertyType';
 // import { data } from './Helper';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import PropertyAmenities from '../components/PropertyAmenities';
+import PropertyBedroom from '../components/PropertyBedroom';
 import ImageIcon from '@mui/icons-material/Image';
 import DialogContentText from '@mui/material/DialogContentText';
 import { apiCallBodyAuthen, fileToDataUrl } from './Helper'
@@ -195,6 +196,9 @@ export default function Listcreate (props) {
 
               <Grid item xs={12}>
                 <PropertyType />
+              </Grid>
+              <Grid item xs={12}>
+                <PropertyBedroom />
               </Grid>
               <Grid item xs={12}>
                 <PropertyAmenities />
