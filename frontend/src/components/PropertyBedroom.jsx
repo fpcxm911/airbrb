@@ -5,14 +5,13 @@ import AddIcon from '@mui/icons-material/Add';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 
 const PropertyBedroom = () => {
-  const [bedrooms, setBedrooms] = React.useState([{ numberOfBeds: '', roomType: '' }]);
+  const [bedrooms, setBedrooms] = React.useState([
+    { numberOfBeds: '', roomType: '' },
+  ]);
   const [hiddenBedroomsInput, setHiddenBedroomsInput] = React.useState('');
 
   React.useEffect(() => {
     setHiddenBedroomsInput(JSON.stringify(bedrooms));
-    console.log('hidden value');
-    console.log(typeof hiddenBedroomsInput)
-    console.log(hiddenBedroomsInput);
   }, [bedrooms]);
 
   const handleOneMore = () => {
@@ -47,7 +46,13 @@ const PropertyBedroom = () => {
           options={bedNumberOption.map((type) => '' + type)}
           onInputChange={(event, value) => handleBedNumberChange(value, idx)}
           renderInput={(params) => (
-            <TextField {...params} required type='number' label='Number of beds' id={`bedNumberInput${idx}`} />
+            <TextField
+              {...params}
+              required
+              type='number'
+              label='Number of beds'
+              id={`bedNumberInput${idx}`}
+            />
           )}
         />
         <Autocomplete
@@ -57,11 +62,16 @@ const PropertyBedroom = () => {
           options={bedroomTypeOption.map((type) => '' + type)}
           onInputChange={(event, value) => handleRoomTypeChange(value, idx)}
           renderInput={(params) => (
-            <TextField {...params} required label='Bedroom type' id={`roomTypeInput${idx}`} />
+            <TextField
+              {...params}
+              required
+              label='Bedroom type'
+              id={`roomTypeInput${idx}`}
+            />
           )}
         />
-        <IconButton onClick={() => handleRemove(idx)} >
-          <ClearOutlinedIcon/>
+        <IconButton onClick={() => handleRemove(idx)}>
+          <ClearOutlinedIcon />
         </IconButton>
       </Stack>
     );

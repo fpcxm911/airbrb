@@ -94,10 +94,11 @@ export default function Listcreate (props) {
         <IconButton
           aria-label="close"
           onClick={props.close}
+          size='small'
           sx={{
             position: 'absolute',
-            right: 8,
-            top: 8,
+            right: 7,
+            top: 7,
           }}
         >
           <CloseIcon />
@@ -106,7 +107,9 @@ export default function Listcreate (props) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          ml: 1.5,
+          mr: 1.5,
         }}>
           <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
             <MapsHomeWorkIcon />
