@@ -7,7 +7,6 @@ import Login from '../pages/Login';
 import EditListing from '../pages/EditListing';
 
 const Pagelist = () => {
-
   return (
     <Routes>
       <Route path='/' element={<Home />} />
