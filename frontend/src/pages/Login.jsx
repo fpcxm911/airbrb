@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 
 const Login = (props) => {
   const [open, setOpen] = React.useState(true);
@@ -73,7 +74,9 @@ const Login = (props) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} />
+            <Avatar sx={{ m: 1, bgcolor: '#6699ff' }} >
+              <LoginOutlinedIcon />
+            </Avatar>
             <Typography component='h1' variant='h5'>
               Welcome Back
             </Typography>
