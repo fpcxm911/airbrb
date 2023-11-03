@@ -16,7 +16,6 @@ import Copyright from '../components/Copyright';
 import { apiCallGetAuthen, apiCallBodyAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 import Listcreate from './Listcreate';
-import { useContext, Context } from '../context';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +23,6 @@ import { useNavigate } from 'react-router-dom';
 // TODO remove, this demo shouldn't need to reset the theme.
 
 export default function HostedListing () {
-  const { getters } = useContext(Context);
   const [HostedLists, setHostedLists] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -61,7 +59,7 @@ export default function HostedListing () {
   }
 
   const deleteListing = async (listing) => {
-    const res = await apiCallBodyAuthen(`listings/${listing.id}`, getters.token, {}, 'DELETE');
+    const res = await apiCallBodyAuthen(`listings/${listing.id}`, localStorage.getItem('token'), {}, 'DELETE');
     if (res.error) {
       console.log(listing.id);
       setErrorMessage({ title: 'Error', body: res.error });
@@ -78,7 +76,7 @@ export default function HostedListing () {
       setErrorMessage({ title: 'Error', body: res.error });
       setShowModal(true);
     } else {
-      const currentUserEmail = getters.email;
+      const currentUserEmail = localStorage.getItem('email');
 
       const myListings = res.listings.filter(x => x.owner === currentUserEmail)
       const myListingsDetail = []

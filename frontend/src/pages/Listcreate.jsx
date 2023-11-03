@@ -19,10 +19,8 @@ import PropertyAmenities from '../components/PropertyAmenities';
 import ImageIcon from '@mui/icons-material/Image';
 import DialogContentText from '@mui/material/DialogContentText';
 import { apiCallBodyAuthen, fileToDataUrl } from './Helper'
-import { useContext, Context } from '../context';
 
 export default function Listcreate (props) {
-  const { getters } = useContext(Context);
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const createMeta = (numberOfBathrooms, propertyType, amenities, youtubeUrl) => {
@@ -63,7 +61,7 @@ export default function Listcreate (props) {
     if (data.get('photo') && data.get('photo').name) {
       try {
         const thumbnail = await fileToDataUrl(data.get('photo'));
-        const token = getters.token;
+        const token = localStorage.getItem('token');
         console.log(token);
         const title = data.get('title');
         const country = data.get('country');

@@ -19,6 +19,24 @@ const apiCallPostNoAuthen = async (path, body) => {
   }
 };
 
+const apiCallPostAuthen = async (path, token, body) => {
+  try {
+    const response = await fetch(`http://localhost:5005/${path}`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+    return await response.json();
+  } catch (error) {
+    // Handle error appropriately
+    console.error('Error:', error);
+    throw error;
+  }
+};
+
 // authorize http get request
 const apiCallGetAuthen = async (path, token, queryString) => {
   try {
@@ -78,6 +96,7 @@ export {
   USERNAME_REGEX,
   PASSWORD_REGEX,
   apiCallPostNoAuthen,
+  apiCallPostAuthen,
   apiCallGetAuthen,
   apiCallBodyAuthen
 };

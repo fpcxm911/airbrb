@@ -11,11 +11,9 @@ import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
-import { useContext, Context } from '../context';
+import LogoutBtn from '../components/LogoutBtn';
 
 const Login = () => {
-  const { setters } = useContext(Context);
-
   const [open, setOpen] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -40,9 +38,8 @@ const Login = () => {
       if (res.error) {
         setErrorMessage(res.error);
       } else {
-        setters.setToken(res.token);
-        setters.setEmail(email);
-        setters.setLoggedIn(true);
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('email', email);
         setOpen(false);
         navigate('/');
       }
@@ -99,6 +96,11 @@ const Login = () => {
               type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleLoginForm(e);
+                }
+              }}
             />
             <DialogContentText color='error'>
               {errorMessage}
@@ -108,6 +110,9 @@ const Login = () => {
             <Button onClick={returnHome}>Cancel</Button>
             <Button onClick={handleLoginForm}>Login</Button>
           </DialogActions>
+          <IconButton>
+            <LogoutBtn size='large' />
+          </IconButton>
         </Dialog>
       </React.Fragment>
   );
