@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
-import LogoutBtn from '../components/LogoutBtn';
 
 const Login = () => {
   const [open, setOpen] = React.useState(true);
@@ -110,9 +109,6 @@ const Login = () => {
             <Button onClick={returnHome}>Cancel</Button>
             <Button onClick={handleLoginForm}>Login</Button>
           </DialogActions>
-          <IconButton>
-            <LogoutBtn size='large' />
-          </IconButton>
         </Dialog>
       </React.Fragment>
   );

@@ -1,7 +1,9 @@
 import React from 'react';
+import LogoutBtn from '../components/LogoutBtn';
 import {
   useNavigate
 } from 'react-router-dom';
+import { IconButton } from '@mui/material';
 export default function Home () {
   const navigate = useNavigate();
   return (
@@ -21,6 +23,7 @@ export default function Home () {
       }}>
         Hosted
       </button>
+      <IconButton><LogoutBtn /></IconButton>
     </div>
   );
 }
