@@ -69,7 +69,7 @@ export default function HostedListing () {
       setHostedLists(newListings)
     }
   }
-  console.log(HostedLists);
+  // console.log(HostedLists);
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings',);
     if (res.error) {
