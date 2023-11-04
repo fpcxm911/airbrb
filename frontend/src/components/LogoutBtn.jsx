@@ -2,12 +2,13 @@ import * as React from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { apiCallPostAuthen } from '../pages/Helper';
+import { apiCallBodyAuthen } from '../pages/Helper';
 
 const LogoutBtn = (props) => {
   const navigate = useNavigate();
   const handleLogout = async () => {
-    const res = await apiCallPostAuthen('user/auth/logout', localStorage.getItem('token'), {});
+    // const res = await apiCallPostAuthen('user/auth/logout', localStorage.getItem('token'), {});
+    const res = await apiCallBodyAuthen('user/auth/logout', localStorage.getItem('token'), {}, 'POST');
     if (res.error) {
       console.log(res.error);
     } else {

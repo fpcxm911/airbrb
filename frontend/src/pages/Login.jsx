@@ -90,6 +90,7 @@ const Login = (props) => {
               type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={(e) => (e.key === 'Enter') && handleLoginForm(e)}
             />
             <TextField
               fullWidth
@@ -98,11 +99,7 @@ const Login = (props) => {
               type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleLoginForm(e);
-                }
-              }}
+              onKeyDown={(e) => (e.key === 'Enter') && handleLoginForm(e)}
             />
             <DialogContentText color='error'>
               {errorMessage}
