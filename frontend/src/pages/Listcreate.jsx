@@ -21,7 +21,7 @@ import { apiCallBodyAuthen, fileToDataUrl } from './Helper'
 export default function Listcreate (props) {
   const [errorMessage, setErrorMessage] = React.useState('');
 
-  const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtubeUrl) => {
+  const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtubeUrl, propertyImages) => {
     console.log('creating meta');
     console.log(bedrooms);
     return {
@@ -29,7 +29,8 @@ export default function Listcreate (props) {
       numberOfBathrooms,
       amenities,
       bedrooms,
-      youtubeUrl
+      youtubeUrl,
+      propertyImages
     }
   }
 
@@ -60,8 +61,9 @@ export default function Listcreate (props) {
         const propertyType = data.get('prop');
         const bedroomsArray = JSON.parse(data.get('bedrooms'));
         const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',')
-        const youtubeUrl = data.get('youtube') ? data.get('youtube') : null
-        const metadata = createMeta(bathNum, propertyType, bedroomsArray, amenitiesList, youtubeUrl);
+        const youtubeUrl = data.get('youtube') ? data.get('youtube') : null;
+        const propertyImages = [];
+        const metadata = createMeta(bathNum, propertyType, bedroomsArray, amenitiesList, youtubeUrl, propertyImages);
         const res = await apiCallBodyAuthen('listings/new', token, {
           title,
           address,
