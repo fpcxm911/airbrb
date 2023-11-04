@@ -217,7 +217,7 @@ export default function HostedListing () {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" onClick={() => navigate(`/edit/:${listing.id}`)}>EDIT</Button>
+                    <Button size="small" onClick={() => navigate(`/edit/${listing.id}`)}>EDIT</Button>
                     {!listing.published && <Button size="small" onClick={() => console.log('wanna publish')}>PUBLISH</Button>}
                     {listing.published && <Button size="small" onClick={() => unpublishListing(listing.id)}>UNPUBLISH</Button>}
                     <Button size="small" onClick={() => deleteListing(listing)}>DELETE</Button>
