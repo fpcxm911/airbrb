@@ -16,32 +16,10 @@ import PropertyAmenities from '../components/PropertyAmenities';
 import PropertyBedroom from '../components/PropertyBedroom';
 import ImageIcon from '@mui/icons-material/Image';
 import DialogContentText from '@mui/material/DialogContentText';
-import { apiCallBodyAuthen, fileToDataUrl } from './Helper'
+import { apiCallBodyAuthen, fileToDataUrl, createMeta, createAddress } from './Helper'
 
 export default function Listcreate (props) {
   const [errorMessage, setErrorMessage] = React.useState('');
-
-  const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtubeUrl, propertyImages) => {
-    console.log('creating meta');
-    console.log(bedrooms);
-    return {
-      propertyType,
-      numberOfBathrooms,
-      amenities,
-      bedrooms,
-      youtubeUrl,
-      propertyImages
-    }
-  }
-
-  const createAddress = (country, city, street, postcode) => {
-    return {
-      country,
-      city,
-      street,
-      postcode
-    }
-  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();

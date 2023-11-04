@@ -91,6 +91,28 @@ const fileToDataUrl = (file) => {
   return dataUrlPromise;
 }
 
+const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtubeUrl, propertyImages) => {
+  console.log('creating meta');
+  console.log(bedrooms);
+  return {
+    propertyType,
+    numberOfBathrooms,
+    amenities,
+    bedrooms,
+    youtubeUrl,
+    propertyImages
+  }
+}
+
+const createAddress = (country, city, street, postcode) => {
+  return {
+    country,
+    city,
+    street,
+    postcode
+  }
+}
+
 export {
   EMAIL_REGEX,
   USERNAME_REGEX,
@@ -99,5 +121,7 @@ export {
   apiCallPostAuthen,
   apiCallGetAuthen,
   apiCallBodyAuthen,
-  fileToDataUrl
+  fileToDataUrl,
+  createMeta,
+  createAddress
 };
