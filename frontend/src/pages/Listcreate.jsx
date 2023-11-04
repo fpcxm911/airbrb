@@ -208,7 +208,7 @@ export default function Listcreate (props) {
                   component="label"
                   startIcon={<ImageIcon />}
                 >
-                  Upload Photo
+                  Upload Thumbnail
                   <input
                     type="file"
                     hidden

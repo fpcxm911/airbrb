@@ -112,7 +112,11 @@
               "roomType": "Dungeon"
             }
           ],
-          "youtubeUrl": "https://youtube.com/watch?v=dQw4w9WgXcQ"
+          "youtubeUrl": "https://youtube.com/watch?v=dQw4w9WgXcQ",
+          "propertyImages": [
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA",
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA"
+          ]
         }
       },
       "ListingReviews": {

@@ -11,7 +11,6 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import PropertyType from '../components/PropertyType';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import PropertyAmenities from '../components/PropertyAmenities';
 import PropertyBedroom from '../components/PropertyBedroom';
@@ -50,7 +49,7 @@ export default function EditListing () {
       setErrorMessage({ title: 'Error', body: listingRes.error });
       setShowModal(true);
     } else {
-      setListingData(listingRes);
+      setListingData(listingRes.listing);
     }
   }, [params.id]);
 
@@ -140,10 +139,6 @@ export default function EditListing () {
                   required
                 />
               </Grid>
-
-              <Grid item xs={12}>
-                <PropertyType />
-              </Grid>
               <Grid item xs={12}>
                 <PropertyBedroom />
               </Grid>
@@ -165,7 +160,7 @@ export default function EditListing () {
                   component="label"
                   startIcon={<ImageIcon />}
                 >
-                  Upload Photo
+                  Upload Thumbnail
                   <input
                     type="file"
                     hidden
