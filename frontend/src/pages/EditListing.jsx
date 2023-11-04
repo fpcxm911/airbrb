@@ -3,6 +3,7 @@ import {
   useParams,
   useNavigate
 } from 'react-router-dom';
+import HomeBtn from '../components/HomeBtn';
 
 export default function EditListing () {
   const params = useParams();
@@ -17,6 +18,7 @@ export default function EditListing () {
         <button onClick={() => {
           navigate('/edit/' + id);
         }}>Go!</button>
+        <HomeBtn />
         </>
     );
   }
@@ -30,7 +32,8 @@ export default function EditListing () {
         <h1>Edit Listing</h1>
         <div>
           edit {params.id}
-          </div>
+        </div>
+        <HomeBtn />
     </div>
   );
 }
