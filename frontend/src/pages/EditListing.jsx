@@ -254,7 +254,7 @@ export default function EditListing () {
                 />
               </Button>
             </Grid>
-            {/* // TODO when updating prop imgs, could show the image and decide delete, keep, or add more */}
+            {/* // TODO eric when updating prop imgs, show images uploaded before and decide delete, keep, or add more */}
             <Grid item xs={12}>
               <Button
                 fullWidth

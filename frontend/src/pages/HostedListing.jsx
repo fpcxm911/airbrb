@@ -70,7 +70,7 @@ export default function HostedListing () {
     }
   }
 
-  // TODO check if this works correctly
+  // TODO eric check if this works correctly
   const unpublishListing = async (listing) => {
     const res = await apiCallBodyAuthen(`listings/unpublish/${listing.id}`, localStorage.getItem('token'), {}, 'PUT');
     if (res.error) {
