@@ -1,8 +1,5 @@
 import * as React from 'react';
-import {
-  useParams,
-  useNavigate
-} from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import HomeBtn from '../components/HomeBtn';
 import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
@@ -20,26 +17,34 @@ import { apiCallGetAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 
 export default function EditListing () {
-  console.log('edit listing page loading');
   const params = useParams();
   const navigate = useNavigate();
 
   const [id, setId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
-  const [listingData, setListingData] = React.useState('');
+  const [listingData, setListingData] = React.useState({
+    title: '',
+    owner: '',
+    address: { country: '', city: '', street: '', postcode: '' },
+    price: '',
+    thumbnail: '',
+    metadata: { numberOfBathrooms: '', propertyType: '', amenities: [], bedrooms: [], youtubeUrl: '', propertyImages: [] },
+    reviews: [],
+    availability: [],
+    published: false,
+    postedOn: null,
+  });
   const [showModal, setShowModal] = React.useState(false);
-
-  console.log(setErrorMessage);
 
   if (!params.id) {
     return (
-        <>
-        Listing id: <input value={id} onChange={e => setId(e.target.value)} />
-        <button onClick={() => {
-          navigate(`/edit/${id}`);
-        }}>Go!</button>
+      <>
+        Listing id: <input value={id} onChange={(e) => setId(e.target.value)} />
+        <button onClick={() => navigate(`/edit/${id}`)}>
+          Go!
+        </button>
         <HomeBtn />
-        </>
+      </>
     );
   }
 
@@ -58,135 +63,171 @@ export default function EditListing () {
 
   return (
     <>
-        <DialogContent dividers sx={{
+      <DialogContent
+        dividers
+        sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           ml: 1.5,
           mr: 1.5,
-        }}>
-          <HomeBtn />
-          <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
-            <MapsHomeWorkIcon />
-          </Avatar>
-          <Typography component='h1' variant='h5'>
-            Edit your Hosted Listing id {params.id}
-          </Typography>
-          <Box component='form' onSubmit={() => console.log('hi')} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id='listing-edit-title'
-                  label='Title'
-                  name='title'
-                  autoComplete='title'
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  fullWidth
-                  label='Country'
-                  name='country'
-                  autoComplete='country'
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  fullWidth
-                  label='City'
-                  name='city'
-                  autoComplete='city'
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  fullWidth
-                  label='Street'
-                  name='street'
-                  autoComplete='street'
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  fullWidth
-                  label='Postcode'
-                  name='postcode'
-                  autoComplete='postcode'
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  type="number"
-                  name="bath"
-                  label="Bathrooms"
-                  required
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  type="number"
-                  name="price"
-                  label="Price/Night"
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <PropertyBedroom />
-              </Grid>
-              <Grid item xs={12}>
-                <PropertyAmenities />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  type="text"
-                  name="youtube"
-                  label="Youtube url (Optional)"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  fullWidth
-                  variant="text"
-                  component="label"
-                  startIcon={<ImageIcon />}
-                >
-                  Upload Thumbnail
-                  <input
-                    type="file"
-                    hidden
-                    name = 'photo'
-                    accept="image/jpeg, image/jpg, image/png"
-                  />
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <DialogContentText color='error' sx={{ textAlign: 'center' }} xs={12}>
-                  {errorMessage}
-                </DialogContentText>
-              </Grid>
-
+        }}
+      >
+        <HomeBtn />
+        <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
+          <MapsHomeWorkIcon />
+        </Avatar>
+        <Typography component='h1' variant='h5'>
+          Edit your Hosted Listing id {params.id}
+        </Typography>
+        <Box component='form' onSubmit={() => console.log('hi')} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id='title'
+                label='Title'
+                name='title'
+                autoComplete='title'
+                value={listingData.title}
+                onChange={(e) => {
+                  setListingData({ ...listingData, title: e.target.value });
+                }}
+              />
             </Grid>
-            <Button
-              type='submit'
-              fullWidth
-              variant='contained'
-              sx={{ mt: 5, mb: 2 }}
-            >
-              Submit
-            </Button>
-          </Box>
-        </DialogContent>
-        {showModal && <ErrorDialog content={errorMessage} close={setShowModal} />}
+            <Grid item xs={6}>
+              <TextField
+                required
+                fullWidth
+                label='Country'
+                name='country'
+                autoComplete='country'
+                value={listingData.address.country}
+                onChange={(e) => {
+                  setListingData({ ...listingData, address: { ...listingData.address, country: e.target.value } });
+                }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                fullWidth
+                label='City'
+                name='city'
+                autoComplete='city'
+                value={listingData.address.city}
+                onChange={(e) => {
+                  setListingData({ ...listingData, address: { ...listingData.address, city: e.target.value } });
+                }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                fullWidth
+                label='Street'
+                name='street'
+                autoComplete='street'
+                value={listingData.address.street}
+                onChange={(e) => {
+                  setListingData({ ...listingData, address: { ...listingData.address, street: e.target.value } });
+                }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                fullWidth
+                label='Postcode'
+                name='postcode'
+                autoComplete='postcode'
+                value={listingData.address.postcode}
+                onChange={(e) => {
+                  setListingData({ ...listingData, address: { ...listingData.address, postcode: e.target.value } });
+                }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                fullWidth
+                type='number'
+                name='bath'
+                label='Bathrooms'
+                value={listingData.metadata.numberOfBathrooms}
+                onChange={(e) => {
+                  setListingData({ ...listingData, metadata: { ...listingData.metadata, numberOfBathrooms: e.target.value } });
+                  console.log(listingData);
+                }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                type='number'
+                name='price'
+                label='Price/Night'
+                required
+                value={listingData.price}
+                onChange={(e) => {
+                  setListingData({ ...listingData, price: e.target.value });
+                  console.log(listingData);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <PropertyBedroom />
+            </Grid>
+            <Grid item xs={12}>
+              <PropertyAmenities />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                type='text'
+                name='youtube'
+                label='Youtube url (Optional)'
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                fullWidth
+                variant='text'
+                component='label'
+                startIcon={<ImageIcon />}
+              >
+                Upload Thumbnail
+                <input
+                  type='file'
+                  hidden
+                  name='photo'
+                  accept='image/jpeg, image/jpg, image/png'
+                />
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <DialogContentText
+                color='error'
+                sx={{ textAlign: 'center' }}
+                xs={12}
+              >
+                {errorMessage}
+              </DialogContentText>
+            </Grid>
+          </Grid>
+          <Button
+            type='submit'
+            fullWidth
+            variant='contained'
+            sx={{ mt: 5, mb: 2 }}
+          >
+            Submit
+          </Button>
+        </Box>
+      </DialogContent>
+      {showModal && <ErrorDialog content={errorMessage} close={setShowModal} />}
     </>
   );
 }
