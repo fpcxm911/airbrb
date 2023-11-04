@@ -29,7 +29,6 @@ const Login = (props) => {
 
   const handleLoginForm = async (e) => {
     e.preventDefault();
-
     if (validLoginInput()) {
       const res = await apiCallPostNoAuthen('user/auth/login', {
         email,

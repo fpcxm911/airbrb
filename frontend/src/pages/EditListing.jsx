@@ -15,6 +15,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import DialogContentText from '@mui/material/DialogContentText';
 import { apiCallGetAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
+import PropertyType from '../components/PropertyType';
 
 export default function EditListing () {
   const params = useParams();
@@ -22,6 +23,7 @@ export default function EditListing () {
 
   const [id, setId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [showModal, setShowModal] = React.useState(false);
   const [listingData, setListingData] = React.useState({
     title: '',
     owner: '',
@@ -34,7 +36,26 @@ export default function EditListing () {
     published: false,
     postedOn: null,
   });
-  const [showModal, setShowModal] = React.useState(false);
+
+  React.useEffect(async () => {
+    console.log(params.id);
+    const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
+    if (listingRes.error) {
+      setErrorMessage({ title: 'Error', body: listingRes.error });
+      setShowModal(true);
+      console.error(listingRes.error);
+    } else {
+      setListingData(listingRes.listing);
+    }
+  }, []);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log('submit');
+  }
+
+  console.log('listing data');
+  console.log(listingData);
 
   if (!params.id) {
     return (
@@ -47,19 +68,6 @@ export default function EditListing () {
       </>
     );
   }
-
-  React.useEffect(async () => {
-    const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
-    if (listingRes.error) {
-      setErrorMessage({ title: 'Error', body: listingRes.error });
-      setShowModal(true);
-    } else {
-      setListingData(listingRes.listing);
-    }
-  }, [params.id]);
-
-  console.log('listing data');
-  console.log(listingData);
 
   return (
     <>
@@ -81,7 +89,7 @@ export default function EditListing () {
         <Typography component='h1' variant='h5'>
           Edit your Hosted Listing id {params.id}
         </Typography>
-        <Box component='form' onSubmit={() => console.log('hi')} sx={{ mt: 3 }}>
+        <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -159,7 +167,6 @@ export default function EditListing () {
                 value={listingData.metadata.numberOfBathrooms}
                 onChange={(e) => {
                   setListingData({ ...listingData, metadata: { ...listingData.metadata, numberOfBathrooms: e.target.value } });
-                  console.log(listingData);
                 }}
               />
             </Grid>
@@ -173,9 +180,11 @@ export default function EditListing () {
                 value={listingData.price}
                 onChange={(e) => {
                   setListingData({ ...listingData, price: e.target.value });
-                  console.log(listingData);
                 }}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <PropertyType />
             </Grid>
             <Grid item xs={12}>
               <PropertyBedroom />
@@ -199,6 +208,22 @@ export default function EditListing () {
                 startIcon={<ImageIcon />}
               >
                 Upload Thumbnail
+                <input
+                  type='file'
+                  hidden
+                  name='photo'
+                  accept='image/jpeg, image/jpg, image/png'
+                />
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                fullWidth
+                variant='text'
+                component='label'
+                startIcon={<ImageIcon />}
+              >
+                Upload Property Images
                 <input
                   type='file'
                   hidden
