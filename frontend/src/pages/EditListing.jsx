@@ -38,7 +38,6 @@ export default function EditListing () {
   });
 
   React.useEffect(async () => {
-    console.log(params.id);
     const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
     if (listingRes.error) {
       setErrorMessage({ title: 'Error', body: listingRes.error });
@@ -57,28 +56,24 @@ export default function EditListing () {
         let thumbnail;
         (data.get('thumbnail') && data.get('thumbnail').name) ? thumbnail = await fileToDataUrl(data.get('thumbnail')) : thumbnail = listingData.thumbnail;
         const token = localStorage.getItem('token');
-        console.log(token);
         const title = data.get('title');
-        console.log(title);
         const country = data.get('country');
         const city = data.get('city');
         const street = data.get('street');
         const postcode = data.get('postcode');
         const address = createAddress(country, city, street, postcode);
-        console.log(address);
         const bathNum = data.get('bath');
-        console.log(bathNum);
         const price = data.get('price');
-        console.log(price);
         const propertyType = data.get('prop');
-        console.log(propertyType);
         const bedroomsArray = JSON.parse(data.get('bedrooms'));
         const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',');
-        console.log(amenitiesList);
         const youtubeUrl = data.get('youtube') ? data.get('youtube') : null;
-        console.log(youtubeUrl);
-        // TODO multiple images
         const propertyImages = [];
+        const images = data.getAll('images');
+        for (const image of images) {
+          (image.name) && propertyImages.push(await fileToDataUrl(image));
+        }
+        console.log(propertyImages.length);
         const metadata = createMeta(bathNum, propertyType, bedroomsArray, amenitiesList, youtubeUrl, propertyImages);
         const res = await apiCallBodyAuthen(`listings/${params.id}`, token, {
           title,
@@ -259,6 +254,7 @@ export default function EditListing () {
                 />
               </Button>
             </Grid>
+            {/* // TODO when updating prop imgs, could show the image and decide delete, keep, or add more */}
             <Grid item xs={12}>
               <Button
                 fullWidth
@@ -271,6 +267,7 @@ export default function EditListing () {
                   type='file'
                   hidden
                   name='images'
+                  multiple
                   accept='image/jpeg, image/jpg, image/png'
                 />
               </Button>
