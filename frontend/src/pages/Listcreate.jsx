@@ -56,7 +56,7 @@ export default function Listcreate (props) {
           props.close();
         }
       } catch (error) {
-        setErrorMessage(error)
+        setErrorMessage(error);
       }
     } else {
       (JSON.parse(data.get('bedrooms')).length === 0) && setErrorMessage('Please add at least one bedroom');

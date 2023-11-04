@@ -92,8 +92,6 @@ const fileToDataUrl = (file) => {
 }
 
 const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtubeUrl, propertyImages) => {
-  console.log('creating meta');
-  console.log(bedrooms);
   return {
     propertyType,
     numberOfBathrooms,

@@ -13,7 +13,7 @@ import PropertyAmenities from '../components/PropertyAmenities';
 import PropertyBedroom from '../components/PropertyBedroom';
 import ImageIcon from '@mui/icons-material/Image';
 import DialogContentText from '@mui/material/DialogContentText';
-import { apiCallGetAuthen } from './Helper';
+import { apiCallBodyAuthen, apiCallGetAuthen, createAddress, fileToDataUrl, createMeta } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 import PropertyType from '../components/PropertyType';
 
@@ -51,11 +51,54 @@ export default function EditListing () {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('submit');
+    const data = new FormData(event.currentTarget);
+    if (JSON.parse(data.get('bedrooms')).length > 0) {
+      try {
+        let thumbnail;
+        (data.get('thumbnail') && data.get('thumbnail').name) ? thumbnail = await fileToDataUrl(data.get('thumbnail')) : thumbnail = listingData.thumbnail;
+        const token = localStorage.getItem('token');
+        console.log(token);
+        const title = data.get('title');
+        console.log(title);
+        const country = data.get('country');
+        const city = data.get('city');
+        const street = data.get('street');
+        const postcode = data.get('postcode');
+        const address = createAddress(country, city, street, postcode);
+        console.log(address);
+        const bathNum = data.get('bath');
+        console.log(bathNum);
+        const price = data.get('price');
+        console.log(price);
+        const propertyType = data.get('prop');
+        console.log(propertyType);
+        const bedroomsArray = JSON.parse(data.get('bedrooms'));
+        const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',');
+        console.log(amenitiesList);
+        const youtubeUrl = data.get('youtube') ? data.get('youtube') : null;
+        console.log(youtubeUrl);
+        // TODO multiple images
+        const propertyImages = [];
+        const metadata = createMeta(bathNum, propertyType, bedroomsArray, amenitiesList, youtubeUrl, propertyImages);
+        const res = await apiCallBodyAuthen(`listings/${params.id}`, token, {
+          title,
+          address,
+          thumbnail,
+          price,
+          metadata
+        }, 'PUT');
+        if (res.error) {
+          setErrorMessage(res.error);
+        } else {
+          navigate('/hosted');
+        }
+      } catch (error) {
+        setErrorMessage(error);
+      }
+    } else {
+      setErrorMessage('Please add at least one bedroom');
+    }
   }
-
-  console.log('listing data');
-  console.log(listingData);
 
   if (!params.id) {
     return (
@@ -207,11 +250,11 @@ export default function EditListing () {
                 component='label'
                 startIcon={<ImageIcon />}
               >
-                Upload Thumbnail
+                update Thumbnail
                 <input
                   type='file'
                   hidden
-                  name='photo'
+                  name='thumbnail'
                   accept='image/jpeg, image/jpg, image/png'
                 />
               </Button>
@@ -227,7 +270,7 @@ export default function EditListing () {
                 <input
                   type='file'
                   hidden
-                  name='photo'
+                  name='images'
                   accept='image/jpeg, image/jpg, image/png'
                 />
               </Button>
