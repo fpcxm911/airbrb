@@ -18,7 +18,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import DialogContentText from '@mui/material/DialogContentText';
 import { apiCallBodyAuthen, fileToDataUrl, createMeta, createAddress } from './Helper'
 
-export default function Listcreate (props) {
+export default function ListCreate (props) {
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const handleSubmit = async (event) => {

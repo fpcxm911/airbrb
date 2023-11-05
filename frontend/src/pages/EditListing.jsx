@@ -17,7 +17,7 @@ import { apiCallBodyAuthen, apiCallGetAuthen, createAddress, fileToDataUrl, crea
 import ErrorDialog from '../components/ErrorPopup';
 import PropertyType from '../components/PropertyType';
 
-export default function EditListing () {
+const EditListing = () => {
   const params = useParams();
   const navigate = useNavigate();
 
@@ -99,9 +99,9 @@ export default function EditListing () {
     return (
       <>
         Listing id: <input value={id} onChange={(e) => setId(e.target.value)} />
-        <button onClick={() => navigate(`/edit/${id}`)}>
+        <Button onClick={() => navigate(`/edit/${id}`)}>
           Go!
-        </button>
+        </Button>
         <HomeBtn />
       </>
     );
@@ -120,6 +120,7 @@ export default function EditListing () {
           mr: 1.5,
         }}
       >
+        {/* // TODO optimise HomeBtn positioning */}
         <HomeBtn />
         <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
           <MapsHomeWorkIcon />
@@ -296,3 +297,5 @@ export default function EditListing () {
     </>
   );
 }
+
+export default EditListing;
