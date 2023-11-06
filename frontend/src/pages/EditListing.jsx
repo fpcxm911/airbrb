@@ -127,7 +127,7 @@ const EditListing = () => {
           <MapsHomeWorkIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Edit your Hosted Listing
+          Edit your Listing
         </Typography>
         <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -290,7 +290,7 @@ const EditListing = () => {
             variant='contained'
             sx={{ mt: 5, mb: 2 }}
           >
-            Submit
+            Save
           </Button>
         </Box>
       </DialogContent>
