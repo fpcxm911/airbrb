@@ -11,6 +11,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AvailabilityRange from '../components/AvailabilityRange';
 import Button from '@mui/material/Button';
+import { apiCallBodyAuthen } from './Helper';
 
 const ListPublish = (props) => {
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -20,19 +21,64 @@ const ListPublish = (props) => {
   }, []);
 
   const handleSubmit = async (event) => {
+    setErrorMessage('');
     event.preventDefault();
-    console.log('wanna submit');
-    const dates = JSON.parse(new FormData(event.currentTarget).get('dates'));
-    console.log(dates);
-    checkDatesOverlap(dates);
-    // props.update();
-    // props.close();
+    const datesRangeStrArr = JSON.parse(new FormData(event.currentTarget).get('dates'));
+    checkDatesOverlap(datesRangeStrArr);
+    const availability = createAvailbilityArray(datesRangeStrArr);
+    const token = localStorage.getItem('token');
+    const listingid = props.listingid;
+    const res = await apiCallBodyAuthen(`listings/publish/${listingid}`, token, { availability }, 'PUT');
+    if (res.error) {
+      setErrorMessage(res.error)
+    } else {
+      props.update();
+      props.close();
+      console.log('published!!!');
+    }
   }
 
-  const checkDatesOverlap = (datesStr) => {
-    console.log('hi')
+  /**
+   * Generates an availability array based on the given array of date strings.
+   *
+   * @param {Array<string>} datesStrArr - An array of date strings.
+   * @return {Array<{start: string, end: string}>} The availability array with start and end dates.
+   */
+  const createAvailbilityArray = (datesStrArr) => {
+    return sortDates(datesStrArr).map(dateRange => ({ start: dateRange.start.substring(0, 10), end: dateRange.end.substring(0, 10) }));
+  }
+  //   const mergeDates = (datesStr) => {
+  //     const sortedDates = sortDates(datesStr);
+  //     const mergedDates = sortedDates.reduce((acc, currentRange) => {
+  //       const previousRange = acc[acc.length - 1];
+  //       if (previousRange && previousRange.end >= currentRange.start) {
+  //         previousRange.end = currentRange.end;
+  //       } else {
+  //         acc.push({ ...currentRange });
+  //       }
+  //       return acc;
+  //     }, []);
+  //     return mergedDates;
+  //   }
+
+  const sortDates = (datesStrArr) => {
     const dates = [];
-    datesStr.forEach((str) => {
+    datesStrArr.forEach((str) => {
+      dates.push({
+        start: new Date(str.start),
+        end: new Date(str.end)
+      })
+    });
+    dates.sort((a, b) => a.start - b.start);
+    return (dates.map(dateObj => ({
+      start: dateObj.start.toISOString(),
+      end: dateObj.end.toISOString()
+    })));
+  }
+
+  const checkDatesOverlap = (datesRangeStrArr) => {
+    const dates = [];
+    datesRangeStrArr.forEach((str) => {
       dates.push({
         start: new Date(str.start),
         end: new Date(str.end)
@@ -40,8 +86,8 @@ const ListPublish = (props) => {
     });
     for (let i = 0; i < dates.length; i++) {
       for (let j = i + 1; j < dates.length; j++) {
-        if (dates[i].start < dates[j].end && dates[j].start < dates[i].end) {
-          setErrorMessage(`Availability overlap between ${i + 1} and ${j + 1} `);
+        if (dates[i].start <= dates[j].end && dates[j].start <= dates[i].end) {
+          setErrorMessage(`Availability overlap between row ${i + 1} and ${j + 1} `);
           return;
         }
       }

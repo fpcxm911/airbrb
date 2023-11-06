@@ -120,7 +120,7 @@ const EditListing = () => {
           mr: 1.5,
         }}
       >
-        {/* // TODO optimise HomeBtn positioning */}
+        {/* // TODO eric optimise HomeBtn positioning */}
         <HomeBtn />
         <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
           <MapsHomeWorkIcon />

@@ -28,7 +28,7 @@ export default function HostedListing () {
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [showCreate, setShowCreate] = React.useState(false);
-  const [showPublish, setShowPublish] = React.useState(false);
+  const [showPublish, setShowPublish] = React.useState([false, '']);
   const [listingsUpdate, setListingsUpdate] = React.useState(0);
   const navigate = useNavigate();
 
@@ -224,8 +224,8 @@ export default function HostedListing () {
                   </CardContent>
                   <CardActions>
                     <Button size="small" onClick={() => navigate(`/edit/${listing.id}`)}>EDIT</Button>
-                    {!listing.published && <Button size="small" onClick={() => setShowPublish(true)}>PUBLISH</Button>}
-                    {listing.published && <Button size="small" onClick={() => unpublishListing(listing.id)}>UNPUBLISH</Button>}
+                    {!listing.published && <Button size="small" onClick={() => setShowPublish([true, listing.id])}>PUBLISH</Button>}
+                    {listing.published && <Button size="small" onClick={() => unpublishListing(listing)}>UNPUBLISH</Button>}
                     <Button size="small" onClick={() => deleteListing(listing)}>DELETE</Button>
                   </CardActions>
                 </Card>
@@ -252,7 +252,7 @@ export default function HostedListing () {
       {/* End footer */}
       {showModal && (<ErrorDialog close={closeModal} content={errorMessage} />)}
       {showCreate && (<ListCreate close={closeCreate} update={updateListing} />)}
-      {showPublish && (<ListPublish close={closePublish} update={updateListing} />)}
+      {showPublish[1] && (<ListPublish close={closePublish} update={updateListing} listingid={showPublish[1]} />)}
     </div>
   );
 }
