@@ -56,7 +56,7 @@ const apiCallBodyAuthen = async (path, token, body, method) => {
   }
 };
 
-export function fileToDataUrl (file) {
+const fileToDataUrl = (file) => {
   const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg']
   const valid = validFileTypes.find(type => type === file.type);
   // Bad data, let's walk away.
@@ -73,11 +73,34 @@ export function fileToDataUrl (file) {
   return dataUrlPromise;
 }
 
+const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtubeUrl, propertyImages) => {
+  return {
+    propertyType,
+    numberOfBathrooms,
+    amenities,
+    bedrooms,
+    youtubeUrl,
+    propertyImages
+  }
+}
+
+const createAddress = (country, city, street, postcode) => {
+  return {
+    country,
+    city,
+    street,
+    postcode
+  }
+}
+
 export {
   EMAIL_REGEX,
   USERNAME_REGEX,
   PASSWORD_REGEX,
   apiCallPostNoAuthen,
   apiCallGetAuthen,
-  apiCallBodyAuthen
+  apiCallBodyAuthen,
+  fileToDataUrl,
+  createMeta,
+  createAddress
 };

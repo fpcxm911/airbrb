@@ -1,17 +1,21 @@
 import * as React from 'react';
-import { useContext, Context } from '../context';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { apiCallBodyAuthen } from '../pages/Helper';
 
-export default function LogoutBtn (props) {
-  const { getters, setters } = useContext(Context);
+const LogoutBtn = (props) => {
   const navigate = useNavigate();
-  const handleLogout = () => {
-    setters.setEmail(null);
-    setters.setToken(null);
-    setters.setLoggedIn(false);
-    navigate('/');
+  const handleLogout = async () => {
+    const res = await apiCallBodyAuthen('user/auth/logout', localStorage.getItem('token'), {}, 'POST');
+    if (res.error) {
+      console.log(res.error);
+    } else {
+      // clear token in local storage and props
+      localStorage.clear();
+      props.setToken(null);
+      navigate('/');
+    }
   };
 
   const buttonStyles = {
@@ -21,7 +25,7 @@ export default function LogoutBtn (props) {
   return (
     <>
       <IconButton
-        disabled={!getters.loggedIn}
+        disabled={localStorage.getItem('email') === null}
         onClick={handleLogout}
         aria-label='logout'
         variant="outlined"
@@ -32,3 +36,5 @@ export default function LogoutBtn (props) {
     </>
   );
 }
+
+export default LogoutBtn;

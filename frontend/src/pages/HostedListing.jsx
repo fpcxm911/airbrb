@@ -15,28 +15,32 @@ import Container from '@mui/material/Container';
 import Copyright from '../components/Copyright';
 import { apiCallGetAuthen, apiCallBodyAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
-import Listcreate from './Listcreate';
-import { useContext, Context } from '../context';
+import ListCreate from './ListCreate';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import { useNavigate } from 'react-router-dom';
+import ListPublish from './ListPublish';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 export default function HostedListing () {
-  const { getters } = useContext(Context);
   const [HostedLists, setHostedLists] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [showCreate, setShowCreate] = React.useState(false);
+  const [showPublish, setShowPublish] = React.useState([false, '']);
   const [listingsUpdate, setListingsUpdate] = React.useState(0);
   const navigate = useNavigate();
 
   const goBackMain = () => {
     navigate('/');
-  }
+  };
   const closeCreate = () => {
     setShowCreate(false);
+  };
+
+  const closePublish = () => {
+    setShowPublish(false);
   };
 
   const closeModal = () => {
@@ -45,23 +49,23 @@ export default function HostedListing () {
 
   const updateListing = () => {
     setListingsUpdate(listingsUpdate + 1)
-  }
+  };
 
   const convertPrecision = (number) => {
     return Math.round(number * 10) / 10;
-  }
+  };
 
   const calculateAverageRating = (listing) => {
     const sum = listing.reviews.reduce((accumulator, review) => accumulator + review.rating, 0);
     return convertPrecision(sum / listing.reviews.length)
-  }
+  };
 
   const calculateNumBeds = (listing) => {
-    return (listing.metadata.bedrooms.reduce((accumulator, bedroom) => accumulator + bedroom.numberOfBeds, 0));
-  }
+    return (listing.metadata.bedrooms.reduce((accumulator, bedroom) => accumulator + Number(bedroom.numberOfBeds), 0));
+  };
 
   const deleteListing = async (listing) => {
-    const res = await apiCallBodyAuthen(`listings/${listing.id}`, getters.token, {}, 'DELETE');
+    const res = await apiCallBodyAuthen(`listings/${listing.id}`, localStorage.getItem('token'), {}, 'DELETE');
     if (res.error) {
       console.log(listing.id);
       setErrorMessage({ title: 'Error', body: res.error });
@@ -70,15 +74,32 @@ export default function HostedListing () {
       const newListings = HostedLists.filter(x => x.id !== listing.id)
       setHostedLists(newListings)
     }
+  };
+
+  const unpublishListing = async (listing) => {
+    const res = await apiCallBodyAuthen(`listings/unpublish/${listing.id}`, localStorage.getItem('token'), {}, 'PUT');
+    if (res.error) {
+      console.log(listing.id);
+      setErrorMessage({ title: 'Error', body: res.error });
+      setShowModal(true);
+    } else {
+      const newListings = HostedLists.map(item => {
+        if (item.id === listing.id) {
+          return { ...item, published: false }
+        }
+        return item;
+      });
+      setHostedLists(newListings);
+    }
   }
-  console.log(HostedLists);
+
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings',);
     if (res.error) {
       setErrorMessage({ title: 'Error', body: res.error });
       setShowModal(true);
     } else {
-      const currentUserEmail = getters.email;
+      const currentUserEmail = localStorage.getItem('email');
 
       const myListings = res.listings.filter(x => x.owner === currentUserEmail)
       const myListingsDetail = []
@@ -196,13 +217,14 @@ export default function HostedListing () {
                         </>
                       }
                     </Box>
-
                     <Typography variant="button" gutterBottom sx={{ fontWeight: 'bold' }}>
                       Price : {listing.price} AUD / NIGHT
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">EDIT</Button>
+                    <Button size="small" onClick={() => navigate(`/edit/${listing.id}`)}>EDIT</Button>
+                    {!listing.published && <Button size="small" onClick={() => setShowPublish([true, listing.id])}>PUBLISH</Button>}
+                    {listing.published && <Button size="small" onClick={() => unpublishListing(listing)}>UNPUBLISH</Button>}
                     <Button size="small" onClick={() => deleteListing(listing)}>DELETE</Button>
                   </CardActions>
                 </Card>
@@ -228,7 +250,8 @@ export default function HostedListing () {
       </Box>
       {/* End footer */}
       {showModal && (<ErrorDialog close={closeModal} content={errorMessage} />)}
-      {showCreate && (<Listcreate close={closeCreate} update={updateListing} />)}
+      {showCreate && (<ListCreate close={closeCreate} update={updateListing} />)}
+      {showPublish[1] && (<ListPublish close={closePublish} update={updateListing} listingid={showPublish[1]} />)}
     </div>
   );
 }

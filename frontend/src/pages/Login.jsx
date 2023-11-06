@@ -11,11 +11,9 @@ import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
-import { useContext, Context } from '../context';
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 
-export default function Login () {
-  const { setters } = useContext(Context);
-
+const Login = (props) => {
   const [open, setOpen] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -31,7 +29,6 @@ export default function Login () {
 
   const handleLoginForm = async (e) => {
     e.preventDefault();
-
     if (validLoginInput()) {
       const res = await apiCallPostNoAuthen('user/auth/login', {
         email,
@@ -40,9 +37,9 @@ export default function Login () {
       if (res.error) {
         setErrorMessage(res.error);
       } else {
-        setters.setToken(res.token);
-        setters.setEmail(email);
-        setters.setLoggedIn(true);
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('email', email);
+        props.setToken(res.token);
         setOpen(false);
         navigate('/');
       }
@@ -76,7 +73,9 @@ export default function Login () {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} />
+            <Avatar sx={{ m: 1, bgcolor: '#6699ff' }} >
+              <LoginOutlinedIcon />
+            </Avatar>
             <Typography component='h1' variant='h5'>
               Welcome Back
             </Typography>
@@ -91,6 +90,7 @@ export default function Login () {
               type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={(e) => (e.key === 'Enter') && handleLoginForm(e)}
             />
             <TextField
               fullWidth
@@ -99,6 +99,7 @@ export default function Login () {
               type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => (e.key === 'Enter') && handleLoginForm(e)}
             />
             <DialogContentText color='error'>
               {errorMessage}
@@ -112,3 +113,5 @@ export default function Login () {
       </React.Fragment>
   );
 }
+
+export default Login;

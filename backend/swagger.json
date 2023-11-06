@@ -76,10 +76,10 @@
         "type": "object",
         "description": "Address of the listing",
         "example": {
-          "Street": "1 Kensington Street",
-          "City": "Kensington",
-          "Postcode": "2032",
-          "Country": "Australia"
+          "street": "1 Kensington Street",
+          "city": "Kensington",
+          "postcode": "2032",
+          "country": "Australia"
         }
       },
       "ListingPrice": {
@@ -102,7 +102,7 @@
             "Wifi",
             "Pool"
           ],
-          "Bedrooms": [
+          "bedrooms": [
             {
               "numberOfBeds": 2,
               "roomType": "loft"
@@ -112,7 +112,8 @@
               "roomType": "Dungeon"
             }
           ],
-          "youtubeUrl": "https://youtube.com/watch?v=dQw4w9WgXcQ"
+          "youtubeUrl": "https://youtube.com/watch?v=dQw4w9WgXcQ",
+          "propertyImages": []
         }
       },
       "ListingReviews": {

@@ -10,61 +10,24 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-// import PropertyType from '../components/PropertyType';
-// import Autocomplete from '@mui/material/Autocomplete';
 import PropertyType from '../components/PropertyType';
-// import { data } from './Helper';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import PropertyAmenities from '../components/PropertyAmenities';
+import PropertyBedroom from '../components/PropertyBedroom';
 import ImageIcon from '@mui/icons-material/Image';
 import DialogContentText from '@mui/material/DialogContentText';
-import { apiCallBodyAuthen, fileToDataUrl } from './Helper'
-import { useContext, Context } from '../context';
+import { apiCallBodyAuthen, fileToDataUrl, createMeta, createAddress } from './Helper'
 
-export default function Listcreate (props) {
-  const { getters } = useContext(Context);
+export default function ListCreate (props) {
   const [errorMessage, setErrorMessage] = React.useState('');
-
-  const createMeta = (numberOfBathrooms, propertyType, amenities, youtubeUrl) => {
-    return {
-      propertyType,
-      numberOfBathrooms,
-      amenities,
-      bedrooms: [
-        {
-          numberOfBeds: 2,
-          roomType: 'loft'
-        },
-        {
-          numberOfBeds: 1,
-          roomType: 'Dungeon'
-        },
-        {
-          numberOfBeds: 3,
-          roomType: 'Single'
-        }
-      ],
-      youtubeUrl
-    }
-  }
-
-  const createAddress = (country, city, street, postcode) => {
-    return {
-      country,
-      city,
-      street,
-      postcode
-    }
-  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (data.get('photo') && data.get('photo').name) {
+    if (data.get('photo') && data.get('photo').name && JSON.parse(data.get('bedrooms')).length > 0) {
       try {
         const thumbnail = await fileToDataUrl(data.get('photo'));
-        const token = getters.token;
-        console.log(token);
+        const token = localStorage.getItem('token');
         const title = data.get('title');
         const country = data.get('country');
         const city = data.get('city');
@@ -74,9 +37,11 @@ export default function Listcreate (props) {
         const bathNum = data.get('bath');
         const price = data.get('price');
         const propertyType = data.get('prop');
+        const bedroomsArray = JSON.parse(data.get('bedrooms'));
         const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',')
-        const youtubeUrl = data.get('youtube') ? data.get('youtube') : null
-        const metadata = createMeta(bathNum, propertyType, amenitiesList, youtubeUrl)
+        const youtubeUrl = data.get('youtube') ? data.get('youtube') : null;
+        const propertyImages = [];
+        const metadata = createMeta(bathNum, propertyType, bedroomsArray, amenitiesList, youtubeUrl, propertyImages);
         const res = await apiCallBodyAuthen('listings/new', token, {
           title,
           address,
@@ -91,10 +56,11 @@ export default function Listcreate (props) {
           props.close();
         }
       } catch (error) {
-        setErrorMessage(error)
+        setErrorMessage(error);
       }
     } else {
-      setErrorMessage('Please upload a photo');
+      (JSON.parse(data.get('bedrooms')).length === 0) && setErrorMessage('Please add at least one bedroom');
+      (!data.get('photo') || !data.get('photo').name) && setErrorMessage('Please upload a photo');
     }
   }
 
@@ -108,10 +74,11 @@ export default function Listcreate (props) {
         <IconButton
           aria-label="close"
           onClick={props.close}
+          size='small'
           sx={{
             position: 'absolute',
-            right: 8,
-            top: 8,
+            right: 7,
+            top: 7,
           }}
         >
           <CloseIcon />
@@ -120,7 +87,9 @@ export default function Listcreate (props) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          ml: 1.5,
+          mr: 1.5,
         }}>
           <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
             <MapsHomeWorkIcon />
@@ -199,6 +168,9 @@ export default function Listcreate (props) {
                 <PropertyType />
               </Grid>
               <Grid item xs={12}>
+                <PropertyBedroom />
+              </Grid>
+              <Grid item xs={12}>
                 <PropertyAmenities />
               </Grid>
               <Grid item xs={12}>
@@ -216,11 +188,12 @@ export default function Listcreate (props) {
                   component="label"
                   startIcon={<ImageIcon />}
                 >
-                  Upload Photo
+                  Upload Thumbnail
                   <input
                     type="file"
                     hidden
                     name = 'photo'
+                    accept="image/jpeg, image/jpg, image/png"
                   />
                 </Button>
               </Grid>
