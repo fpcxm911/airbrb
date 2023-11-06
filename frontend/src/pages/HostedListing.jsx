@@ -15,7 +15,7 @@ import Container from '@mui/material/Container';
 import Copyright from '../components/Copyright';
 import { apiCallGetAuthen, apiCallBodyAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
-import ListCreate from './ListCreate';
+import Listcreate from './Listcreate';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import { useNavigate } from 'react-router-dom';
@@ -250,7 +250,7 @@ export default function HostedListing () {
       </Box>
       {/* End footer */}
       {showModal && (<ErrorDialog close={closeModal} content={errorMessage} />)}
-      {showCreate && (<ListCreate close={closeCreate} update={updateListing} />)}
+      {showCreate && (<Listcreate close={closeCreate} update={updateListing} />)}
       {showPublish[1] && (<ListPublish close={closePublish} update={updateListing} listingid={showPublish[1]} />)}
     </div>
   );
