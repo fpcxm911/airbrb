@@ -1,13 +1,10 @@
 import * as React from 'react';
 import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 
 const HomeBtn = (props) => {
   const navigate = useNavigate();
-  const returnHome = () => {
-    navigate('/');
-  };
 
   const buttonStyles = {
     fontSize: props.size,
@@ -16,11 +13,11 @@ const HomeBtn = (props) => {
   return (
     <>
       <IconButton
-        onClick={returnHome}
+        onClick={() => navigate(-1)}
         aria-label='home'
         variant="outlined"
         >
-        <HomeOutlinedIcon sx={buttonStyles} />
+        <ArrowBackOutlinedIcon sx={buttonStyles} />
       </IconButton>
     </>
   );

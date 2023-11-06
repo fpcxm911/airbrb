@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import HomeBtn from '../components/HomeBtn';
+import GoBackBtn from '../components/GoBackBtn';
 import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
@@ -102,7 +102,7 @@ const EditListing = () => {
         <Button onClick={() => navigate(`/edit/${id}`)}>
           Go!
         </Button>
-        <HomeBtn />
+        <GoBackBtn />
       </>
     );
   }
@@ -120,13 +120,14 @@ const EditListing = () => {
           mr: 1.5,
         }}
       >
-        {/* // TODO eric optimise HomeBtn positioning */}
-        <HomeBtn />
+        <Grid container justify='flex-end' alignItems={'flex-end'}>
+          <GoBackBtn />
+        </Grid>
         <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
           <MapsHomeWorkIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Edit your Hosted Listing id {params.id}
+          Edit your Hosted Listing
         </Typography>
         <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
