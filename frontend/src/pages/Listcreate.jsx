@@ -97,7 +97,7 @@ export default function Listcreate (props) {
           <Typography component='h1' variant='h5'>
             Create your Hosted Listing
           </Typography>
-          <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3, overflowY: 'auto' }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
