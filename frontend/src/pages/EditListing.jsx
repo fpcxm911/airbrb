@@ -73,7 +73,6 @@ const EditListing = () => {
         for (const image of images) {
           (image.name) && propertyImages.push(await fileToDataUrl(image));
         }
-        console.log(propertyImages.length);
         const metadata = createMeta(bathNum, propertyType, bedroomsArray, amenitiesList, youtubeUrl, propertyImages);
         const res = await apiCallBodyAuthen(`listings/${params.id}`, token, {
           title,

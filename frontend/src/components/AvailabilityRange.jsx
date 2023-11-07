@@ -4,13 +4,18 @@ import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import DialogContentText from '@mui/material/DialogContentText';
 
-const AvailabilityRange = () => {
+const AvailabilityRange = (props) => {
+  const setSubmit = props.setSubmit;
   const [dates, setDates] = React.useState([{ start: '', end: '' }]);
   const [hiddenDatesInput, setHiddenDatesInput] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
 
   React.useEffect(() => {
-    checkDates();
+    if (!checkDates(dates)) {
+      setSubmit(false);
+      return;
+    }
+    setSubmit(true);
     setHiddenDatesInput(JSON.stringify(dates));
   }, [dates]);
 
@@ -22,7 +27,6 @@ const AvailabilityRange = () => {
     const newDates = [...dates];
     newDates[idx].start = value;
     setDates(newDates);
-    console.log(newDates);
   }
 
   const handleEndDateChange = (value, idx) => {
@@ -41,20 +45,62 @@ const AvailabilityRange = () => {
     setDates(newDates);
   }
 
-  const checkDates = () => {
-    // TODO check if dates overlap each other
-    for (const [idx, date] of dates.entries()) {
-      const date1 = new Date(date.start);
-      const date2 = new Date(date.end);
-      if (date1 >= date2) {
-        setErrorMessage(`End date ${idx + 1} must be after start date ${idx + 1}.`);
-        return;
+  const checkDates = (datesRangeStrArr) => {
+    /**
+ * Checks if any of the dates in the given array overlap with each other.
+ *
+ * @param {Array} datesRangeStrArr - An array of date range objects, each with start and end dates in string.
+ * @return {Boolean} Returns true if there are no overlapping dates, false otherwise.
+ */
+    const checkDatesOverlap = (datesRangeStrArr) => {
+      const dates = [];
+      datesRangeStrArr.forEach((str) => {
+        dates.push({
+          start: new Date(str.start),
+          end: new Date(str.end)
+        })
+      });
+      for (let i = 0; i < dates.length; i++) {
+        for (let j = i + 1; j < dates.length; j++) {
+          if (dates[i].start <= dates[j].end && dates[j].start <= dates[i].end) {
+            return [false, i, j];
+          }
+        }
       }
+      return [true, -1, -1];
+    }
+
+    const checkEachStartEnd = (datesRangeStrArr) => {
+      for (const idx in datesRangeStrArr) {
+        const item = datesRangeStrArr[idx];
+        if (item.start === '' || item.end === '') {
+          continue;
+        }
+        if (item.start === item.end) {
+          return [false, idx];
+        }
+        if (new Date(item.start) > new Date(item.end)) {
+          return [false, idx];
+        }
+      }
+      return [true, -1];
+    }
+
+    const [differCheckPass, idx] = checkEachStartEnd(datesRangeStrArr);
+    if (!differCheckPass) {
+      setErrorMessage(`Start date must precede end date in row ${Number(idx) + 1}`);
+      return false;
+    }
+    const [overlapPass, i, j] = checkDatesOverlap(datesRangeStrArr);
+    if (!overlapPass) {
+      setErrorMessage(`Availability overlap between row ${Number(i) + 1} and ${Number(j) + 1} `);
+      return false;
     }
     setErrorMessage('');
+    return true;
   }
 
-  const dateInputRow = (date, idx) => {
+  const dateInputRow = (dates, idx) => {
     return (
         <Stack key={idx} direction='row' spacing={3} mb={1}>
             {/* // TODO autocomplete tag may not be suitable for date, consider mui other component option */}
@@ -65,6 +111,8 @@ const AvailabilityRange = () => {
               InputLabelProps={{
                 shrink: true,
               }}
+              value={dates.start}
+              // isOptionEqualToValue={(option, value) => option.id === value.id}
               label={`Start date ${idx + 1}`}
               id={`startDateInput${idx}`}
               onChange={(e) => handleStartDateChange(e.target.value, idx)}
@@ -76,6 +124,8 @@ const AvailabilityRange = () => {
               InputLabelProps={{
                 shrink: true,
               }}
+              value={dates.end}
+              // isOptionEqualToValue={(option, value) => option.id === value.id}
               label={`End date ${idx + 1}`}
               id={`endDateInput${idx}`}
               onChange={(e) => handleEndDateChange(e.target.value, idx)}
