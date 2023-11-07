@@ -1,10 +1,11 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import { Autocomplete, IconButton, Stack, TextField } from '@mui/material';
+import { Autocomplete, IconButton, Stack, TextField, DialogContentText } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 
 const PropertyBedroom = () => {
+  const [errorMessage, setErrorMessage] = React.useState('');
   const [bedrooms, setBedrooms] = React.useState([
     { numberOfBeds: '', roomType: '' },
   ]);
@@ -12,6 +13,7 @@ const PropertyBedroom = () => {
 
   React.useEffect(() => {
     setHiddenBedroomsInput(JSON.stringify(bedrooms));
+    setErrorMessage('');
   }, [bedrooms]);
 
   const handleOneMore = () => {
@@ -31,12 +33,16 @@ const PropertyBedroom = () => {
   };
 
   const handleRemove = (idx) => {
+    if (bedrooms.length === 1) {
+      setErrorMessage('Your property must have at least one bedroom.');
+      return;
+    }
     const newBedrooms = [...bedrooms];
     newBedrooms.splice(idx, 1);
     setBedrooms(newBedrooms);
   };
 
-  const roomInputRow = (bedroom, idx) => {
+  const roomInputRow = (bedrooms, idx) => {
     return (
       <Stack key={idx} direction='row' spacing={3} mb={1}>
         <Autocomplete
@@ -44,6 +50,8 @@ const PropertyBedroom = () => {
           id={`bedNumberInput${idx}`}
           disableClearable
           options={bedNumberOption.map((type) => '' + type)}
+          value={bedrooms.numberOfBeds}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
           onInputChange={(event, value) => handleBedNumberChange(value, idx)}
           renderInput={(params) => (
             <TextField
@@ -60,6 +68,8 @@ const PropertyBedroom = () => {
           id={`roomTypeInput${idx}`}
           disableClearable
           options={bedroomTypeOption.map((type) => '' + type)}
+          value={bedrooms.roomType}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
           onInputChange={(event, value) => handleRoomTypeChange(value, idx)}
           renderInput={(params) => (
             <TextField
@@ -79,6 +89,9 @@ const PropertyBedroom = () => {
   return (
     <>
       {bedrooms.map((bedroom, idx) => roomInputRow(bedroom, idx))}
+      <DialogContentText color='error' sx={{ mb: 2 }}>
+          {errorMessage}
+      </DialogContentText>
       <Button
         fullWidth
         variant='text'

@@ -1,3 +1,4 @@
+// TODO eric login modal needs to satisfy 2.1.4 show navbar in the background
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';

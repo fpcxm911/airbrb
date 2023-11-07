@@ -15,6 +15,7 @@ import { apiCallBodyAuthen } from './Helper';
 
 const ListPublish = (props) => {
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [submitClickable, setSubmitClickable] = React.useState(false);
 
   React.useEffect(() => {
     setErrorMessage('');
@@ -24,7 +25,6 @@ const ListPublish = (props) => {
     setErrorMessage('');
     event.preventDefault();
     const datesRangeStrArr = JSON.parse(new FormData(event.currentTarget).get('dates'));
-    checkDatesOverlap(datesRangeStrArr);
     const availability = createAvailbilityArray(datesRangeStrArr);
     const token = localStorage.getItem('token');
     const listingid = props.listingid;
@@ -34,7 +34,6 @@ const ListPublish = (props) => {
     } else {
       props.update();
       props.close();
-      console.log('published!!!');
     }
   }
 
@@ -47,19 +46,6 @@ const ListPublish = (props) => {
   const createAvailbilityArray = (datesStrArr) => {
     return sortDates(datesStrArr).map(dateRange => ({ start: dateRange.start.substring(0, 10), end: dateRange.end.substring(0, 10) }));
   }
-  //   const mergeDates = (datesStr) => {
-  //     const sortedDates = sortDates(datesStr);
-  //     const mergedDates = sortedDates.reduce((acc, currentRange) => {
-  //       const previousRange = acc[acc.length - 1];
-  //       if (previousRange && previousRange.end >= currentRange.start) {
-  //         previousRange.end = currentRange.end;
-  //       } else {
-  //         acc.push({ ...currentRange });
-  //       }
-  //       return acc;
-  //     }, []);
-  //     return mergedDates;
-  //   }
 
   const sortDates = (datesStrArr) => {
     const dates = [];
@@ -74,24 +60,6 @@ const ListPublish = (props) => {
       start: dateObj.start.toISOString(),
       end: dateObj.end.toISOString()
     })));
-  }
-
-  const checkDatesOverlap = (datesRangeStrArr) => {
-    const dates = [];
-    datesRangeStrArr.forEach((str) => {
-      dates.push({
-        start: new Date(str.start),
-        end: new Date(str.end)
-      })
-    });
-    for (let i = 0; i < dates.length; i++) {
-      for (let j = i + 1; j < dates.length; j++) {
-        if (dates[i].start <= dates[j].end && dates[j].start <= dates[i].end) {
-          setErrorMessage(`Availability overlap between row ${i + 1} and ${j + 1} `);
-          return;
-        }
-      }
-    }
   }
 
   return (
@@ -131,7 +99,7 @@ const ListPublish = (props) => {
             <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <AvailabilityRange />
+                  <AvailabilityRange setSubmit={setSubmitClickable}/>
                 </Grid>
               </Grid>
               <Button
@@ -139,6 +107,7 @@ const ListPublish = (props) => {
                 fullWidth
                 variant='contained'
                 sx={{ mt: 3, mb: 2 }}
+                disabled={!submitClickable}
               >
                 Submit
               </Button>
