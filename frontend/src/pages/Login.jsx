@@ -23,9 +23,9 @@ const Login = (props) => {
   const navigate = useNavigate();
 
   // close modal when closed
-  const returnHome = () => {
+  const goBack = () => {
     setOpen(false);
-    navigate('/');
+    navigate(-1);
   };
 
   const handleLoginForm = async (e) => {
@@ -61,9 +61,9 @@ const Login = (props) => {
 
   return (
       <React.Fragment>
-        <Dialog open={open} onClose={returnHome} PaperProps={{ sx: { borderRadius: 6 } }}>
+        <Dialog open={open} onClose={goBack} PaperProps={{ sx: { borderRadius: 6 } }}>
           <IconButton
-            onClick={returnHome}
+            onClick={goBack}
             sx={{ position: 'absolute', right: 8, top: 8 }}
             aria-label='close'>
               <CloseIcon />
@@ -107,7 +107,7 @@ const Login = (props) => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={returnHome}>Cancel</Button>
+            <Button onClick={goBack}>Cancel</Button>
             <Button onClick={handleLoginForm}>Login</Button>
           </DialogActions>
         </Dialog>
