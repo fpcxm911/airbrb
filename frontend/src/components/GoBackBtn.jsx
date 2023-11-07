@@ -5,7 +5,6 @@ import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 
 const HomeBtn = (props) => {
   const navigate = useNavigate();
-
   return (
     <>
       <IconButton
