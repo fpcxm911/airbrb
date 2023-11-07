@@ -1,4 +1,3 @@
-// TODO eric login modal needs to satisfy 2.1.4 show navbar in the background
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -23,9 +22,9 @@ const Login = (props) => {
   const navigate = useNavigate();
 
   // close modal when closed
-  const goBack = () => {
+  const returnHome = () => {
     setOpen(false);
-    navigate(-1);
+    navigate('/');
   };
 
   const handleLoginForm = async (e) => {
@@ -61,9 +60,9 @@ const Login = (props) => {
 
   return (
       <React.Fragment>
-        <Dialog open={open} onClose={goBack} PaperProps={{ sx: { borderRadius: 6 } }}>
+        <Dialog open={open} onClose={returnHome} PaperProps={{ sx: { borderRadius: 6 } }}>
           <IconButton
-            onClick={goBack}
+            onClick={returnHome}
             sx={{ position: 'absolute', right: 8, top: 8 }}
             aria-label='close'>
               <CloseIcon />
@@ -107,7 +106,7 @@ const Login = (props) => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={goBack}>Cancel</Button>
+            <Button onClick={returnHome}>Cancel</Button>
             <Button onClick={handleLoginForm}>Login</Button>
           </DialogActions>
         </Dialog>
