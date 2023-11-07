@@ -1,6 +1,6 @@
 import React from 'react';
 // import navAirbrb from '../components/navAirbrb';
-// import { useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import NavAirbrb from '../components/NavAirbrb';
 import SearchBar from '../components/SearchBar';
 import { Grid, Box } from '@mui/material';
@@ -91,6 +91,7 @@ export default function Home () {
         </Box>
       </main>
       {showModal && (<ErrorDialog close={() => setShowModal(false)} content={errorMessage} />)}
+      <Outlet />
     </div>
   );
 }
