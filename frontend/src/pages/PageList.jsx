@@ -10,8 +10,8 @@ const Pagelist = () => {
   return (
     <Routes>
       <Route path='/' element={<Home/>}>
-        <Route path='/register' element={<SignUp/>} />
-        <Route path='/login' element={<Login/>} />
+        <Route path='register' element={<SignUp/>} />
+        <Route path='login' element={<Login/>} />
       </Route>
       <Route path='/hosted' element={<HostedListing/>}>
         <Route path='edit' element={<EditListing />} />
