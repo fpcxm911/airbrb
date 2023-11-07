@@ -12,7 +12,7 @@ import Copyright from '../components/Copyright';
 import { apiCallGetAuthen, apiCallBodyAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 import Listcreate from './Listcreate';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 import ListPublish from './ListPublish';
 import NavAirbrb from '../components/NavAirbrb';
 import ListingCard from '../components/ListingCard';
@@ -146,7 +146,7 @@ export default function HostedListing () {
                 >
                   <ListingCard listing = {listing} />
                   <CardActions>
-                    <Button size="small" onClick={() => navigate(`/edit/${listing.id}`)}>EDIT</Button>
+                    <Button size="small" onClick={() => navigate(`/hosted/edit/${listing.id}`)}>EDIT</Button>
                     {!listing.published && <Button size="small" onClick={() => setShowPublish([true, listing.id])}>PUBLISH</Button>}
                     {listing.published && <Button size="small" onClick={() => unpublishListing(listing)}>UNPUBLISH</Button>}
                     <Button size="small" onClick={() => deleteListing(listing)}>DELETE</Button>
@@ -176,6 +176,7 @@ export default function HostedListing () {
       {showModal && (<ErrorDialog close={closeModal} content={errorMessage} />)}
       {showCreate && (<Listcreate close={closeCreate} update={updateListing} />)}
       {showPublish[1] && (<ListPublish close={closePublish} update={updateListing} listingid={showPublish[1]} />)}
+      <Outlet />
     </div>
   );
 }

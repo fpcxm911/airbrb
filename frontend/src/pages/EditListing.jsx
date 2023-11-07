@@ -16,12 +16,16 @@ import DialogContentText from '@mui/material/DialogContentText';
 import { apiCallBodyAuthen, apiCallGetAuthen, createAddress, fileToDataUrl, createMeta } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 import PropertyType from '../components/PropertyType';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const EditListing = () => {
+  const [openEditing, setOpenEditing] = React.useState(true);
   const params = useParams();
   const navigate = useNavigate();
 
-  const [id, setId] = React.useState('');
+  // const [id, setId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
   const [showModal, setShowModal] = React.useState(false);
   const [listingData, setListingData] = React.useState({
@@ -94,207 +98,231 @@ const EditListing = () => {
     }
   }
 
-  if (!params.id) {
-    return (
-      <>
-        Listing id: <input value={id} onChange={(e) => setId(e.target.value)} />
-        <Button onClick={() => navigate(`/edit/${id}`)}>
-          Go!
-        </Button>
-        <GoBackBtn />
-      </>
-    );
-  }
+  // if (!params.id) {
+  //   return (
+  //     <>
+  //       Listing id: <input value={id} onChange={(e) => setId(e.target.value)} />
+  //       <Button onClick={() => navigate(`/edit/${id}`)}>
+  //         Go!
+  //       </Button>
+  //       <GoBackBtn />
+  //     </>
+  //   );
+  // }
 
   return (
-    <>
-      <DialogContent
-        dividers
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          ml: 1.5,
-          mr: 1.5,
+    <React.Fragment>
+      <Dialog
+        onClose={() => {
+          setOpenEditing(false);
+          navigate('/hosted');
         }}
+        open = {openEditing}
+        PaperProps={{ sx: { borderRadius: 6 } }}
       >
-        <Grid container justify='flex-end' alignItems={'flex-end'}>
-          <GoBackBtn />
-        </Grid>
-        <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
-          <MapsHomeWorkIcon />
-        </Avatar>
-        <Typography component='h1' variant='h5'>
-          Edit your Listing
-        </Typography>
-        <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id='title'
-                label='Title'
-                name='title'
-                autoComplete='title'
-                value={listingData.title}
-                onChange={(e) => {
-                  setListingData({ ...listingData, title: e.target.value });
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                fullWidth
-                label='Country'
-                name='country'
-                autoComplete='country'
-                value={listingData.address.country}
-                onChange={(e) => {
-                  setListingData({ ...listingData, address: { ...listingData.address, country: e.target.value } });
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                fullWidth
-                label='City'
-                name='city'
-                autoComplete='city'
-                value={listingData.address.city}
-                onChange={(e) => {
-                  setListingData({ ...listingData, address: { ...listingData.address, city: e.target.value } });
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                fullWidth
-                label='Street'
-                name='street'
-                autoComplete='street'
-                value={listingData.address.street}
-                onChange={(e) => {
-                  setListingData({ ...listingData, address: { ...listingData.address, street: e.target.value } });
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                fullWidth
-                label='Postcode'
-                name='postcode'
-                autoComplete='postcode'
-                value={listingData.address.postcode}
-                onChange={(e) => {
-                  setListingData({ ...listingData, address: { ...listingData.address, postcode: e.target.value } });
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                fullWidth
-                type='number'
-                name='bath'
-                label='Bathrooms'
-                value={listingData.metadata.numberOfBathrooms}
-                onChange={(e) => {
-                  setListingData({ ...listingData, metadata: { ...listingData.metadata, numberOfBathrooms: e.target.value } });
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                type='number'
-                name='price'
-                label='Price/Night'
-                required
-                value={listingData.price}
-                onChange={(e) => {
-                  setListingData({ ...listingData, price: e.target.value });
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <PropertyType />
-            </Grid>
-            <Grid item xs={12}>
-              <PropertyBedroom />
-            </Grid>
-            <Grid item xs={12}>
-              <PropertyAmenities />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                type='text'
-                name='youtube'
-                label='Youtube url (Optional)'
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                fullWidth
-                variant='text'
-                component='label'
-                startIcon={<ImageIcon />}
-              >
-                update Thumbnail
-                <input
-                  type='file'
-                  hidden
-                  name='thumbnail'
-                  accept='image/jpeg, image/jpg, image/png'
-                />
-              </Button>
-            </Grid>
-            {/* // TODO eric when updating prop imgs, show images uploaded before and decide delete, keep, or add more */}
-            <Grid item xs={12}>
-              <Button
-                fullWidth
-                variant='text'
-                component='label'
-                startIcon={<ImageIcon />}
-              >
-                Upload Property Images
-                <input
-                  type='file'
-                  hidden
-                  name='images'
-                  multiple
-                  accept='image/jpeg, image/jpg, image/png'
-                />
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <DialogContentText
-                color='error'
-                sx={{ textAlign: 'center' }}
-                xs={12}
-              >
-                {errorMessage}
-              </DialogContentText>
-            </Grid>
+        <IconButton
+          aria-label="close"
+          onClick={() => {
+            setOpenEditing(false);
+            navigate('/hosted');
+          }}
+          size='small'
+          sx={{
+            position: 'absolute',
+            right: 7,
+            top: 7,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent
+          dividers
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            ml: 1.5,
+            mr: 1.5,
+          }}
+        >
+          <Grid container justify='flex-end' alignItems={'flex-end'}>
+            <GoBackBtn />
           </Grid>
-          <Button
-            type='submit'
-            fullWidth
-            variant='contained'
-            sx={{ mt: 5, mb: 2 }}
-          >
-            Save
-          </Button>
-        </Box>
-      </DialogContent>
-      {showModal && <ErrorDialog content={errorMessage} close={setShowModal} />}
-    </>
+          <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
+            <MapsHomeWorkIcon />
+          </Avatar>
+          <Typography component='h1' variant='h5'>
+            Edit your Listing
+          </Typography>
+          <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id='title'
+                  label='Title'
+                  name='title'
+                  autoComplete='title'
+                  value={listingData.title}
+                  onChange={(e) => {
+                    setListingData({ ...listingData, title: e.target.value });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  fullWidth
+                  label='Country'
+                  name='country'
+                  autoComplete='country'
+                  value={listingData.address.country}
+                  onChange={(e) => {
+                    setListingData({ ...listingData, address: { ...listingData.address, country: e.target.value } });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  fullWidth
+                  label='City'
+                  name='city'
+                  autoComplete='city'
+                  value={listingData.address.city}
+                  onChange={(e) => {
+                    setListingData({ ...listingData, address: { ...listingData.address, city: e.target.value } });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  fullWidth
+                  label='Street'
+                  name='street'
+                  autoComplete='street'
+                  value={listingData.address.street}
+                  onChange={(e) => {
+                    setListingData({ ...listingData, address: { ...listingData.address, street: e.target.value } });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  fullWidth
+                  label='Postcode'
+                  name='postcode'
+                  autoComplete='postcode'
+                  value={listingData.address.postcode}
+                  onChange={(e) => {
+                    setListingData({ ...listingData, address: { ...listingData.address, postcode: e.target.value } });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  fullWidth
+                  type='number'
+                  name='bath'
+                  label='Bathrooms'
+                  value={listingData.metadata.numberOfBathrooms}
+                  onChange={(e) => {
+                    setListingData({ ...listingData, metadata: { ...listingData.metadata, numberOfBathrooms: e.target.value } });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  type='number'
+                  name='price'
+                  label='Price/Night'
+                  required
+                  value={listingData.price}
+                  onChange={(e) => {
+                    setListingData({ ...listingData, price: e.target.value });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <PropertyType />
+              </Grid>
+              <Grid item xs={12}>
+                <PropertyBedroom />
+              </Grid>
+              <Grid item xs={12}>
+                <PropertyAmenities />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  type='text'
+                  name='youtube'
+                  label='Youtube url (Optional)'
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant='text'
+                  component='label'
+                  startIcon={<ImageIcon />}
+                >
+                  update Thumbnail
+                  <input
+                    type='file'
+                    hidden
+                    name='thumbnail'
+                    accept='image/jpeg, image/jpg, image/png'
+                  />
+                </Button>
+              </Grid>
+              {/* // TODO eric when updating prop imgs, show images uploaded before and decide delete, keep, or add more */}
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant='text'
+                  component='label'
+                  startIcon={<ImageIcon />}
+                >
+                  Upload Property Images
+                  <input
+                    type='file'
+                    hidden
+                    name='images'
+                    multiple
+                    accept='image/jpeg, image/jpg, image/png'
+                  />
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <DialogContentText
+                  color='error'
+                  sx={{ textAlign: 'center' }}
+                  xs={12}
+                >
+                  {errorMessage}
+                </DialogContentText>
+              </Grid>
+            </Grid>
+            <Button
+              type='submit'
+              fullWidth
+              variant='contained'
+              sx={{ mt: 5, mb: 2 }}
+            >
+              Save
+            </Button>
+          </Box>
+        </DialogContent>
+        {showModal && <ErrorDialog content={errorMessage} close={setShowModal} />}
+      </Dialog>
+    </React.Fragment>
   );
 }
 

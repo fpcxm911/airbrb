@@ -9,12 +9,14 @@ import EditListing from '../pages/EditListing';
 const Pagelist = () => {
   return (
     <Routes>
-      <Route path='/' element={<Home/>} />
-      <Route path='/register' element={<SignUp/>} />
-      <Route path='/hosted' element={<HostedListing/>} />
-      <Route path='/login' element={<Login/>} />
-      <Route path='/edit' element={<EditListing />} />
-      <Route path='/edit/:id' element={<EditListing />} />
+      <Route path='/' element={<Home/>}>
+        <Route path='/register' element={<SignUp/>} />
+        <Route path='/login' element={<Login/>} />
+      </Route>
+      <Route path='/hosted' element={<HostedListing/>}>
+        <Route path='edit' element={<EditListing />} />
+        <Route path='edit/:id' element={<EditListing />} />
+      </Route>
     </Routes>
   );
 };
