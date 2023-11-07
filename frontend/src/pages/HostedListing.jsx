@@ -18,13 +18,12 @@ import NavAirbrb from '../components/NavAirbrb';
 import ListingCard from '../components/ListingCard';
 // TODO remove, this demo shouldn't need to reset the theme.
 
-export default function HostedListing () {
+export default function HostedListing (props) {
   const [HostedLists, setHostedLists] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [showCreate, setShowCreate] = React.useState(false);
   const [showPublish, setShowPublish] = React.useState([false, '']);
-  const [listingsUpdate, setListingsUpdate] = React.useState(0);
   const navigate = useNavigate();
 
   const goBackMain = () => {
@@ -40,10 +39,6 @@ export default function HostedListing () {
 
   const closeModal = () => {
     setShowModal(false);
-  };
-
-  const updateListing = () => {
-    setListingsUpdate(listingsUpdate + 1)
   };
 
   const deleteListing = async (listing) => {
@@ -98,7 +93,7 @@ export default function HostedListing () {
       }
       setHostedLists(myListingsDetail)
     }
-  }, [listingsUpdate]);
+  }, [props.listingsUpdate]);
   return (
     <div>
       <CssBaseline />
@@ -163,8 +158,8 @@ export default function HostedListing () {
       </Box>
       {/* End footer */}
       {showModal && (<ErrorDialog close={closeModal} content={errorMessage} />)}
-      {showCreate && (<Listcreate close={closeCreate} update={updateListing} />)}
-      {showPublish[1] && (<ListPublish close={closePublish} update={updateListing} listingid={showPublish[1]} />)}
+      {showCreate && (<Listcreate close={closeCreate} update={props.update} />)}
+      {showPublish[1] && (<ListPublish close={closePublish} update={props.update} listingid={showPublish[1]} />)}
       <Outlet />
     </div>
   );

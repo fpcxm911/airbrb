@@ -20,7 +20,7 @@ import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-const EditListing = () => {
+const EditListing = (props) => {
   const [openEditing, setOpenEditing] = React.useState(true);
   const params = useParams();
   const navigate = useNavigate();
@@ -88,6 +88,7 @@ const EditListing = () => {
         if (res.error) {
           setErrorMessage(res.error);
         } else {
+          props.update();
           navigate('/hosted');
         }
       } catch (error) {
