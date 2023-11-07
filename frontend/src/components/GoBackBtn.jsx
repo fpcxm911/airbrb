@@ -6,18 +6,15 @@ import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 const HomeBtn = (props) => {
   const navigate = useNavigate();
 
-  const buttonStyles = {
-    fontSize: props.size,
-  };
-
   return (
     <>
       <IconButton
         onClick={() => navigate(-1)}
-        aria-label='home'
+        aria-label='goback'
         variant="outlined"
+        sx={props.sx}
         >
-        <ArrowBackOutlinedIcon sx={buttonStyles} />
+        <ArrowBackOutlinedIcon />
       </IconButton>
     </>
   );
