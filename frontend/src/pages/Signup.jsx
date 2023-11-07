@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX, apiCallPostNoAuthen } from './Helper'
 import ErrorDialog from '../components/ErrorPopup';
 
-export default function SignUp (props) {
+export default function SignUp () {
   const [openRegister, setOpenRegister] = React.useState(true);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -45,7 +45,6 @@ export default function SignUp (props) {
       } else {
         localStorage.setItem('token', res.token);
         localStorage.setItem('email', data.get('email'));
-        props.setToken(res.token);
         setOpenRegister(false)
         navigate('/');
       }

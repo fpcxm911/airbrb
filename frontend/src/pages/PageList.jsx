@@ -7,14 +7,12 @@ import Login from '../pages/Login';
 import EditListing from '../pages/EditListing';
 
 const Pagelist = () => {
-  const [token, setToken] = React.useState(null);
-
   return (
     <Routes>
-      <Route path='/' element={<Home token={token} setToken={setToken}/>} />
-      <Route path='/register' element={<SignUp token={token} setToken={setToken}/>} />
-      <Route path='/hosted' element={<HostedListing />} />
-      <Route path='/login' element={<Login token={token} setToken={setToken}/>} />
+      <Route path='/' element={<Home/>} />
+      <Route path='/register' element={<SignUp/>} />
+      <Route path='/hosted' element={<HostedListing/>} />
+      <Route path='/login' element={<Login/>} />
       <Route path='/edit' element={<EditListing />} />
       <Route path='/edit/:id' element={<EditListing />} />
     </Routes>

@@ -71,7 +71,7 @@ const fileToDataUrl = (file) => {
   });
   reader.readAsDataURL(file);
   return dataUrlPromise;
-}
+};
 
 const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtubeUrl, propertyImages) => {
   return {
@@ -82,7 +82,7 @@ const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtub
     youtubeUrl,
     propertyImages
   }
-}
+};
 
 const createAddress = (country, city, street, postcode) => {
   return {
@@ -91,7 +91,11 @@ const createAddress = (country, city, street, postcode) => {
     street,
     postcode
   }
-}
+};
+
+const checkLogin = () => {
+  return localStorage.getItem('token') && localStorage.getItem('email')
+};
 
 export {
   EMAIL_REGEX,
@@ -102,5 +106,6 @@ export {
   apiCallBodyAuthen,
   fileToDataUrl,
   createMeta,
-  createAddress
+  createAddress,
+  checkLogin,
 };

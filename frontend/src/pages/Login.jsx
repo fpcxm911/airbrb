@@ -14,7 +14,7 @@ import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 
-const Login = (props) => {
+const Login = () => {
   const [open, setOpen] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -40,7 +40,6 @@ const Login = (props) => {
       } else {
         localStorage.setItem('token', res.token);
         localStorage.setItem('email', email);
-        props.setToken(res.token);
         setOpen(false);
         navigate('/');
       }
