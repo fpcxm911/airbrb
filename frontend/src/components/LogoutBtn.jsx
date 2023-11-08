@@ -13,7 +13,6 @@ const LogoutBtn = (props) => {
     } else {
       // clear token in local storage and props
       localStorage.clear();
-      props.setToken(null);
       navigate('/');
     }
   };
