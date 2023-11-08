@@ -70,7 +70,6 @@ const SearchBar = (props) => {
         break;
       case 'date':
         searchInput = JSON.parse(data.get('dates'));
-        console.log(searchInput);
         filteredList = newList.filter((listing) => {
           for (const range of listing.availability) {
             const rangeStart = new Date(range.start);
