@@ -1,6 +1,6 @@
 import React from 'react';
 // import navAirbrb from '../components/navAirbrb';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import NavAirbrb from '../components/NavAirbrb';
 import SearchBar from '../components/SearchBar';
 import { Grid, Box } from '@mui/material';
@@ -14,6 +14,7 @@ export default function Home () {
   const [publishedListings, setpublishedListings] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
+  const navigate = useNavigate();
 
   const sortListings = async (listings) => {
     // have login
@@ -77,9 +78,10 @@ export default function Home () {
           {/* End hero unit */}
           <Grid container spacing={4}>
             {publishedListings.map((listing, index) => (
-              <Grid item key={listing.owner + index} xs={12} sm={6} md={4}>
+              <Grid item key={listing.owner + index} xs={12} sm={6} md={4} >
                 <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                  sx={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
+                  onClick={() => navigate(`/listing/${listing.id}`)}
                 >
                   <ListingCard listing = {listing} />
                   <CardActions>

@@ -97,6 +97,23 @@ const checkLogin = () => {
   return localStorage.getItem('token') && localStorage.getItem('email')
 };
 
+const calculateNumBeds = (listing) => {
+  return (listing.metadata.bedrooms.reduce((accumulator, bedroom) => accumulator + Number(bedroom.numberOfBeds), 0));
+};
+
+const calculateNumBedrooms = (listing) => {
+  return (listing.metadata.bedrooms.length);
+};
+
+const convertPrecision = (number) => {
+  return Math.round(number * 10) / 10;
+};
+
+const calculateAverageRating = (listing) => {
+  const sum = listing.reviews.reduce((accumulator, review) => accumulator + review.rating, 0);
+  return convertPrecision(sum / listing.reviews.length)
+};
+
 /**
  * Sorts the given listings based on specific criteria (login status, bookings status).
  *
@@ -143,5 +160,8 @@ export {
   createMeta,
   createAddress,
   checkLogin,
+  calculateNumBeds,
+  calculateAverageRating,
+  calculateNumBedrooms,
   sortListings
 };

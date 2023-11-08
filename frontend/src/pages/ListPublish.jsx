@@ -38,7 +38,9 @@ const ListPublish = (props) => {
   }
 
   const createAvailbilityArray = (datesStrArr) => {
+    console.log(sortDates(datesStrArr));
     return sortDates(datesStrArr);
+    // return sortDates(datesStrArr).map(dateRange => ({ start: dateRange.start.substring(0, 10), end: dateRange.end.substring(0, 10) }));
   }
 
   const sortDates = (datesStrArr) => {
