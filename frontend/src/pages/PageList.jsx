@@ -5,6 +5,7 @@ import SignUp from '../pages/Signup';
 import HostedListing from '../pages/HostedListing';
 import Login from '../pages/Login';
 import EditListing from '../pages/EditListing';
+import ListingDetail from './ListingDeatail';
 
 const Pagelist = () => {
   const [listingsUpdate, setListingsUpdate] = React.useState(0);
@@ -23,6 +24,7 @@ const Pagelist = () => {
         <Route path='edit' element={<EditListing />} />
         <Route path='edit/:id' element={<EditListing update = {updateListing} />} />
       </Route>
+      <Route path='listing/:id' element={<ListingDetail />} />
     </Routes>
   );
 };
