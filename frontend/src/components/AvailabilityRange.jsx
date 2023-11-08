@@ -1,5 +1,5 @@
 import { Button, IconButton, Stack, TextField } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -103,7 +103,6 @@ const AvailabilityRange = (props) => {
   const dateInputRow = (dates, idx) => {
     return (
         <Stack key={idx} direction='row' spacing={3} mb={1}>
-            {/* // TODO autocomplete tag may not be suitable for date, consider mui other component option */}
             <TextField
               required
               fullWidth

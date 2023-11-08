@@ -11,11 +11,13 @@ import BedroomRangeSlider from './BedroomRangeSlider';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import PriceSlider from './PriceSlider';
+import DateSearch from './DateSearch';
 
 // TODO eric if no listing is found, show some message
 const SearchBar = (props) => {
   const [searchOption, setSearchOption] = React.useState('titleLocation');
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [clickable, setClickable] = React.useState(true);
 
   const handleSelectChange = (event) => {
     setSearchOption(event.target.value);
@@ -68,6 +70,19 @@ const SearchBar = (props) => {
         break;
       case 'date':
         console.log('filtering by date');
+        searchInput = JSON.parse(data.get('dates'));
+        console.log(searchInput);
+        filteredList = newList.filter((listing) => {
+          console.log(listing.availability);
+          for (const range of listing.availability) {
+            const rangeStart = new Date(range.start);
+            const rangeEnd = new Date(range.end);
+            if (new Date(searchInput.start) >= rangeStart && new Date(searchInput.end) <= rangeEnd) {
+              return true;
+            }
+          }
+          return false;
+        });
         props.update(filteredList);
         break;
       case 'price':
@@ -89,10 +104,11 @@ const SearchBar = (props) => {
   }
 
   return (
+    // TODO eric recheck nothing overflow in the searchbar component
     <>
       <Paper
         component="form"
-        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 415 }}
+        sx={{ p: '2px 6px', display: 'flex', alignItems: 'center', height: 95, minWidth: 395 }}
         onSubmit={handleSearchSubmit}
       >
         {/* <IconButton sx={{ p: '10px' }} aria-label="menu">
@@ -104,7 +120,7 @@ const SearchBar = (props) => {
           wrap='nowrap'
           alignItems={'center'}
           justifyContent={'center'}>
-          <Grid item xs={6} sx={{ alignItems: 'center' }}>
+          <Grid item xs={5} sx={{ alignItems: 'center' }}>
             <FormControl>
               <InputLabel id='search-option-label'>Search Option</InputLabel>
               <Select
@@ -116,7 +132,7 @@ const SearchBar = (props) => {
                 value={searchOption}
                 onChange={handleSelectChange}
                 divider={<Divider orientation="vertical" flexItem />}
-                sx={{ width: 155, disableUnderline: true }}
+                sx={{ width: 145, disableUnderline: true }}
               >
                 {optionsArray.map((option) => {
                   return (
@@ -126,7 +142,7 @@ const SearchBar = (props) => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={6} sx={{ mr: 2, alignItems: 'center' }}>
+          <Grid item xs={6} sx={{ alignItems: 'center' }}>
             {searchOption === 'titleLocation' && (
               <TextField
                 required
@@ -141,8 +157,9 @@ const SearchBar = (props) => {
             {searchOption === 'bedrooms' && (
               <BedroomRangeSlider />
             )}
+            {/* // TODO eric when date selected, the search icon overflow */}
             {searchOption === 'date' && (
-              <p>date range</p>
+              <DateSearch setSearch={setClickable} setErrorMessage={setErrorMessage} />
             )}
             {searchOption === 'price' && (
               <PriceSlider />
@@ -151,12 +168,14 @@ const SearchBar = (props) => {
               <p>reviews slider, lowest to highest or vice versa</p>
             )}
           </Grid>
+          <Grid item xs={1} sx={{ alignItems: 'center', pr: 2 }}>
+            <IconButton type="submit" aria-label="search" disabled={!clickable} sx={{ p: 0 }}>
+              <SearchIcon />
+            </IconButton>
+          </Grid>
         </Grid>
-        <IconButton type="submit" sx={{ p: '10px' }} aria-label="search" >
-          <SearchIcon />
-        </IconButton>
       </Paper>
-      <DialogContentText color='error' sx={{ mb: 2 }}>
+      <DialogContentText color='error'>
         {errorMessage}
       </DialogContentText>
     </>
