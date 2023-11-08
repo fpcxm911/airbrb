@@ -17,6 +17,7 @@ import MyCarousels from '../components/MyCarousels';
 import { Divider, Grid } from '@mui/material';
 import Icon from '@mdi/react';
 import { mdiWashingMachine, mdiMicrowave, mdiWifi } from '@mdi/js';
+import DisplayReview from '../components/DisplayReview';
 
 export default function Candicate () {
   return (
@@ -77,6 +78,8 @@ export default function Candicate () {
             Washing Machine description
           </Typography>
         </Grid>
+        <Divider sx={{ my: 3 }}/>
+          <DisplayReview/>
         <Copyright sx={{ mt: 5 }} />
       </Container>
     </>
