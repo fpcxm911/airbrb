@@ -69,11 +69,9 @@ const SearchBar = (props) => {
         props.update(filteredList);
         break;
       case 'date':
-        console.log('filtering by date');
         searchInput = JSON.parse(data.get('dates'));
         console.log(searchInput);
         filteredList = newList.filter((listing) => {
-          console.log(listing.availability);
           for (const range of listing.availability) {
             const rangeStart = new Date(range.start);
             const rangeEnd = new Date(range.end);
@@ -93,7 +91,11 @@ const SearchBar = (props) => {
         props.update(filteredList);
         break;
       case 'reviews':
+        // TODO eric finish off filter by review
         console.log('filtering by reviews');
+        filteredList = newList.filter((listing) => {
+          return true;
+        })
         props.update(filteredList);
         break;
       default:
