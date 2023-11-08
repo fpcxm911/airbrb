@@ -122,8 +122,10 @@
         "items": {
           "type": "object",
           "example": {
+            "name": "Christian Yu",
             "rating": 5,
-            "comment": "This was a great place to stay"
+            "comment": "This was a great place to stay",
+            "date": "2020-10-31T14:45:21.077Z"
           }
         }
       },

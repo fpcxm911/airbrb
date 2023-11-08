@@ -136,6 +136,14 @@ const EditListing = (props) => {
         >
           <CloseIcon />
         </IconButton>
+          <GoBackBtn
+            sx={{
+              position: 'absolute',
+              left: 7,
+              top: 5,
+            }} />
+          <Grid container justify='flex-end' alignItems={'flex-end'}>
+          </Grid>
         <DialogContent
           dividers
           sx={{
@@ -147,9 +155,6 @@ const EditListing = (props) => {
             mr: 1.5,
           }}
         >
-          <Grid container justify='flex-end' alignItems={'flex-end'}>
-            <GoBackBtn />
-          </Grid>
           <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
             <MapsHomeWorkIcon />
           </Avatar>
