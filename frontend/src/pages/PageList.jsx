@@ -20,7 +20,7 @@ const Pagelist = () => {
         <Route path='login' element={<Login/>} />
       </Route>
       <Route path='/hosted' element={<HostedListing listingsUpdate = {listingsUpdate} update = {updateListing}/>}>
-        <Route path='edit' element={<EditListing />} />
+        {/* <Route path='edit' element={<EditListing />} /> */}
         <Route path='edit/:id' element={<EditListing update = {updateListing} />} />
       </Route>
     </Routes>
