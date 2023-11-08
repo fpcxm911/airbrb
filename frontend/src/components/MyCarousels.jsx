@@ -15,7 +15,7 @@ export default function MyCarousels (props) {
       {
           props.images.map((item, i) =>
           <Box sx={{ width: '100%' }} key={i}>
-            <ResonsiveImg src={item} width={'100%'} />
+            <ResonsiveImg src={item} />
           </Box>
           )
       }
