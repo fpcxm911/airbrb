@@ -5,19 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
-
-const calculateNumBeds = (listing) => {
-  return (listing.metadata.bedrooms.reduce((accumulator, bedroom) => accumulator + Number(bedroom.numberOfBeds), 0));
-};
-
-const convertPrecision = (number) => {
-  return Math.round(number * 10) / 10;
-};
-
-const calculateAverageRating = (listing) => {
-  const sum = listing.reviews.reduce((accumulator, review) => accumulator + review.rating, 0);
-  return convertPrecision(sum / listing.reviews.length)
-};
+import { calculateAverageRating, calculateNumBeds } from '../pages/Helper';
 
 const ListingCard = (props) => {
   return (

@@ -1,10 +1,12 @@
 import React from 'react';
-import Carousel from 'react-material-ui-carousel'
-import { Grid, Typography } from '@mui/material'
+import Carousel from 'react-material-ui-carousel';
+import { Grid, Typography, Box } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { calculateAverageRating } from '../pages/Helper';
+import { parseISO, format } from 'date-fns';
 // import image2 from '../assets/1.jfif'
 // import SkipNextIcon from '@mui/icons-material/SkipNext';
 // import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -48,63 +50,72 @@ function stringAvatar (name) {
 }
 
 export default function DisplayReview (props) {
-  const items = [
-    {
-      name: 'Random Name #1',
-      description: 'Probably the most random thing you have ever seen!'
-    },
-    {
-      name: 'Random Name #2',
-      description: 'Hello World!'
-    }
-  ]
-
   return (
     <>
       <Grid container justifyContent={'center'}>
-        <StarBorderIcon sx={{ fontSize: '70px', mr: 2 }}/>
+        <StarBorderIcon sx={{ fontSize: '70px', mr: 2 }} />
         <Typography variant="h2" color="text.primary" paragraph>
-          5.0
+          {calculateAverageRating(props.listing)}
         </Typography>
       </Grid>
+      <Typography
+        variant="subtitle1"
+        color="text.secondary"
+        align="center"
+        paragraph
+      >
+        Slide to view other reviews
+      </Typography>
 
-      <Carousel sx={{ width: '100%' }} autoPlay stopAutoPlayOnHover duration={1200} swipe indicators={false}>
-        {
-          items.map((item, i) => <Item key={i} item={item} />)
-        }
+      <Carousel
+        sx={{ width: '100%', mb: 10 }}
+        duration={500}
+        swipe
+        indicators={false}
+        autoPlay={false}
+        cycleNavigation={false}
+        animation="slide"
+      >
+        {props.listing.reviews.map((item, i) => (
+          <Box key={i} height={'180px'}>
+            <Grid container alignItems={'center'} sx={{ mb: 2 }}>
+              <Avatar {...stringAvatar(item.name)} />
+              <Typography variant="body2" color={'text.primary'} sx={{ ml: 1 }}>
+                {item.name}
+              </Typography>
+            </Grid>
+            <Grid container minheight={'170px'}>
+              <Grid container>
+                <Rating
+                  value={item.rating}
+                  readOnly
+                  precision={0.1}
+                  emptyIcon={
+                    <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+                  }
+                />
+                <Typography variant="body2" sx={{ ml: 2 }}>
+                  {' '}
+                  {format(parseISO(item.date), 'do MMMM yyyy')}
+                </Typography>
+              </Grid>
+              <Typography
+                variant="body2"
+                sx={{
+                  WebkitLineClamp: '3',
+                  WebkitBoxOrient: 'vertical',
+                  display: '-webkit-box',
+                  mt: 3,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {item.comment}
+              </Typography>
+            </Grid>
+          </Box>
+        ))}
       </Carousel>
     </>
-  )
-}
-
-function Item (props) {
-  return (
-    <Grid>
-      <Grid container alignItems={'center'} sx={{ mb: 2 }}>
-        <Avatar {...stringAvatar('Haoxiang Zhang')}/>
-        <Typography variant='body2' color={'text.primary'} sx={{ ml: 1 }}>
-          Haoxiang Zhang
-        </Typography>
-      </Grid>
-      <Grid container>
-        <Rating
-          value={3.3}
-          readOnly
-          precision={0.1}
-          emptyIcon={<StarIcon style={{ opacity: 0.55 }}
-            fontSize="inherit" />} />
-        <Typography variant="body2" sx={{ ml: 2 }}> 2023-09-24</Typography>
-      </Grid>
-      <Typography variant="body2" sx={{
-        WebkitLineClamp: '2',
-        WebkitBoxOrient: 'vertical',
-        display: '-webkit-box',
-        mt: 3,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-      }}>
-        when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      </Typography>
-    </Grid>
-  )
+  );
 }
