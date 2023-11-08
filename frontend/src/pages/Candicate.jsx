@@ -28,7 +28,6 @@ export default function Candicate () {
       {/* Hero unit */}
       <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 1 }}>
         <Typography
-          component="h1"
           variant="h2"
           align="center"
           color="text.primary"
@@ -40,17 +39,24 @@ export default function Candicate () {
       {/* End hero unit */}
       <Container maxWidth="md" component="main">
         <MyCarousels />
+        <Typography variant="subtitle1" align="start" color="text.secondary" sx={{ pt: 5 }} gutterBottom>
+          Property type : House
+        </Typography>
         <Typography
           variant="subtitle1"
           align="start"
           color="text.secondary"
-          sx={{ pt: 5 }}
           gutterBottom
         >
           Address : 1/101 Kensington Street, Kensington, NSW
         </Typography>
-        <Typography variant="subtitle1" align="start" color="text.secondary" sx={{ pb: 3 }}>
-          Property type : House
+        <Typography
+          variant="subtitle1"
+          align="start"
+          color="text.secondary"
+          sx={{ pb: 3 }}
+        >
+          3 beds | 5 baths | 6 bedrooms
         </Typography>
         <Divider/>
           <Typography variant="h5" align="start" color="text.primary" sx={{ py: 3 }}>

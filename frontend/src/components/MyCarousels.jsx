@@ -1,7 +1,7 @@
 import React from 'react';
 import Carousel from 'react-material-ui-carousel'
-import { Paper } from '@mui/material'
 import image from '../assets/1.jfif'
+import { CardMedia } from '@mui/material';
 // import image2 from '../assets/1.jfif'
 // import SkipNextIcon from '@mui/icons-material/SkipNext';
 // import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -19,7 +19,7 @@ export default function MyCarousels (props) {
 
   return (
 
-    <Carousel sx={{ width: '100%' }}autoPlay stopAutoPlayOnHover duration={1200} swipe indicators={false} height={500}>
+    <Carousel sx={{ width: '100%' }} autoPlay stopAutoPlayOnHover duration={1200} swipe indicators={false}>
     {
         items.map((item, i) => <Item key={i} item={item} />)
     }
@@ -29,8 +29,17 @@ export default function MyCarousels (props) {
 
 function Item (props) {
   return (
-        <Paper>
-            <img src={image} alt="testimage" height={500} width={'100%'} />
-        </Paper>
+        <>
+
+          <CardMedia
+            component="div"
+            sx={{
+              // 16:9
+              pt: '56.25%',
+            }}
+            image={image}
+          />
+        </>
+
   )
 }

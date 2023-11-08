@@ -4,6 +4,7 @@ import { Grid, Typography } from '@mui/material'
 import Avatar from '@mui/material/Avatar';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 // import image2 from '../assets/1.jfif'
 // import SkipNextIcon from '@mui/icons-material/SkipNext';
 // import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -59,12 +60,20 @@ export default function DisplayReview (props) {
   ]
 
   return (
+    <>
+      <Grid container justifyContent={'center'}>
+        <StarBorderIcon sx={{ fontSize: '70px', mr: 2 }}/>
+        <Typography variant="h2" color="text.primary" paragraph>
+          5.0
+        </Typography>
+      </Grid>
 
-    <Carousel sx={{ width: '100%' }} autoPlay stopAutoPlayOnHover duration={1200} swipe indicators={false}>
-      {
-        items.map((item, i) => <Item key={i} item={item} />)
-      }
-    </Carousel>
+      <Carousel sx={{ width: '100%' }} autoPlay stopAutoPlayOnHover duration={1200} swipe indicators={false}>
+        {
+          items.map((item, i) => <Item key={i} item={item} />)
+        }
+      </Carousel>
+    </>
   )
 }
 
