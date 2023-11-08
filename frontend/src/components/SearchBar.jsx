@@ -7,14 +7,15 @@ import MenuItem from '@mui/material/MenuItem';
 import { FormControl, TextField, DialogContentText } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import { apiCallGetAuthen, sortListings } from '../pages/Helper';
+import BedroomRangeSlider from './BedroomRangeSlider';
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
+import PriceSlider from './PriceSlider';
+
 // TODO eric if no listing is found, show some message
 const SearchBar = (props) => {
   const [searchOption, setSearchOption] = React.useState('titleLocation');
   const [errorMessage, setErrorMessage] = React.useState('');
-
-  React.useEffect(() => {
-    console.log(searchOption);
-  }, [searchOption])
 
   const handleSelectChange = (event) => {
     setSearchOption(event.target.value);
@@ -22,11 +23,7 @@ const SearchBar = (props) => {
 
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    console.log('search submit');
-    console.log(`searchOption: ${searchOption}`);
-    console.log('search value');
     const data = new FormData(e.currentTarget);
-    console.log(data.get('title'));
     const res = await apiCallGetAuthen('listings');
     if (res.error) {
       setErrorMessage({ title: 'Error', body: res.error });
@@ -50,22 +47,23 @@ const SearchBar = (props) => {
       setErrorMessage({ title: 'Error', body: newList.error });
       return;
     }
-    let words;
+    let searchInput;
     let filteredList;
     switch (searchOption) {
       case 'titleLocation':
-        console.log('filtering by title');
-        words = data.get('title').toLowerCase().split(' ').filter(str => str !== '');
+        searchInput = data.get('title').toLowerCase().split(' ').filter(str => str !== '');
         filteredList = newList.filter((listing) => {
           const lowercaseTitle = listing.title.toLowerCase();
           const lowercaseAddress = Object.entries(listing.address).map(([key, value]) => value).join(' ').toLowerCase();
-          return words.some(keyword => lowercaseTitle.includes(keyword) || lowercaseAddress.includes(keyword));
+          return searchInput.some(keyword => lowercaseTitle.includes(keyword) || lowercaseAddress.includes(keyword));
         });
-        console.log('filteredList: ', filteredList);
         props.update(filteredList);
         break;
       case 'bedrooms':
-        console.log('filtering by bedrooms');
+        searchInput = data.get('bedroomRange').split('-');
+        filteredList = newList.filter((listing) => {
+          return listing.metadata.bedrooms.length >= Number(searchInput[0]) && listing.metadata.bedrooms.length <= Number(searchInput[1]);
+        });
         props.update(filteredList);
         break;
       case 'date':
@@ -73,7 +71,10 @@ const SearchBar = (props) => {
         props.update(filteredList);
         break;
       case 'price':
-        console.log('filtering by price');
+        searchInput = data.get('priceRange').split('-');
+        filteredList = newList.filter((listing) => {
+          return Number(listing.price) >= Number(searchInput[0]) && Number(listing.price) <= Number(searchInput[1]);
+        })
         props.update(filteredList);
         break;
       case 'reviews':
@@ -97,48 +98,60 @@ const SearchBar = (props) => {
         {/* <IconButton sx={{ p: '10px' }} aria-label="menu">
           <MenuIcon />
         </IconButton> */}
-        <FormControl>
-          <InputLabel id='search-option-label'>Search Option</InputLabel>
-          <Select
-            required
-            labelId='search-option-label'
-            label="Package Type"
-            id='search-option-select'
-            key='search-option-select'
-            value={searchOption}
-            onChange={handleSelectChange}
-            sx={{ width: 155, disableUnderline: true }}
-          >
-            {optionsArray.map((option) => {
-              return (
-                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
-              )
-            })}
-          </Select>
-        </FormControl>
-        {searchOption === 'titleLocation' && (
-          <TextField
-            required
-            type='text'
-            name='title'
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Listings"
-            variant='standard'
-            InputProps={{ disableUnderline: true }}
-          />
-        )}
-        {searchOption === 'bedrooms' && (
-          <p>bedrooms slider</p>
-        )}
-        {searchOption === 'date' && (
-          <p>date range</p>
-        )}
-        {searchOption === 'price' && (
-          <p>price slider</p>
-        )}
-        {searchOption === 'reviews' && (
-          <p>reviews slider, lowest to highest or vice versa</p>
-        )}
+        <Grid
+          container
+          spacing={1}
+          wrap='nowrap'
+          alignItems={'center'}
+          justifyContent={'center'}>
+          <Grid item xs={6} sx={{ alignItems: 'center' }}>
+            <FormControl>
+              <InputLabel id='search-option-label'>Search Option</InputLabel>
+              <Select
+                required
+                labelId='search-option-label'
+                label="Package Type"
+                id='search-option-select'
+                key='search-option-select'
+                value={searchOption}
+                onChange={handleSelectChange}
+                divider={<Divider orientation="vertical" flexItem />}
+                sx={{ width: 155, disableUnderline: true }}
+              >
+                {optionsArray.map((option) => {
+                  return (
+                    <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6} sx={{ mr: 2, alignItems: 'center' }}>
+            {searchOption === 'titleLocation' && (
+              <TextField
+                required
+                type='text'
+                name='title'
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search Listings"
+                variant='standard'
+                InputProps={{ disableUnderline: true }}
+              />
+            )}
+            {searchOption === 'bedrooms' && (
+              <BedroomRangeSlider />
+            )}
+            {searchOption === 'date' && (
+              <p>date range</p>
+            )}
+            {searchOption === 'price' && (
+              <PriceSlider />
+            )}
+            {searchOption === 'reviews' && (
+              <p>reviews slider, lowest to highest or vice versa</p>
+            )}
+          </Grid>
+        </Grid>
         <IconButton type="submit" sx={{ p: '10px' }} aria-label="search" >
           <SearchIcon />
         </IconButton>
