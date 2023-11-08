@@ -74,14 +74,13 @@ export default function BookingStatus (props) {
               </Typography>
             </Grid>
           ))}
+          <Divider />
         </>
           )
         : (
-        <Typography variant="h6" color="text.primary" sx={{ mb: 2 }}>
-          You do not have any bookings yet
-        </Typography>
+        <>
+        </>
           )}
-      <Divider />
     </>
   );
 }

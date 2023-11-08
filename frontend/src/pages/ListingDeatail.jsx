@@ -82,7 +82,7 @@ export default function ListingDetail () {
           {/* Hero unit */}
           <Container
             disableGutters
-            maxWidth="sm"
+            maxWidth="md"
             component="main"
             sx={{ pt: 8, pb: 1 }}
           >
@@ -96,7 +96,7 @@ export default function ListingDetail () {
             </Typography>
           </Container>
           {/* End hero unit */}
-          <Container maxWidth="md" component="main">
+          <Container maxWidth="lg" component="main">
             <MyCarousels images={imageCollection(listDeatail)} />
             <Grid sx={{ mt: 5 }}>
               {checkLogin() && (
