@@ -37,14 +37,8 @@ const ListPublish = (props) => {
     }
   }
 
-  /**
-   * Generates an availability array based on the given array of date strings.
-   *
-   * @param {Array<string>} datesStrArr - An array of date strings.
-   * @return {Array<{start: string, end: string}>} The availability array with start and end dates.
-   */
   const createAvailbilityArray = (datesStrArr) => {
-    return sortDates(datesStrArr).map(dateRange => ({ start: dateRange.start.substring(0, 10), end: dateRange.end.substring(0, 10) }));
+    return sortDates(datesStrArr);
   }
 
   const sortDates = (datesStrArr) => {
