@@ -98,7 +98,7 @@ const EditListing = (props) => {
       setErrorMessage('Please add at least one bedroom');
     }
   }
-
+  // TODO eric remove the route to /edit (route without propertyID)
   // if (!params.id) {
   //   return (
   //     <>
