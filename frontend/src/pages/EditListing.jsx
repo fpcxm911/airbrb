@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import GoBackBtn from '../components/GoBackBtn';
 import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
@@ -98,7 +97,7 @@ const EditListing = (props) => {
       setErrorMessage('Please add at least one bedroom');
     }
   }
-
+  // TODO eric remove the route to /edit (route without propertyID)
   // if (!params.id) {
   //   return (
   //     <>
@@ -136,12 +135,6 @@ const EditListing = (props) => {
         >
           <CloseIcon />
         </IconButton>
-          <GoBackBtn
-            sx={{
-              position: 'absolute',
-              left: 7,
-              top: 5,
-            }} />
           <Grid container justify='flex-end' alignItems={'flex-end'}>
           </Grid>
         <DialogContent
