@@ -7,6 +7,7 @@ import Login from '../pages/Login';
 import EditListing from '../pages/EditListing';
 import ListingDetail from './ListingDeatail';
 import { Context, initialValue } from '../Context';
+import BookingHistory from '../components/BookingHistory';
 
 const Pagelist = () => {
   const [listingsUpdate, setListingsUpdate] = React.useState(0);
@@ -52,6 +53,7 @@ const Pagelist = () => {
           />
         </Route>
         <Route path="listing/:id" element={<ListingDetail />} />
+        <Route path="test" element={<BookingHistory />} />
       </Routes>
     </Context.Provider>
   );
