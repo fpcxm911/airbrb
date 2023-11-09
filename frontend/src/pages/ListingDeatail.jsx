@@ -26,11 +26,14 @@ import {
 } from './Helper';
 import { useParams } from 'react-router-dom';
 import BookingStatus from '../components/BookingStatus';
+import Myform from '../components/MyForm';
 
 export default function ListingDetail () {
   const [listDeatail, setListDetail] = React.useState({});
+  const [listBookings, setListBookings] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [newComment, setNewComment] = React.useState(0);
 
   const params = useParams();
 
@@ -58,15 +61,33 @@ export default function ListingDetail () {
   };
 
   React.useEffect(async () => {
-    const res = await apiCallGetAuthen(`listings/${params.id}`);
-    if (res.error) {
-      setErrorMessage({ title: 'Error', body: res.error });
+    const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
+    if (listingRes.error) {
+      setErrorMessage({ title: 'Error', body: listingRes.error });
       setShowModal(true);
     } else {
-      const collectListingData = res.listing;
+      const collectListingData = listingRes.listing;
       collectListingData.id = params.id;
       console.log(collectListingData);
       setListDetail(collectListingData);
+    }
+  }, [newComment]);
+
+  React.useEffect(async () => {
+    const bookingRes = await apiCallGetAuthen(
+      'bookings',
+      localStorage.getItem('token')
+    );
+    if (bookingRes.error) {
+      setErrorMessage({ title: 'Error', body: bookingRes.error });
+      setShowModal(true);
+    } else {
+      const myBookings = bookingRes.bookings.filter(
+        (x) =>
+          x.owner === localStorage.getItem('email') &&
+          x.listingId === params.id
+      );
+      setListBookings(myBookings);
     }
   }, []);
 
@@ -103,7 +124,7 @@ export default function ListingDetail () {
                 <BookingStatus
                   setErrorMessage={setErrorMessage}
                   setShowModal={setShowModal}
-                  listingId={listDeatail.id}
+                  bookings={listBookings}
                 />
               )}
               <Typography variant="h6" sx={{ pt: 3 }} color="text.primary">
@@ -205,6 +226,15 @@ export default function ListingDetail () {
                 </Typography>
               </Grid>
                 )}
+            <Divider />
+            <Grid container direction='column'>
+                <Typography variant="h6" sx={{ my: 3 }} color="text.primary">
+                  Leave your reviews
+                </Typography>
+              <Grid container direction='row' justifyContent='center' >
+                <Myform setErrorMessage = {setErrorMessage} setShowModal = {setShowModal} bookings={listBookings} listingId = {listDeatail.id} setNewComment={setNewComment} newComment={newComment}/>
+              </Grid>
+            </Grid>
             <Copyright sx={{ my: 5 }} />
             {showModal && (
               <ErrorDialog
