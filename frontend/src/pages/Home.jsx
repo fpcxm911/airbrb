@@ -76,8 +76,8 @@ export default function Home () {
           setShowModal(true);
         } else {
           const collectListingData = deatailRes.listing;
-          collectListingData.id = listing.id
-          myListingsDetail.push(collectListingData)
+          collectListingData.id = listing.id;
+          myListingsDetail.push(collectListingData);
         }
       }
       const newList = await sortListings(myListingsDetail.filter(x => x.published));
@@ -90,7 +90,7 @@ export default function Home () {
     <div>
       <NavAirbrb/>
       <Grid container justifyContent={'center'} sx={{ mt: 5, mb: 3 }}>
-        <SearchBar/>
+        <SearchBar update={setpublishedListings} />
       </Grid>
       <main>
       <Box sx={{ py: 8, mx: 10 }} >

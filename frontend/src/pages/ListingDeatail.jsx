@@ -224,7 +224,7 @@ export default function ListingDetail () {
               <Grid container alignItems={'center'} sx={{ pt: 3 }}>
                 <Icon path={mdiHomeCircleOutline} size={2} />
                 <Typography variant="h6" color="text.primary" sx={{ pl: 2 }}>
-                  No amenities provide yet
+                  No amenities provided yet
                 </Typography>
               </Grid>
                 )}

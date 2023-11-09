@@ -114,6 +114,41 @@ const calculateAverageRating = (listing) => {
   return convertPrecision(sum / listing.reviews.length)
 };
 
+/**
+ * Sorts the given listings based on specific criteria (login status, bookings status).
+ *
+ * @param {Array} listings - The array of listings to be sorted.
+ * @return {Array} - The sorted array of listings.
+ */
+const sortListings = async (listings) => {
+  // have login
+  if (checkLogin()) {
+    const res = await apiCallGetAuthen('bookings', localStorage.getItem('token'));
+    if (res.error) {
+      console.error('Error:', res.error);
+      throw res.error;
+    } else {
+      const accecptPendingBookings = res.bookings.filter(x => x.status === 'accepted' || x.status === 'pending');
+      const extractedLitingsId = accecptPendingBookings.map(x => x.listingId);
+      return listings.sort((a, b) => {
+        const aIn = extractedLitingsId.includes(a.id);
+        const bIn = extractedLitingsId.includes(b.id);
+        if (aIn && !bIn) {
+          return -1;
+        } else if (!aIn && bIn) {
+          return 1;
+        } else if (aIn && bIn) {
+          return 1;
+        } else {
+          return a.title.localeCompare(b.title);
+        }
+      });
+    }
+  } else {
+    return listings.sort((a, b) => a.title.localeCompare(b.title));
+  }
+}
+
 export {
   EMAIL_REGEX,
   USERNAME_REGEX,
@@ -127,5 +162,6 @@ export {
   checkLogin,
   calculateNumBeds,
   calculateAverageRating,
-  calculateNumBedrooms
+  calculateNumBedrooms,
+  sortListings
 };
