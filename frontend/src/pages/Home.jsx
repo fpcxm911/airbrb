@@ -3,11 +3,12 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import NavAirbrb from '../components/NavAirbrb';
 import SearchBar from '../components/SearchBar';
 import { Grid, Box } from '@mui/material';
-import { apiCallGetAuthen, checkLogin } from './Helper';
+import { apiCallGetAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import ListingCard from '../components/ListingCard';
+import { useContext, Context } from '../Context';
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import Button from '@mui/material/Button';
@@ -16,16 +17,27 @@ import { calculateAverageRating } from '../pages/Helper';
 import AbcOutlinedIcon from '@mui/icons-material/AbcOutlined';
 
 const Home = () => {
+  const { getters, setters } = useContext(Context);
   const [publishedListings, setpublishedListings] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   // const [sortOption, setSortOption] = React.useState('');
   const [sortOption, setSortOption] = React.useState('title');
   const navigate = useNavigate();
+  // fetch localstorage to context state prevent lossing data by refreshing
+  React.useEffect(() => {
+    const email = localStorage.getItem('email');
+    const token = localStorage.getItem('token');
+    if (email && token) {
+      setters.setToken(token);
+      setters.setEmail(email);
+      setters.setLoggedIn(true);
+    }
+  }, []);
 
   const sortListings = async (listings) => {
     // have login
-    if (checkLogin()) {
+    if (getters.loggedIn) {
       const res = await apiCallGetAuthen('bookings', localStorage.getItem('token'));
       if (res.error) {
         setErrorMessage({ title: 'Error', body: res.error });
@@ -33,21 +45,27 @@ const Home = () => {
       } else {
         const accecptPendingBookings = res.bookings.filter(x => x.status === 'accepted' || x.status === 'pending');
         const extractedLitingsId = accecptPendingBookings.map(x => x.listingId);
+        console.log(extractedLitingsId);
         return listings.sort((a, b) => {
-          const aIn = extractedLitingsId.includes(a.id);
-          const bIn = extractedLitingsId.includes(b.id);
+          const aIn = extractedLitingsId.includes(String(a.id));
+          const bIn = extractedLitingsId.includes(String(b.id));
           if (aIn && !bIn) {
+            console.log('123');
             return -1;
           } else if (!aIn && bIn) {
+            console.log('456');
             return 1;
           } else if (aIn && bIn) {
+            console.log('789');
             return 1;
           } else {
+            console.log('haha');
             return a.title.localeCompare(b.title);
           }
         });
       }
     } else {
+      console.log('noway');
       return listings.sort((a, b) => a.title.localeCompare(b.title));
     }
   }
@@ -74,7 +92,8 @@ const Home = () => {
       const newList = await sortListings(myListingsDetail.filter(x => x.published));
       setpublishedListings(newList);
     }
-  }, []);
+  }, [getters.loggedIn]);
+  console.log('rendering again');
 
   // sort if sortOption changes
   React.useEffect(async () => {

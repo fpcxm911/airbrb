@@ -7,49 +7,11 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { calculateAverageRating } from '../pages/Helper';
 import { parseISO, format } from 'date-fns';
-// import image2 from '../assets/1.jfif'
-// import SkipNextIcon from '@mui/icons-material/SkipNext';
-// import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-
-// const convertPrecision = (number) => {
-//   return Math.round(number * 10) / 10;
-// };
-
-// const calculateAverageRating = (listing) => {
-//   const sum = listing.reviews.reduce((accumulator, review) => accumulator + review.rating, 0);
-//   return convertPrecision(sum / listing.reviews.length)
-// };
-
-function stringToColor (string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar (name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  };
-}
+import defaultImage from '../assets/man.png'
 
 export default function DisplayReview (props) {
+  const copiedReviews = [...props.listing.reviews];
+  const reversedReviews = copiedReviews.reverse();
   return (
     <>
       <Grid container justifyContent={'center'}>
@@ -76,12 +38,12 @@ export default function DisplayReview (props) {
         cycleNavigation={false}
         animation="slide"
       >
-        {props.listing.reviews.map((item, i) => (
+        {reversedReviews.map((item, i) => (
           <Box key={i} height={'180px'}>
             <Grid container alignItems={'center'} sx={{ mb: 2 }}>
-              <Avatar {...stringAvatar(item.name)} />
+              <Avatar alt="Remy Sharp" src={defaultImage} sx={{ width: 56, height: 56 }} />
               <Typography variant="body2" color={'text.primary'} sx={{ ml: 1 }}>
-                {item.name}
+                {item.userEmail}
               </Typography>
             </Grid>
             <Grid container minheight={'170px'}>

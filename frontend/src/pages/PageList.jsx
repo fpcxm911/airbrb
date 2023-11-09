@@ -6,26 +6,54 @@ import HostedListing from '../pages/HostedListing';
 import Login from '../pages/Login';
 import EditListing from '../pages/EditListing';
 import ListingDetail from './ListingDeatail';
+import { Context, initialValue } from '../Context';
 
 const Pagelist = () => {
   const [listingsUpdate, setListingsUpdate] = React.useState(0);
 
   const updateListing = () => {
-    setListingsUpdate(listingsUpdate + 1)
+    setListingsUpdate(listingsUpdate + 1);
+  };
+
+  const [email, setEmail] = React.useState(initialValue.email);
+  const [token, setToken] = React.useState(initialValue.token);
+  const [loggedIn, setLoggedIn] = React.useState(initialValue.loggedIn);
+  const getters = {
+    email,
+    token,
+    loggedIn,
+  };
+  const setters = {
+    setEmail,
+    setToken,
+    setLoggedIn,
   };
 
   return (
-    <Routes>
-      <Route path='/' element={<Home/>}>
-        <Route path='register' element={<SignUp/>} />
-        <Route path='login' element={<Login/>} />
-      </Route>
-      <Route path='/hosted' element={<HostedListing listingsUpdate = {listingsUpdate} update = {updateListing}/>}>
-        {/* <Route path='edit' element={<EditListing />} /> */}
-        <Route path='edit/:id' element={<EditListing update = {updateListing} />} />
-      </Route>
-      <Route path='listing/:id' element={<ListingDetail />} />
-    </Routes>
+    <Context.Provider value={{ getters, setters }}>
+      <Routes>
+        <Route path="/" element={<Home />}>
+          <Route path="register" element={<SignUp />} />
+          <Route path="login" element={<Login />} />
+        </Route>
+        <Route
+          path="/hosted"
+          element={
+            <HostedListing
+              listingsUpdate={listingsUpdate}
+              update={updateListing}
+            />
+          }
+        >
+          <Route path="edit" element={<EditListing />} />
+          <Route
+            path="edit/:id"
+            element={<EditListing update={updateListing} />}
+          />
+        </Route>
+        <Route path="listing/:id" element={<ListingDetail />} />
+      </Routes>
+    </Context.Provider>
   );
 };
 

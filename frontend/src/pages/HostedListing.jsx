@@ -16,14 +16,27 @@ import { useNavigate, Outlet } from 'react-router-dom';
 import ListPublish from './ListPublish';
 import NavAirbrb from '../components/NavAirbrb';
 import ListingCard from '../components/ListingCard';
+import { useContext, Context } from '../Context';
 // TODO remove, this demo shouldn't need to reset the theme.
 
 export default function HostedListing (props) {
+  const { getters, setters } = useContext(Context);
   const [HostedLists, setHostedLists] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [showCreate, setShowCreate] = React.useState(false);
   const [showPublish, setShowPublish] = React.useState([false, '']);
+
+  React.useEffect(() => {
+    const email = localStorage.getItem('email');
+    const token = localStorage.getItem('token');
+    if (email && token) {
+      setters.setToken(token);
+      setters.setEmail(email);
+      setters.setLoggedIn(true);
+    }
+  }, []);
+
   const navigate = useNavigate();
 
   const goBackMain = () => {
@@ -94,8 +107,14 @@ export default function HostedListing (props) {
       setHostedLists(myListingsDetail)
     }
   }, [props.listingsUpdate]);
+
+  console.log(getters.loggedIn);
+  console.log(getters.token);
+  console.log(getters.email);
   return (
-    <div>
+    <>
+    { getters.loggedIn
+      ? (<div>
       <CssBaseline />
       <NavAirbrb/>
       <main>
@@ -161,6 +180,8 @@ export default function HostedListing (props) {
       {showCreate && (<Listcreate close={closeCreate} update={props.update} />)}
       {showPublish[1] && (<ListPublish close={closePublish} update={props.update} listingid={showPublish[1]} />)}
       <Outlet />
-    </div>
-  );
+    </div>)
+      : (<>You dont have permission</>)
+    }
+    </>);
 }

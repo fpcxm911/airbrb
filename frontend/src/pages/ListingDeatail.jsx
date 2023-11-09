@@ -22,17 +22,31 @@ import {
   apiCallGetAuthen,
   calculateNumBedrooms,
   calculateNumBeds,
-  checkLogin,
 } from './Helper';
 import { useParams } from 'react-router-dom';
 import BookingStatus from '../components/BookingStatus';
+import Myform from '../components/MyForm';
+import { useContext, Context } from '../Context';
 
 export default function ListingDetail () {
+  const { getters, setters } = useContext(Context);
   const [listDeatail, setListDetail] = React.useState({});
+  const [listBookings, setListBookings] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [newComment, setNewComment] = React.useState(0);
 
   const params = useParams();
+
+  React.useEffect(() => {
+    const email = localStorage.getItem('email');
+    const token = localStorage.getItem('token');
+    if (email && token) {
+      setters.setToken(token);
+      setters.setEmail(email);
+      setters.setLoggedIn(true);
+    }
+  }, []);
 
   const imageCollection = () => {
     const newArray = [listDeatail.thumbnail];
@@ -58,17 +72,39 @@ export default function ListingDetail () {
   };
 
   React.useEffect(async () => {
-    const res = await apiCallGetAuthen(`listings/${params.id}`);
-    if (res.error) {
-      setErrorMessage({ title: 'Error', body: res.error });
+    const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
+    if (listingRes.error) {
+      setErrorMessage({ title: 'Error', body: listingRes.error });
       setShowModal(true);
     } else {
-      const collectListingData = res.listing;
+      const collectListingData = listingRes.listing;
       collectListingData.id = params.id;
       console.log(collectListingData);
       setListDetail(collectListingData);
     }
-  }, []);
+  }, [newComment]);
+
+  React.useEffect(async () => {
+    if (getters.loggedIn) {
+      const bookingRes = await apiCallGetAuthen(
+        'bookings',
+        localStorage.getItem('token')
+      );
+      if (bookingRes.error) {
+        setErrorMessage({ title: 'Error', body: bookingRes.error });
+        setShowModal(true);
+      } else {
+        const myBookings = bookingRes.bookings.filter(
+          (x) =>
+            x.owner === localStorage.getItem('email') &&
+            x.listingId === params.id
+        );
+        setListBookings(myBookings);
+      }
+    } else {
+      setListBookings([]);
+    }
+  }, [getters.loggedIn]);
 
   return (
     <>
@@ -99,11 +135,11 @@ export default function ListingDetail () {
           <Container maxWidth="lg" component="main">
             <MyCarousels images={imageCollection(listDeatail)} />
             <Grid sx={{ mt: 5 }}>
-              {checkLogin() && (
+              {getters.loggedIn && (
                 <BookingStatus
                   setErrorMessage={setErrorMessage}
                   setShowModal={setShowModal}
-                  listingId={listDeatail.id}
+                  bookings={listBookings}
                 />
               )}
               <Typography variant="h6" sx={{ pt: 3 }} color="text.primary">
@@ -205,6 +241,17 @@ export default function ListingDetail () {
                 </Typography>
               </Grid>
                 )}
+            {listBookings.length !== 0 && getters.loggedIn && <>
+              <Divider />
+            <Grid container direction='column'>
+                <Typography variant="h6" sx={{ my: 3 }} color="text.primary">
+                  Leave your reviews
+                </Typography>
+              <Grid container direction='row' justifyContent='center' >
+                <Myform setErrorMessage = {setErrorMessage} setShowModal = {setShowModal} bookings={listBookings} listingId = {listDeatail.id} setNewComment={setNewComment} newComment={newComment}/>
+              </Grid>
+            </Grid>
+            </>}
             <Copyright sx={{ my: 5 }} />
             {showModal && (
               <ErrorDialog
