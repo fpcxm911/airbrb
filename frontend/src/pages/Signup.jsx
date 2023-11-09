@@ -14,8 +14,10 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX, apiCallPostNoAuthen } from './Helper'
 import ErrorDialog from '../components/ErrorPopup';
+import { useContext, Context } from '../Context';
 
 export default function SignUp () {
+  const { setters } = useContext(Context);
   const [openRegister, setOpenRegister] = React.useState(true);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -45,6 +47,9 @@ export default function SignUp () {
       } else {
         localStorage.setItem('token', res.token);
         localStorage.setItem('email', data.get('email'));
+        setters.setToken(res.token);
+        setters.setEmail(data.get('email'));
+        setters.setLoggedIn(true);
         setOpenRegister(false)
         navigate('/');
       }

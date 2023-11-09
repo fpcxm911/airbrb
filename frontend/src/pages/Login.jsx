@@ -12,8 +12,10 @@ import Avatar from '@mui/material/Avatar';
 import { EMAIL_REGEX, apiCallPostNoAuthen } from './Helper'
 import { Typography } from '@mui/material';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
+import { useContext, Context } from '../Context';
 
 const Login = () => {
+  const { setters } = useContext(Context);
   const [open, setOpen] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -39,6 +41,9 @@ const Login = () => {
       } else {
         localStorage.setItem('token', res.token);
         localStorage.setItem('email', email);
+        setters.setToken(res.token);
+        setters.setEmail(email);
+        setters.setLoggedIn(true);
         setOpen(false);
         navigate('/');
       }

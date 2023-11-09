@@ -15,10 +15,12 @@ import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { useNavigate } from 'react-router-dom';
 import { apiCallBodyAuthen, checkLogin } from '../pages/Helper';
+import { useContext, Context } from '../Context';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 export default function NavAirbrb () {
+  const { setters } = useContext(Context);
   const handleLogout = async () => {
     const res = await apiCallBodyAuthen('user/auth/logout', localStorage.getItem('token'), {}, 'POST');
     if (res.error) {
@@ -26,7 +28,9 @@ export default function NavAirbrb () {
     } else {
       // clear token in local storage and props
       localStorage.clear();
-      navigate('/');
+      setters.setToken(null);
+      setters.setEmail(null);
+      setters.setLoggedIn(false);
     }
   };
 
