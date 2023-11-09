@@ -12,7 +12,6 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import PriceSlider from './PriceSlider';
 import DateSearch from './DateSearch';
-import ReviewFilter from './ReviewFilter';
 
 // TODO eric if no listing is found, show some message
 const SearchBar = (props) => {
@@ -186,17 +185,33 @@ const SearchBar = (props) => {
             {searchOption === 'price' && (
               <PriceSlider />
             )}
-            {searchOption === 'reviews' && (
+            {/* {searchOption === 'reviews' && (
               <ReviewFilter />
-            )}
+            )} */}
           </Grid>
           <Grid item xs={1} sx={{ alignItems: 'center', pr: 2 }}>
             <IconButton type="submit" aria-label="search" disabled={!clickable} sx={{ p: 0 }}>
-              <SearchIcon />
+              <SearchIcon style={{ fill: 'blue' }} />
             </IconButton>
           </Grid>
         </Grid>
       </Paper>
+      {/* <form>
+        <TextField
+          id="search-bar"
+          className="text"
+          // onInput={(e) => {
+          //   setSearchQuery(e.target.value);
+          // }}
+          label="Search listings"
+          variant="outlined"
+          placeholder="Search..."
+          size="small"
+        />
+        <IconButton type="submit" aria-label="search" onClick={(e) => e.preventDefault()}>
+          <SearchIcon style={{ fill: 'blue' }} />
+        </IconButton>
+      </form> */}
       <DialogContentText color='error'>
         {errorMessage}
       </DialogContentText>
@@ -207,7 +222,6 @@ const optionsArray = [
   { value: 'titleLocation', label: 'Title location' },
   { value: 'bedrooms', label: 'Bedrooms' },
   { value: 'date', label: 'Date' },
-  { value: 'price', label: 'Price' },
-  { value: 'reviews', label: 'Review rating' },
+  { value: 'price', label: 'Price' }
 ]
 export default SearchBar;

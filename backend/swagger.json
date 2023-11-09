@@ -123,7 +123,7 @@
           "type": "object",
           "example": {
             "bookingId": 78204786,
-            "name": "Christian Yu",
+            "email": "christian@unsw.edu.au",
             "rating": 5,
             "comment": "This was a great place to stay",
             "date": "2020-10-31T14:45:21.077Z"

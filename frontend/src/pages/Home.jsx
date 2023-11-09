@@ -1,5 +1,4 @@
 import React from 'react';
-// import navAirbrb from '../components/navAirbrb';
 import { Outlet, useNavigate } from 'react-router-dom';
 import NavAirbrb from '../components/NavAirbrb';
 import SearchBar from '../components/SearchBar';
@@ -9,11 +8,18 @@ import ErrorDialog from '../components/ErrorPopup';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import ListingCard from '../components/ListingCard';
-// import Button from '@mui/material/Button';
+import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
+import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import { calculateAverageRating } from '../pages/Helper';
+
 export default function Home () {
   const [publishedListings, setpublishedListings] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
+  // const [sortOption, setSortOption] = React.useState('');
+  const [sortAscending, setSortAscending] = React.useState(false);
   const navigate = useNavigate();
 
   const sortListings = async (listings) => {
@@ -44,6 +50,7 @@ export default function Home () {
       return listings.sort((a, b) => a.title.localeCompare(b.title));
     }
   }
+
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings');
     if (res.error) {
@@ -63,18 +70,55 @@ export default function Home () {
         }
       }
       const newList = await sortListings(myListingsDetail.filter(x => x.published));
+      newList.forEach((listing) => {
+        listing.averageRating = isNaN(calculateAverageRating(listing))
+          ? sortAscending
+            ? 999
+            : -1
+          : calculateAverageRating(listing);
+      });
+      newList.sort((a, b) =>
+        sortAscending
+          ? a.averageRating - b.averageRating
+          : b.averageRating - a.averageRating
+      );
       setpublishedListings(newList);
     }
-  }, []);
-  // const navigate = useNavigate();
+  }, [sortAscending]);
+
   return (
     <div>
       <NavAirbrb/>
       <Grid container justifyContent={'center'} sx={{ mt: 5, mb: 3 }}>
-        <SearchBar update={setpublishedListings} />
+        {/* <Grid item xs={12} alignItems={'center'}> */}
+          <SearchBar update={setpublishedListings} />
+        {/* </Grid> */}
+        {/* <Grid item xs={6} alignItems={'right'}>
+          <Select
+            labelId='review-id'
+            id='sort-select'
+            value={sortOption}
+            label="Sort by"
+            onChange={handleSortChange}
+          >
+            <MenuItem value={'high to low'}>high to low</MenuItem>
+            <MenuItem value={'low to high'}>low to high</MenuItem>
+          </Select>
+        </Grid> */}
       </Grid>
       <main>
       <Box sx={{ py: 8, mx: 10 }} >
+        <Tooltip title={`Sort by ${sortAscending ? 'ascending' : 'descending'} ratings`} placement="top">
+          <Button
+            variant="contained"
+            onClick={() => setSortAscending(!sortAscending)}
+            sx={{ mb: 2, borderRadius: 8 }}
+            >
+            Sort by ratings &nbsp;
+            { sortAscending && <ArrowUpwardOutlinedIcon />}
+            { !sortAscending && <ArrowDownwardOutlinedIcon />}
+          </Button>
+        </Tooltip>
           {/* End hero unit */}
           <Grid container spacing={4}>
             {publishedListings.map((listing, index) => (
