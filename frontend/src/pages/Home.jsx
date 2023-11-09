@@ -13,13 +13,14 @@ import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { calculateAverageRating } from '../pages/Helper';
+import AbcOutlinedIcon from '@mui/icons-material/AbcOutlined';
 
-export default function Home () {
+const Home = () => {
   const [publishedListings, setpublishedListings] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   // const [sortOption, setSortOption] = React.useState('');
-  const [sortAscending, setSortAscending] = React.useState(false);
+  const [sortOption, setSortOption] = React.useState('title');
   const navigate = useNavigate();
 
   const sortListings = async (listings) => {
@@ -51,6 +52,7 @@ export default function Home () {
     }
   }
 
+  // first load of home page
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings');
     if (res.error) {
@@ -61,62 +63,80 @@ export default function Home () {
       for (const listing of res.listings) {
         const deatailRes = await apiCallGetAuthen(`listings/${listing.id}`);
         if (deatailRes.error) {
-          setErrorMessage({ title: 'Error', body: res.error });
+          setErrorMessage({ title: 'Error', body: deatailRes.error });
           setShowModal(true);
         } else {
           const collectListingData = deatailRes.listing;
-          collectListingData.id = listing.id;
-          myListingsDetail.push(collectListingData);
+          collectListingData.id = listing.id
+          myListingsDetail.push(collectListingData)
         }
       }
       const newList = await sortListings(myListingsDetail.filter(x => x.published));
-      newList.forEach((listing) => {
-        listing.averageRating = isNaN(calculateAverageRating(listing))
-          ? sortAscending
-            ? 999
-            : -1
-          : calculateAverageRating(listing);
-      });
-      newList.sort((a, b) =>
-        sortAscending
-          ? a.averageRating - b.averageRating
-          : b.averageRating - a.averageRating
-      );
       setpublishedListings(newList);
     }
-  }, [sortAscending]);
+  }, []);
+
+  // sort if sortOption changes
+  React.useEffect(async () => {
+    let myListingsDetail;
+    const unsortedListings = [...publishedListings];
+    switch (sortOption) {
+      case 'ascending':
+        unsortedListings.forEach((listing) => {
+          listing.averageRating = isNaN(calculateAverageRating(listing)) ? 999 : calculateAverageRating(listing);
+        });
+        unsortedListings.sort((a, b) => a.averageRating - b.averageRating);
+        setpublishedListings(unsortedListings);
+        break;
+      case 'descending':
+        unsortedListings.forEach((listing) => {
+          listing.averageRating = isNaN(calculateAverageRating(listing)) ? -1 : calculateAverageRating(listing);
+        });
+        unsortedListings.sort((a, b) => b.averageRating - a.averageRating);
+        setpublishedListings(unsortedListings);
+        break;
+      default:
+        myListingsDetail = [];
+        for (const listing of unsortedListings) {
+          const deatailRes = await apiCallGetAuthen(`listings/${listing.id}`);
+          if (deatailRes.error) {
+            setErrorMessage({ title: 'Error', body: deatailRes.error });
+            setShowModal(true);
+          } else {
+            const collectListingData = deatailRes.listing;
+            collectListingData.id = listing.id;
+            myListingsDetail.push(collectListingData);
+          }
+        }
+        setpublishedListings(await sortListings(myListingsDetail.filter(x => x.published)));
+        break;
+    }
+  }, [sortOption]);
+
+  const setNextOption = () => {
+    const curIndex = optionList.indexOf(sortOption);
+    const nextIndex = (curIndex + 1) % optionList.length;
+    setSortOption(optionList[nextIndex]);
+  }
 
   return (
     <div>
       <NavAirbrb/>
       <Grid container justifyContent={'center'} sx={{ mt: 5, mb: 3 }}>
-        {/* <Grid item xs={12} alignItems={'center'}> */}
           <SearchBar update={setpublishedListings} />
-        {/* </Grid> */}
-        {/* <Grid item xs={6} alignItems={'right'}>
-          <Select
-            labelId='review-id'
-            id='sort-select'
-            value={sortOption}
-            label="Sort by"
-            onChange={handleSortChange}
-          >
-            <MenuItem value={'high to low'}>high to low</MenuItem>
-            <MenuItem value={'low to high'}>low to high</MenuItem>
-          </Select>
-        </Grid> */}
       </Grid>
       <main>
       <Box sx={{ py: 8, mx: 10 }} >
-        <Tooltip title={`Sort by ${sortAscending ? 'ascending' : 'descending'} ratings`} placement="top">
+        <Tooltip title={`Sort by ${sortOption}`} placement="top">
           <Button
             variant="contained"
-            onClick={() => setSortAscending(!sortAscending)}
+            onClick={setNextOption}
             sx={{ mb: 2, borderRadius: 8 }}
             >
-            Sort by ratings &nbsp;
-            { sortAscending && <ArrowUpwardOutlinedIcon />}
-            { !sortAscending && <ArrowDownwardOutlinedIcon />}
+            Sort option &nbsp;
+            { sortOption === optionList[0] && <AbcOutlinedIcon />}
+            { sortOption === optionList[1] && <ArrowUpwardOutlinedIcon />}
+            { sortOption === optionList[2] && <ArrowDownwardOutlinedIcon />}
           </Button>
         </Tooltip>
           {/* End hero unit */}
@@ -141,3 +161,7 @@ export default function Home () {
     </div>
   );
 }
+
+const optionList = ['title', 'ascending', 'descending'];
+
+export default Home;
