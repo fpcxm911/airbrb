@@ -6,26 +6,28 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function ErrorDialog (props) {
+export default function ConfirmPopup (props) {
   return (
     <React.Fragment>
       <Dialog
         maxWidth = {'xs'}
         open
         onClose={props.close}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {props.content.title}
+        <DialogTitle>
+          {props.title}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-          {props.content.body}
+          <DialogContentText>
+            {props.content}
+          </DialogContentText>
+          <DialogContentText>
+            Are you sure this is correct?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.close}>Close</Button>
+          <Button onClick={props.confirm}>Confirm</Button>
+          <Button onClick={props.cancel}>Cancel</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -9,12 +9,11 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import ListingCard from '../components/ListingCard';
 import { useContext, Context } from '../Context';
-import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
-import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { calculateAverageRating } from '../pages/Helper';
-import AbcOutlinedIcon from '@mui/icons-material/AbcOutlined';
+import Icon from '@mdi/react';
+import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending } from '@mdi/js';
 
 const Home = () => {
   const { getters, setters } = useContext(Context);
@@ -153,9 +152,9 @@ const Home = () => {
             sx={{ mb: 2, borderRadius: 8 }}
             >
             Sort option &nbsp;
-            { sortOption === optionList[0] && <AbcOutlinedIcon />}
-            { sortOption === optionList[1] && <ArrowUpwardOutlinedIcon />}
-            { sortOption === optionList[2] && <ArrowDownwardOutlinedIcon />}
+            { sortOption === optionList[0] && <Icon path={mdiSortAlphabeticalAscending} size={1} />}
+            { sortOption === optionList[1] && <Icon path={mdiSortNumericAscending} size={1} />}
+            { sortOption === optionList[2] && <Icon path={mdiSortNumericDescending} size={1} />}
           </Button>
         </Tooltip>
           {/* End hero unit */}

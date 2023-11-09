@@ -1,13 +1,13 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-// import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
 import Copyright from '../components/Copyright';
 import NavAirbrb from '../components/NavAirbrb';
 import MyCarousels from '../components/MyCarousels';
-import { Divider, Grid } from '@mui/material';
+import { Divider, Grid, Button } from '@mui/material';
+import Box from '@mui/material/Box';
 import Icon from '@mdi/react';
 import {
   mdiWashingMachine,
@@ -27,6 +27,7 @@ import { useParams } from 'react-router-dom';
 import BookingStatus from '../components/BookingStatus';
 import Myform from '../components/MyForm';
 import { useContext, Context } from '../Context';
+import MakeBooking from './MakeBooking';
 
 export default function ListingDetail () {
   const { getters, setters } = useContext(Context);
@@ -35,6 +36,7 @@ export default function ListingDetail () {
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [newComment, setNewComment] = React.useState(0);
+  const [showMakeBooking, setShowMakeBooking] = React.useState(false);
 
   const params = useParams();
 
@@ -190,7 +192,7 @@ export default function ListingDetail () {
                       sx={{ pl: 3 }}
                       color="text.secondary"
                     >
-                      Wifi description
+                      Complimentary Wifi
                     </Typography>
                   </Grid>
                 )}
@@ -202,7 +204,7 @@ export default function ListingDetail () {
                       sx={{ pl: 3 }}
                       color="text.secondary"
                     >
-                      Oven description
+                      Oven provided
                     </Typography>
                   </Grid>
                 )}
@@ -214,7 +216,7 @@ export default function ListingDetail () {
                       sx={{ pl: 3 }}
                       color="text.secondary"
                     >
-                      Washing Machine description
+                      Washing Machine provided
                     </Typography>
                   </Grid>
                 )}
@@ -228,6 +230,13 @@ export default function ListingDetail () {
                 </Typography>
               </Grid>
                 )}
+            <Divider sx={{ my: 3 }} />
+            <Box textAlign={'center'}>
+              <Button variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={() => setShowMakeBooking(true)}>
+                Book this accomodation
+              </Button>
+              {showMakeBooking && (<MakeBooking close={() => setShowMakeBooking(false)}/>)}
+            </Box>
             <Divider sx={{ my: 3 }} />
             {listDeatail.reviews.length
               ? (
