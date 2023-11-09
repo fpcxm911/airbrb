@@ -6,12 +6,13 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { FormControl, TextField, DialogContentText } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
-import { apiCallGetAuthen, sortListings } from '../pages/Helper';
+import { apiCallGetAuthen, calculateAverageRating, sortListings } from '../pages/Helper';
 import BedroomRangeSlider from './BedroomRangeSlider';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import PriceSlider from './PriceSlider';
 import DateSearch from './DateSearch';
+import ReviewFilter from './ReviewFilter';
 
 // TODO eric if no listing is found, show some message
 const SearchBar = (props) => {
@@ -90,10 +91,30 @@ const SearchBar = (props) => {
         props.update(filteredList);
         break;
       case 'reviews':
-        // TODO eric finish off filter by review
-        console.log('filtering by reviews');
+        searchInput = data.get('review');
+        newList.forEach((listing) => {
+          listing.averageRating = isNaN(calculateAverageRating(listing)) ? -1 : calculateAverageRating(listing);
+        })
         filteredList = newList.filter((listing) => {
           return true;
+        })
+        filteredList.sort((a, b) => {
+          if (searchInput === 'high to low') {
+            return b.averageRating - a.averageRating;
+          } else if (searchInput === 'low to high') {
+            // put no reviews at the end
+            if (a.averageRating === -1) {
+              a.averageRating = 999;
+            }
+            if (b.averageRating === -1) {
+              b.averageRating = 999;
+            }
+            return a.averageRating - b.averageRating;
+          } else {
+            console.error('invalid review rating input');
+            setErrorMessage({ title: 'Error', body: 'invalid review rating input' });
+            return 0;
+          }
         })
         props.update(filteredList);
         break;
@@ -122,7 +143,7 @@ const SearchBar = (props) => {
           alignItems={'center'}
           justifyContent={'center'}>
           <Grid item xs={5} sx={{ alignItems: 'center' }}>
-            <FormControl>
+            <FormControl fullWidth>
               <InputLabel id='search-option-label'>Search Option</InputLabel>
               <Select
                 required
@@ -158,7 +179,7 @@ const SearchBar = (props) => {
             {searchOption === 'bedrooms' && (
               <BedroomRangeSlider />
             )}
-            {/* // TODO eric when date selected, the search icon overflow */}
+            {/* // TODO eric search bar width gets too big when date range option is selected */}
             {searchOption === 'date' && (
               <DateSearch setSearch={setClickable} setErrorMessage={setErrorMessage} />
             )}
@@ -166,7 +187,7 @@ const SearchBar = (props) => {
               <PriceSlider />
             )}
             {searchOption === 'reviews' && (
-              <p>reviews slider, lowest to highest or vice versa</p>
+              <ReviewFilter />
             )}
           </Grid>
           <Grid item xs={1} sx={{ alignItems: 'center', pr: 2 }}>
@@ -187,6 +208,6 @@ const optionsArray = [
   { value: 'bedrooms', label: 'Bedrooms' },
   { value: 'date', label: 'Date' },
   { value: 'price', label: 'Price' },
-  { value: 'reviews', label: 'Reviews' },
+  { value: 'reviews', label: 'Review rating' },
 ]
 export default SearchBar;

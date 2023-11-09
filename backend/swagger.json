@@ -122,6 +122,7 @@
         "items": {
           "type": "object",
           "example": {
+            "bookingId": 78204786,
             "name": "Christian Yu",
             "rating": 5,
             "comment": "This was a great place to stay",

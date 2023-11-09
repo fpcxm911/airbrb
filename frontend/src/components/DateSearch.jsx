@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import DialogContentText from '@mui/material/DialogContentText';
 import { TextField, Grid } from '@mui/material';
 
 const DateSearch = (props) => {
@@ -45,7 +44,6 @@ const DateSearch = (props) => {
         <Grid item xs={12} sx={{ alignItems: 'center' }}>
           <TextField
             required
-            fullWidth
             size='small'
             type='date'
             InputLabelProps={{ shrink: true }}
@@ -57,7 +55,6 @@ const DateSearch = (props) => {
         <Grid item xs={12} sx={{ alignItems: 'center' }}>
           <TextField
             required
-            fullWidth
             size='small'
             type='date'
             InputLabelProps={{ shrink: true }}
