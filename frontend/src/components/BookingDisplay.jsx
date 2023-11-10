@@ -37,12 +37,10 @@ export default function BookingDisplay (props) {
     }
   }
   React.useEffect(() => {
-    if (props.data.length !== 0) {
-      const start = (pageNum - 1) * 5
-      const end = pageNum * 5
-      const currentPage = props.data.slice(start, end);
-      setRenderLst(currentPage)
-    }
+    const start = (pageNum - 1) * 5
+    const end = pageNum * 5
+    const currentPage = props.data.slice(start, end);
+    setRenderLst(currentPage);
   }, [pageNum, props.data]);
   return (
     <Grid width={'100%'}>
