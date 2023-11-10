@@ -55,7 +55,7 @@ const rows = [
   ),
 ];
 
-export default function BookingHistory () {
+export default function BookingDisplay () {
   const [renderList, setRenderLst] = React.useState([])
   const [pageNum, setPageNum] = React.useState(1)
   const handlePageChange = (event, newPageNumber) => {
