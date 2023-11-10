@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import Pagination from '@mui/material/Pagination';
 import { parseISO, format } from 'date-fns';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, TableContainer } from '@mui/material';
 import { apiCallBodyAuthen } from '../pages/Helper';
 
 export default function BookingDisplay (props) {
@@ -45,8 +45,10 @@ export default function BookingDisplay (props) {
     }
   }, [pageNum, props.data]);
   return (
-    <React.Fragment>
+    <Grid width={'100%'}>
       <Title>{props.current ? 'Booking Request' : 'Booking History'}</Title>
+
+      <TableContainer>
       <Table size="large">
         <TableHead>
           <TableRow>
@@ -75,9 +77,10 @@ export default function BookingDisplay (props) {
           ))}
         </TableBody>
       </Table>
+      </TableContainer>
       <Grid container justifyContent={'center'} sx={{ mt: 2 }}>
         <Pagination count={totalPage} color="primary" onChange={handlePageChange}/>
       </Grid>
-    </React.Fragment>
+    </Grid>
   );
 }
