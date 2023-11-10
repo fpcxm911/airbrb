@@ -236,7 +236,7 @@ export default function ListingDetail () {
               {showMakeBooking && (
                 <MakeBooking
                   price={String(listDeatail.price)}
-                  listingid={String(listDeatail.id)}
+                  listingid={Number(listDeatail.id)}
                   close={() => setShowMakeBooking(false)}
                   showBookSuccess={() => setShowBookSuccess(true)}
                 />
@@ -304,7 +304,6 @@ export default function ListingDetail () {
                   </Alert>
                 </Fade>
               </Backdrop>
-            )
           </Container>
         </>
       )}
