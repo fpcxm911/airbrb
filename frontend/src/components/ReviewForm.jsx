@@ -12,7 +12,7 @@ const CommentTextArea = styled('textarea')({
   resize: 'none'
 })
 
-export default function Myform (props) {
+export default function ReviewForm (props) {
   const [option, setOption] = React.useState('');
   const [comment, setComment] = React.useState('');
   const [value, setValue] = React.useState(4);
