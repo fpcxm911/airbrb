@@ -235,7 +235,7 @@ export default function ListingDetail () {
               <Button variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={() => setShowMakeBooking(true)}>
                 Book this accomodation
               </Button>
-              {showMakeBooking && (<MakeBooking close={() => setShowMakeBooking(false)}/>)}
+              {showMakeBooking && (<MakeBooking price={String(listDeatail.price)} listingid={String(listDeatail.id)} close={() => setShowMakeBooking(false)}/>)}
             </Box>
             <Divider sx={{ my: 3 }} />
             {listDeatail.reviews.length

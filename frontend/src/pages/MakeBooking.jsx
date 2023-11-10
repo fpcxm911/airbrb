@@ -13,37 +13,54 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ConfirmPopup from '../components/ConfirmPopup';
 import AvailabilityRange from '../components/AvailabilityRange';
+import { apiCallBodyAuthen } from './Helper';
+import ErrorDialog from '../components/ErrorPopup';
 
 const ListingBooking = (props) => {
   const { getters } = useContext(Context);
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState({ title: '', body: '' });
   const [showConfirmPopup, setShowConfirmPopup] = React.useState(false);
   const [confirmMessage, setConfirmMessage] = React.useState('');
   const [submitClickable, setSubmitClickable] = React.useState(false);
+  const [checkinISO, setCheckinISO] = React.useState('');
+  const [checkoutISO, setCheckoutISO] = React.useState('');
+  const [showErrorModal, setShowErrorModal] = React.useState(false);
 
   React.useEffect(() => {
-    setErrorMessage('');
-  }, []);
+    const numOfNights = Math.abs(new Date(checkinISO) - new Date(checkoutISO)) / 1000 / 60 / 60 / 24;
+    setConfirmMessage('You are booking for ' + numOfNights + ' night(s). From ' + String(new Date(checkinISO)).substring(0, 15) + ' to ' + String(new Date(checkoutISO)).substring(0, 15) + '.');
+  }, [checkinISO, checkoutISO]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('wanna submit');
-    const data = new FormData(e.currentTarget).get('dates');
-    console.log(data);
-    setConfirmMessage('this should be a date range, number of nights shown in confirmation');
+    const dates = JSON.parse(new FormData(e.currentTarget).get('dates'))[0];
+    setCheckinISO(new Date(dates.start).toISOString());
+    setCheckoutISO(new Date(dates.end).toISOString());
     setShowConfirmPopup(true);
   };
 
   const handleConfirm = async () => {
-    console.log('handle confirm!!call api!!!');
-    setShowConfirmPopup(false);
-    props.close();
+    console.log('confirming');
+    console.log(`price: ${props.price}`);
+    console.log(`listingid: ${props.listingid}`);
+    const totalPrice = String((Math.abs(new Date(checkinISO) - new Date(checkoutISO)) / 1000 / 60 / 60 / 24) * props.price);
+    console.log(`totalPrice: ${totalPrice}`);
+    const res = await apiCallBodyAuthen(`bookings/new/${props.listingid}`, getters.token, {
+      dateRange: { start: checkinISO, end: checkoutISO },
+      totalPrice
+    }, 'POST');
+    if (res.error) {
+      setShowErrorModal(true);
+      setErrorMessage({ title: 'Fail to make booking', body: res.error });
+    } else {
+      console.log('success');
+      setShowConfirmPopup(false);
+      props.close();
+    }
   };
 
   return (
     <React.Fragment>
-      <p>{getters.email}</p>
-      {errorMessage}
       <Button onClick={props.close}>close</Button>
       <Dialog
         onClose={props.close}
@@ -108,6 +125,7 @@ const ListingBooking = (props) => {
             title={'Confirmation'}
           />
         )}
+        {showErrorModal && (<ErrorDialog close={() => setShowErrorModal(false)} content={errorMessage} />)}
       </Dialog>
     </React.Fragment>
   );

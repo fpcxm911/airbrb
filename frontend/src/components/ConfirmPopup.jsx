@@ -26,8 +26,8 @@ export default function ConfirmPopup (props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.confirm}>Confirm</Button>
-          <Button onClick={props.cancel}>Cancel</Button>
+          <Button variant='contained' color="success" onClick={props.confirm}>Confirm</Button>
+          <Button variant='contained' color="error" onClick={props.cancel}>Cancel</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -88,8 +88,13 @@ const AvailabilityRange = (props) => {
 
     const [differCheckPass, idx] = checkEachStartEnd(datesRangeStrArr);
     if (!differCheckPass) {
-      setErrorMessage(`Start date must precede end date in row ${Number(idx) + 1}`);
-      return false;
+      if (props.singleRange) {
+        setErrorMessage('Check-in date must precede check-out date');
+        return false;
+      } else {
+        setErrorMessage(`Start date must precede end date in row ${Number(idx) + 1}`);
+        return false;
+      }
     }
     const [overlapPass, i, j] = checkDatesOverlap(datesRangeStrArr);
     if (!overlapPass) {
@@ -112,7 +117,7 @@ const AvailabilityRange = (props) => {
               }}
               value={dates.start}
               // isOptionEqualToValue={(option, value) => option.id === value.id}
-              label={props.singleRange ? 'Checkin date' : `Start date ${idx + 1}`}
+              label={props.singleRange ? 'Check-in date' : `Start date ${idx + 1}`}
               id={`startDateInput${idx}`}
               onChange={(e) => handleStartDateChange(e.target.value, idx)}
             />
@@ -125,7 +130,7 @@ const AvailabilityRange = (props) => {
               }}
               value={dates.end}
               // isOptionEqualToValue={(option, value) => option.id === value.id}
-              label={props.singleRange ? 'Checkout date' : `End date ${idx + 1}`}
+              label={props.singleRange ? 'Check-out date' : `End date ${idx + 1}`}
               id={`endDateInput${idx}`}
               onChange={(e) => handleEndDateChange(e.target.value, idx)}
             />
