@@ -78,6 +78,7 @@ const ListingBooking = (props) => {
       setShowErrorModal(true);
       setErrorMessage({ title: 'Fail to make booking', body: res.error });
     } else {
+      props.setBookingUpdate();
       props.showBookSuccess();
       setShowConfirmPopup(false);
       props.close();
