@@ -88,8 +88,13 @@ const AvailabilityRange = (props) => {
 
     const [differCheckPass, idx] = checkEachStartEnd(datesRangeStrArr);
     if (!differCheckPass) {
-      setErrorMessage(`Start date must precede end date in row ${Number(idx) + 1}`);
-      return false;
+      if (props.singleRange) {
+        setErrorMessage('Check-in date must precede check-out date');
+        return false;
+      } else {
+        setErrorMessage(`Start date must precede end date in row ${Number(idx) + 1}`);
+        return false;
+      }
     }
     const [overlapPass, i, j] = checkDatesOverlap(datesRangeStrArr);
     if (!overlapPass) {
@@ -112,7 +117,7 @@ const AvailabilityRange = (props) => {
               }}
               value={dates.start}
               // isOptionEqualToValue={(option, value) => option.id === value.id}
-              label={`Start date ${idx + 1}`}
+              label={props.singleRange ? 'Check-in date' : `Start date ${idx + 1}`}
               id={`startDateInput${idx}`}
               onChange={(e) => handleStartDateChange(e.target.value, idx)}
             />
@@ -125,36 +130,50 @@ const AvailabilityRange = (props) => {
               }}
               value={dates.end}
               // isOptionEqualToValue={(option, value) => option.id === value.id}
-              label={`End date ${idx + 1}`}
+              label={props.singleRange ? 'Check-out date' : `End date ${idx + 1}`}
               id={`endDateInput${idx}`}
               onChange={(e) => handleEndDateChange(e.target.value, idx)}
             />
-            <IconButton onClick={() => handleRemove(idx)}>
-                <ClearOutlinedIcon />
-            </IconButton>
+            {!props.singleRange && (
+              <IconButton onClick={() => handleRemove(idx)}>
+                  <ClearOutlinedIcon />
+              </IconButton>
+            )}
         </Stack>
     );
   };
 
-  return (
-    <>
-      {dates.map((date, idx) => dateInputRow(date, idx))}
-      <DialogContentText color='error' sx={{ mb: 2 }}>
-          {errorMessage}
-      </DialogContentText>
-      <Button
-        fullWidth
-        variant='text'
-        component='label'
-        startIcon={<AddIcon />}
-        onClick={handleOneMore}
-        size='small'
-      >
-        Add availability range
-      </Button>
-      <input type='hidden' name='dates' value={hiddenDatesInput} />
-    </>
-  )
+  if (props.singleRange) {
+    return (
+      <>
+        {dates.map((date, idx) => dateInputRow(date, idx))}
+        <DialogContentText color='error' sx={{ mb: 2 }}>
+            {errorMessage}
+        </DialogContentText>
+        <input type='hidden' name='dates' value={hiddenDatesInput} />
+      </>
+    )
+  } else {
+    return (
+      <>
+        {dates.map((date, idx) => dateInputRow(date, idx))}
+        <DialogContentText color='error' sx={{ mb: 2 }}>
+            {errorMessage}
+        </DialogContentText>
+        <Button
+          fullWidth
+          variant='text'
+          component='label'
+          startIcon={<AddIcon />}
+          onClick={handleOneMore}
+          size='small'
+        >
+          Add availability range
+        </Button>
+        <input type='hidden' name='dates' value={hiddenDatesInput} />
+      </>
+    );
+  }
 }
 
 export default AvailabilityRange;
