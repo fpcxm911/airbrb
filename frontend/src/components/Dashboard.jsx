@@ -49,7 +49,6 @@ export default function Dashboard () {
       setters.setToken(token);
       setters.setEmail(email);
       setters.setLoggedIn(true);
-      console.log(getters.token);
     }
   }, []);
 
@@ -68,11 +67,13 @@ export default function Dashboard () {
     } else {
       setAllbookings([]);
     }
-  }, [getters.loggedIn]);
+  }, [getters.loggedIn, bookingUpdate]);
 
+  console.log(getters.loggedIn);
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
+      {getters.loggedIn
+        ? <Box sx={{ display: 'flex' }}>
         <Box
           component="main"
           sx={{
@@ -114,12 +115,12 @@ export default function Dashboard () {
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <BookingDisplay data = {pendingBookings(allBookings)} current = {true} setBookingUpdate={updateBookings}/>
+                  <BookingDisplay data = {pendingBookings(allBookings)} current = {true} setBookingUpdate={updateBookings} setShowModal={setShowModal} setErrorMessage ={setErrorMessage}/>
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <BookingDisplay data = {bookingHistories(allBookings)} current = {false}/>
+                  <BookingDisplay data = {bookingHistories(allBookings)} current = {false} setShowModal={setShowModal} setErrorMessage ={setErrorMessage}/>
                 </Paper>
               </Grid>
             </Grid>
@@ -133,6 +134,7 @@ export default function Dashboard () {
               />
         )}
       </Box>
+        : <></>}
     </>
   );
 }

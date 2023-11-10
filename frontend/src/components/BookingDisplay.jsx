@@ -6,95 +6,78 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import Pagination from '@mui/material/Pagination';
+import { parseISO, format } from 'date-fns';
+import { Button, Grid } from '@mui/material';
+import { apiCallBodyAuthen } from '../pages/Helper';
 
-// Generate Order Data
-function createData (id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-  createData(
-    0,
-    '16 Mar, 2019',
-    'Elvis Presley',
-    'Tupelo, MS',
-    'VISA ⠀•••• 3719',
-    312.44,
-  ),
-  createData(
-    1,
-    '16 Mar, 2019',
-    'Paul McCartney',
-    'London, UK',
-    'VISA ⠀•••• 2574',
-    866.99,
-  ),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(
-    3,
-    '16 Mar, 2019',
-    'Michael Jackson',
-    'Gary, IN',
-    'AMEX ⠀•••• 2000',
-    654.39,
-  ),
-  createData(
-    4,
-    '15 Mar, 2019',
-    'Bruce Springsteen',
-    'Long Branch, NJ',
-    'VISA ⠀•••• 5919',
-    212.79,
-  ), createData(
-    4,
-    '24 Mar, 1999',
-    'Haoxiang Zhang',
-    'Barker St, 2023',
-    'VISA ⠀•••• 9494',
-    1589.37,
-  ),
-];
-
-export default function BookingDisplay () {
+export default function BookingDisplay (props) {
   const [renderList, setRenderLst] = React.useState([])
   const [pageNum, setPageNum] = React.useState(1)
+  const totalPage = Math.ceil(props.data.length / 5)
   const handlePageChange = (event, newPageNumber) => {
     setPageNum(newPageNumber);
   };
+
+  const handleAccept = async (bookingId) => {
+    const res = await apiCallBodyAuthen(`bookings/accept/${bookingId}`, localStorage.getItem('token'), {}, 'PUT');
+    if (res.error) {
+      props.setErrorMessage({ title: 'Error', body: res.error });
+      props.setShowModal(true);
+    } else {
+      props.setBookingUpdate();
+    }
+  }
+  const handleDeny = async (bookingId) => {
+    const res = await apiCallBodyAuthen(`bookings/decline/${bookingId}`, localStorage.getItem('token'), {}, 'PUT');
+    if (res.error) {
+      props.setErrorMessage({ title: 'Error', body: res.error });
+      props.setShowModal(true);
+    } else {
+      props.setBookingUpdate();
+    }
+  }
   React.useEffect(() => {
-    const start = (pageNum - 1) * 5
-    const end = pageNum * 5
-    const currentPage = rows.slice(start, end);
-    setRenderLst(currentPage)
-  }, [pageNum]);
-  console.log(renderList);
-  console.log(pageNum);
+    if (props.data.length !== 0) {
+      const start = (pageNum - 1) * 5
+      const end = pageNum * 5
+      const currentPage = props.data.slice(start, end);
+      setRenderLst(currentPage)
+    }
+  }, [pageNum, props.data]);
   return (
     <React.Fragment>
-      <Title>Recent Orders</Title>
-      <Table size="small">
+      <Title>{props.current ? 'Booking Request' : 'Booking History'}</Title>
+      <Table size="large">
         <TableHead>
           <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
+            <TableCell>Owner Email</TableCell>
+            <TableCell>Start Date</TableCell>
+            <TableCell>End Date</TableCell>
+            <TableCell>Total Price</TableCell>
+            <TableCell>{props.current ? 'Handle Request' : 'Booking Status'}</TableCell>
+            {/* <TableCell align="right">Sale Amount</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
-          {renderList.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
+          {renderList.map((booking, idx) => (
+            <TableRow key={idx}>
+              <TableCell>{booking.owner}</TableCell>
+              <TableCell>{format(parseISO(booking.dateRange.start), 'do MMMM yyyy')}</TableCell>
+              <TableCell>{format(parseISO(booking.dateRange.end), 'do MMMM yyyy')}</TableCell>
+              <TableCell>{`$${booking.totalPrice}`}</TableCell>
+              <TableCell>{props.current
+                ? <Grid container>
+                  <Button size='small' onClick={() => handleAccept(booking.id)}>Accept</Button>
+                  <Button size='small' onClick={() => handleDeny(booking.id)}>Deny</Button>
+                </Grid>
+                : `${booking.status}`}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Pagination count={10} color="primary" onChange={handlePageChange}/>
+      <Grid container justifyContent={'center'} sx={{ mt: 2 }}>
+        <Pagination count={totalPage} color="primary" onChange={handlePageChange}/>
+      </Grid>
     </React.Fragment>
   );
 }

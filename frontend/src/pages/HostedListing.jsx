@@ -161,6 +161,7 @@ export default function HostedListing (props) {
                   <ListingCard listing = {listing} />
                   <CardActions>
                     <Button size="small" onClick={() => navigate(`/hosted/edit/${listing.id}`)}>EDIT</Button>
+                    <Button size="small" onClick={() => navigate(`/hosted/booking/${listing.id}`)}>BOOKINGS</Button>
                     {!listing.published && <Button size="small" onClick={() => setShowPublish([true, listing.id])}>PUBLISH</Button>}
                     {listing.published && <Button size="small" onClick={() => unpublishListing(listing)}>UNPUBLISH</Button>}
                     <Button size="small" onClick={() => deleteListing(listing)}>DELETE</Button>

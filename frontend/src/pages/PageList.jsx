@@ -53,7 +53,7 @@ const Pagelist = () => {
           />
         </Route>
         <Route path="listing/:id" element={<ListingDetail />} />
-        <Route path="test" element={<Dashboard />} />
+        <Route path="hosted/booking/:id" element={<Dashboard />} />
       </Routes>
     </Context.Provider>
   );
