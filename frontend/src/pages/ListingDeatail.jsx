@@ -25,7 +25,7 @@ import {
 } from './Helper';
 import { useParams } from 'react-router-dom';
 import BookingStatus from '../components/BookingStatus';
-import Myform from '../components/MyForm';
+import ReviewForm from '../components/ReviewForm';
 import { useContext, Context } from '../Context';
 
 export default function ListingDetail () {
@@ -135,13 +135,6 @@ export default function ListingDetail () {
           <Container maxWidth="lg" component="main">
             <MyCarousels images={imageCollection(listDeatail)} />
             <Grid sx={{ mt: 5 }}>
-              {getters.loggedIn && (
-                <BookingStatus
-                  setErrorMessage={setErrorMessage}
-                  setShowModal={setShowModal}
-                  bookings={listBookings}
-                />
-              )}
               <Typography variant="h6" sx={{ pt: 3 }} color="text.primary">
                   Property details
                 </Typography>
@@ -243,15 +236,24 @@ export default function ListingDetail () {
                 )}
             {listBookings.length !== 0 && getters.loggedIn && <>
               <Divider />
-            <Grid container direction='column'>
-                <Typography variant="h6" sx={{ my: 3 }} color="text.primary">
+            <Grid container direction='column' sx={{ my: 3 }} >
+                <Typography variant="h6" sx={{ mb: 3 }} color="text.primary">
                   Leave your reviews
                 </Typography>
               <Grid container direction='row' justifyContent='center' >
-                <Myform setErrorMessage = {setErrorMessage} setShowModal = {setShowModal} bookings={listBookings} listingId = {listDeatail.id} setNewComment={setNewComment} newComment={newComment}/>
+                <ReviewForm setErrorMessage = {setErrorMessage} setShowModal = {setShowModal} bookings={listBookings} listingId = {listDeatail.id} setNewComment={setNewComment} newComment={newComment}/>
               </Grid>
             </Grid>
             </>}
+            {listBookings.length !== 0 && getters.loggedIn && (<>
+              <Divider sx={{ mb: 3 }}/>
+                <BookingStatus
+                  setErrorMessage={setErrorMessage}
+                  setShowModal={setShowModal}
+                  bookings={listBookings}
+                />
+              </>
+            )}
             <Copyright sx={{ my: 5 }} />
             {showModal && (
               <ErrorDialog

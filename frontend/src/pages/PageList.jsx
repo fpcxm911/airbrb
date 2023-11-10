@@ -7,7 +7,7 @@ import Login from '../pages/Login';
 import EditListing from '../pages/EditListing';
 import ListingDetail from './ListingDeatail';
 import { Context, initialValue } from '../Context';
-import Dashboard from '../components/Dashboard';
+import Dashboard from './Dashboard';
 
 const Pagelist = () => {
   const [listingsUpdate, setListingsUpdate] = React.useState(0);
