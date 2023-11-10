@@ -58,15 +58,13 @@ const ListingBooking = (props) => {
   };
 
   const handleConfirm = async () => {
-    const totalPrice = String(
-      (Math.abs(new Date(checkinISO) - new Date(checkoutISO)) /
+    const totalPrice = (Math.abs(new Date(checkinISO) - new Date(checkoutISO)) /
         1000 /
         60 /
         60 /
         24) *
-        props.price
-    );
-    console.log(`totalPrice: ${totalPrice}`);
+        props.price;
+    console.log(typeof props.listingid);
     const res = await apiCallBodyAuthen(
       `bookings/new/${props.listingid}`,
       getters.token,
