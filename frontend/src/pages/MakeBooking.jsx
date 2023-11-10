@@ -18,7 +18,10 @@ import ErrorDialog from '../components/ErrorPopup';
 
 const ListingBooking = (props) => {
   const { getters } = useContext(Context);
-  const [errorMessage, setErrorMessage] = React.useState({ title: '', body: '' });
+  const [errorMessage, setErrorMessage] = React.useState({
+    title: '',
+    body: '',
+  });
   const [showConfirmPopup, setShowConfirmPopup] = React.useState(false);
   const [confirmMessage, setConfirmMessage] = React.useState('');
   const [submitClickable, setSubmitClickable] = React.useState(false);
@@ -27,8 +30,23 @@ const ListingBooking = (props) => {
   const [showErrorModal, setShowErrorModal] = React.useState(false);
 
   React.useEffect(() => {
-    const numOfNights = Math.abs(new Date(checkinISO) - new Date(checkoutISO)) / 1000 / 60 / 60 / 24;
-    setConfirmMessage('You are booking for ' + numOfNights + ' night(s). From ' + String(new Date(checkinISO)).substring(0, 15) + ' to ' + String(new Date(checkoutISO)).substring(0, 15) + '.');
+    const numOfNights =
+      Math.abs(new Date(checkinISO) - new Date(checkoutISO)) /
+      1000 /
+      60 /
+      60 /
+      24;
+    const totalPrice = numOfNights * props.price;
+    setConfirmMessage(
+      'You are booking for ' +
+        numOfNights +
+        ' night(s). From ' +
+        String(new Date(checkinISO)).substring(0, 15) +
+        ' to ' +
+        String(new Date(checkoutISO)).substring(0, 15) +
+        '. Total cost: $' +
+        totalPrice
+    );
   }, [checkinISO, checkoutISO]);
 
   const handleSubmit = (e) => {
@@ -40,20 +58,29 @@ const ListingBooking = (props) => {
   };
 
   const handleConfirm = async () => {
-    console.log('confirming');
-    console.log(`price: ${props.price}`);
-    console.log(`listingid: ${props.listingid}`);
-    const totalPrice = String((Math.abs(new Date(checkinISO) - new Date(checkoutISO)) / 1000 / 60 / 60 / 24) * props.price);
+    const totalPrice = String(
+      (Math.abs(new Date(checkinISO) - new Date(checkoutISO)) /
+        1000 /
+        60 /
+        60 /
+        24) *
+        props.price
+    );
     console.log(`totalPrice: ${totalPrice}`);
-    const res = await apiCallBodyAuthen(`bookings/new/${props.listingid}`, getters.token, {
-      dateRange: { start: checkinISO, end: checkoutISO },
-      totalPrice
-    }, 'POST');
+    const res = await apiCallBodyAuthen(
+      `bookings/new/${props.listingid}`,
+      getters.token,
+      {
+        dateRange: { start: checkinISO, end: checkoutISO },
+        totalPrice,
+      },
+      'POST'
+    );
     if (res.error) {
       setShowErrorModal(true);
       setErrorMessage({ title: 'Fail to make booking', body: res.error });
     } else {
-      console.log('success');
+      props.showBookSuccess();
       setShowConfirmPopup(false);
       props.close();
     }
@@ -103,7 +130,10 @@ const ListingBooking = (props) => {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <AvailabilityRange setSubmit={setSubmitClickable} singleRange={true}/>
+                <AvailabilityRange
+                  setSubmit={setSubmitClickable}
+                  singleRange={true}
+                />
               </Grid>
             </Grid>
             <Button
@@ -125,7 +155,12 @@ const ListingBooking = (props) => {
             title={'Confirmation'}
           />
         )}
-        {showErrorModal && (<ErrorDialog close={() => setShowErrorModal(false)} content={errorMessage} />)}
+        {showErrorModal && (
+          <ErrorDialog
+            close={() => setShowErrorModal(false)}
+            content={errorMessage}
+          />
+        )}
       </Dialog>
     </React.Fragment>
   );

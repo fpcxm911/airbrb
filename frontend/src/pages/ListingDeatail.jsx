@@ -28,6 +28,10 @@ import BookingStatus from '../components/BookingStatus';
 import Myform from '../components/MyForm';
 import { useContext, Context } from '../Context';
 import MakeBooking from './MakeBooking';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
+import Backdrop from '@mui/material/Backdrop';
+import Fade from '@mui/material/Fade';
 
 export default function ListingDetail () {
   const { getters, setters } = useContext(Context);
@@ -37,6 +41,7 @@ export default function ListingDetail () {
   const [errorMessage, setErrorMessage] = React.useState('');
   const [newComment, setNewComment] = React.useState(0);
   const [showMakeBooking, setShowMakeBooking] = React.useState(false);
+  const [showBookSuccess, setShowBookSuccess] = React.useState(false);
 
   const params = useParams();
 
@@ -235,7 +240,14 @@ export default function ListingDetail () {
               <Button variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={() => setShowMakeBooking(true)}>
                 Book this accomodation
               </Button>
-              {showMakeBooking && (<MakeBooking price={String(listDeatail.price)} listingid={String(listDeatail.id)} close={() => setShowMakeBooking(false)}/>)}
+              {showMakeBooking && (
+                <MakeBooking
+                  price={String(listDeatail.price)}
+                  listingid={String(listDeatail.id)}
+                  close={() => setShowMakeBooking(false)}
+                  showBookSuccess={() => setShowBookSuccess(true)}
+                />
+              )}
             </Box>
             <Divider sx={{ my: 3 }} />
             {listDeatail.reviews.length
@@ -268,6 +280,29 @@ export default function ListingDetail () {
                 content={errorMessage}
               />
             )}
+              <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={showBookSuccess}
+              onClick={() => setShowBookSuccess(false)}
+                >
+                <Fade
+                  in={showBookSuccess}
+                  timeout={{ enter: 1000, exit: 1000 }}
+                  addEndListener={() => {
+                    setTimeout(() => {
+                      setShowBookSuccess(false);
+                    }, 3500);
+                  }}
+                  >
+                  <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" sx={{ maxWidth: '85%' }}>
+                    Your booking made at {listDeatail.title} is successful.
+                    <p>
+                      Please wait for confirmation.
+                    </p>
+                  </Alert>
+                </Fade>
+              </Backdrop>
+            )
           </Container>
         </>
       )}
