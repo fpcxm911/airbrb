@@ -42,6 +42,10 @@ export default function ListingDetail () {
   const [newComment, setNewComment] = React.useState(0);
   const [showMakeBooking, setShowMakeBooking] = React.useState(false);
   const [showBookSuccess, setShowBookSuccess] = React.useState(false);
+  const [bookingUpdate, setBookingUpdate] = React.useState(0);
+  const updateBookings = () => {
+    setBookingUpdate(bookingUpdate + 1);
+  };
 
   const params = useParams();
 
@@ -111,7 +115,7 @@ export default function ListingDetail () {
     } else {
       setListBookings([]);
     }
-  }, [getters.loggedIn]);
+  }, [getters.loggedIn, bookingUpdate]);
 
   return (
     <>
@@ -229,20 +233,6 @@ export default function ListingDetail () {
               </Grid>
                 )}
             <Divider sx={{ my: 3 }} />
-            <Box textAlign={'center'}>
-              <Button variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={() => setShowMakeBooking(true)}>
-                Book this accomodation
-              </Button>
-              {showMakeBooking && (
-                <MakeBooking
-                  price={String(listDeatail.price)}
-                  listingid={Number(listDeatail.id)}
-                  close={() => setShowMakeBooking(false)}
-                  showBookSuccess={() => setShowBookSuccess(true)}
-                />
-              )}
-            </Box>
-            <Divider sx={{ my: 3 }} />
             {listDeatail.reviews.length
               ? (
               <DisplayReview listing={listDeatail} />
@@ -256,7 +246,7 @@ export default function ListingDetail () {
               </Grid>
                 )}
             {listBookings.length !== 0 && getters.loggedIn && <>
-              <Divider />
+              <Divider sx={{ mt: 3 }}/>
             <Grid container direction='column' sx={{ my: 3 }} >
                 <Typography variant="h6" sx={{ mb: 3 }} color="text.primary">
                   Leave your reviews
@@ -266,13 +256,30 @@ export default function ListingDetail () {
               </Grid>
             </Grid>
             </>}
-            {listBookings.length !== 0 && getters.loggedIn && (<>
-              <Divider sx={{ mb: 3 }}/>
-                <BookingStatus
-                  setErrorMessage={setErrorMessage}
-                  setShowModal={setShowModal}
-                  bookings={listBookings}
-                />
+            {getters.loggedIn && (<>
+              <Divider sx={{ my: 3 }}/>
+              {listBookings.length !== 0 && getters.loggedIn && (<Grid sx={{ mb: 3 }}>
+                    <BookingStatus
+                      setErrorMessage={setErrorMessage}
+                      setShowModal={setShowModal}
+                      bookings={listBookings}
+                    />
+                  </Grid>
+              )}
+              <Box textAlign={'center'}>
+                <Button variant="contained" sx={{ mb: 3, mx: 1.5 }} onClick={() => setShowMakeBooking(true)} >
+                  Book this accomodation
+                </Button>
+                {showMakeBooking && (
+                  <MakeBooking
+                    setBookingUpdate={updateBookings}
+                    price={String(listDeatail.price)}
+                    listingid={Number(listDeatail.id)}
+                    close={() => setShowMakeBooking(false)}
+                    showBookSuccess={() => setShowBookSuccess(true)}
+                  />
+                )}
+              </Box>
               </>
             )}
             <Copyright sx={{ my: 5 }} />
