@@ -17,8 +17,9 @@ import ListPublish from './ListPublish';
 import NavAirbrb from '../components/NavAirbrb';
 import ListingCard from '../components/ListingCard';
 import { useContext, Context } from '../Context';
-// TODO remove, this demo shouldn't need to reset the theme.
+import { CardContent } from '@mui/material';
 
+const buttonFontSize = 12;
 export default function HostedListing (props) {
   const { getters, setters } = useContext(Context);
   const [HostedLists, setHostedLists] = React.useState([]);
@@ -158,13 +159,16 @@ export default function HostedListing (props) {
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                 >
-                  <ListingCard listing = {listing} />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <ListingCard listing = {listing} />
+                  </CardContent>
                   <CardActions>
-                    <Button size="small" onClick={() => navigate(`/hosted/edit/${listing.id}`)}>EDIT</Button>
-                    <Button size="small" onClick={() => navigate(`/hosted/booking/${listing.id}`)}>BOOKINGS</Button>
-                    {!listing.published && <Button size="small" onClick={() => setShowPublish([true, listing.id])}>PUBLISH</Button>}
-                    {listing.published && <Button size="small" onClick={() => unpublishListing(listing)}>UNPUBLISH</Button>}
-                    <Button size="small" onClick={() => deleteListing(listing)}>DELETE</Button>
+                    {/* // TODO consider using stack or grid to group buttons */}
+                    <Button size="small" sx={{ fontSize: buttonFontSize }} onClick={() => navigate(`/hosted/edit/${listing.id}`)}>EDIT</Button>
+                    <Button size="small" sx={{ fontSize: buttonFontSize }} onClick={() => navigate(`/hosted/booking/${listing.id}`)}>BOOKINGS</Button>
+                    {!listing.published && <Button size="small" sx={{ fontSize: buttonFontSize }} onClick={() => setShowPublish([true, listing.id])}>PUBLISH</Button>}
+                    {listing.published && <Button size="small" sx={{ fontSize: buttonFontSize }} onClick={() => unpublishListing(listing)}>UNPUBLISH</Button>}
+                    <Button size="small" sx={{ fontSize: buttonFontSize }} color="error" onClick={() => deleteListing(listing)}>DELETE</Button>
                   </CardActions>
                 </Card>
               </Grid>

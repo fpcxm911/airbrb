@@ -262,7 +262,11 @@ const EditListing = (props) => {
                   fullWidth
                   type='text'
                   name='youtube'
-                  label='Youtube url (Optional)'
+                  label='Youtube URL (Optional)'
+                  value={listingData.metadata.youtubeUrl}
+                  onChange={(e) => {
+                    setListingData({ ...listingData, metadata: { ...listingData.metadata, youtubeUrl: e.target.value } });
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
