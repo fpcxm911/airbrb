@@ -165,7 +165,7 @@ const Home = () => {
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
                   onClick={() => navigate(`/listing/${listing.id}`)}
                 >
-                  <ListingCard listing = {listing} />
+                  <ListingCard listing = {listing} hotedPage = {false} />
                   <CardActions>
                   </CardActions>
                 </Card>

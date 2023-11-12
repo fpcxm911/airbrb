@@ -4,16 +4,11 @@ import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 
 const labels = {
-  0.5: 'Bad',
-  1: 'Bad+',
-  1.5: 'Poor',
-  2: 'Poor+',
-  2.5: 'Ok',
-  3: 'Ok+',
-  3.5: 'Good',
-  4: 'Good+',
-  4.5: 'Excellent',
-  5: 'Excellent+',
+  1: 'Bad',
+  2: 'Poor',
+  3: 'Ok',
+  4: 'Good',
+  5: 'Excellent',
 };
 
 function getLabelText (value) {
@@ -32,7 +27,7 @@ export default function HoverRating (props) {
       <Rating
         name="hover-feedback"
         value={props.value}
-        precision={0.5}
+        precision={1}
         getLabelText={getLabelText}
         onChange={(event, newValue) => {
           props.setValue(newValue);

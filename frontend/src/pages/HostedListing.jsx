@@ -159,9 +159,7 @@ export default function HostedListing (props) {
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                 >
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <ListingCard listing = {listing} />
-                  </CardContent>
+                  <ListingCard listing = {listing} hotedPage = {true} />
                   <CardActions>
                     {/* // TODO consider using stack or grid to group buttons */}
                     <Button size="small" sx={{ fontSize: buttonFontSize }} onClick={() => navigate(`/hosted/edit/${listing.id}`)}>EDIT</Button>

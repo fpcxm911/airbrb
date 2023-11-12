@@ -29,7 +29,7 @@ export default function ReviewForm (props) {
     console.log(value);
     const res = apiCallBodyAuthen(`listings/${props.listingId}/review/${option}`, localStorage.getItem('token'), {
       review: {
-        email: localStorage.getItem('email'),
+        userEmail: localStorage.getItem('email'),
         bookingId: option,
         rating: value,
         comment,
