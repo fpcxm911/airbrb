@@ -8,9 +8,17 @@ import StarIcon from '@mui/icons-material/Star';
 import { calculateAverageRating, calculateNumBeds } from '../pages/Helper';
 import { Grid, Popover } from '@mui/material';
 import RatingCategory from './RatingCategory';
+import Decimal from 'decimal.js';
+import ReviewByCategory from './ReviewByCategory';
 
 const ListingCard = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [showReview, setShowReview] = React.useState(false);
+  const [reviews, setReviews] = React.useState([]);
+  const [reviewCategory, setReviewCategory] = React.useState([]);
+  const closeReviews = () => {
+    setShowReview(false);
+  };
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -20,6 +28,24 @@ const ListingCard = (props) => {
   const popoverAnchor = React.useRef(null);
   const open = Boolean(anchorEl);
 
+  const collectRatingByCategory = (category) => {
+    const categoryRatings = props.listing.reviews.filter(x => x.rating === category);
+    return categoryRatings;
+  }
+
+  const calculatePercentage = (ratings) => {
+    const percentage = (ratings.length / props.listing.reviews.length) * 100
+    const convertPercentage = new Decimal(percentage);
+    const convertedPercentage = convertPercentage.toFixed(1);
+    return convertedPercentage;
+  }
+
+  const prepareReviews = (category) => {
+    setReviews(collectRatingByCategory(category));
+    setShowReview(true)
+    setReviewCategory(category)
+    console.log('123');
+  }
   return (
     <>
       <CardMedia
@@ -109,7 +135,7 @@ const ListingCard = (props) => {
                 onMouseEnter={handlePopoverOpen}
                 onMouseLeave={handlePopoverClose}
               >
-                <Grid sx={{ p: 5, pointerEvents: 'auto' }}>
+                <Grid sx={{ p: 5, pointerEvents: 'auto', width: '380px' }}>
                   <Grid container sx={{ mb: 2 }}>
                     <Rating
                       value={calculateAverageRating(props.listing)}
@@ -133,11 +159,11 @@ const ListingCard = (props) => {
                   >
                     {`${props.listing.reviews.length} global ratings`}
                   </Typography>
-                  <RatingCategory category={1} percentage={30} />
-                  <RatingCategory category={2} percentage={30} />
-                  <RatingCategory category={3} percentage={30} />
-                  <RatingCategory category={4} percentage={30} />
-                  <RatingCategory category={5} percentage={30} />
+                  <RatingCategory category={1} percentage={calculatePercentage(collectRatingByCategory(1))} prepare = {() => prepareReviews(1)} total = {collectRatingByCategory(1).length}/>
+                  <RatingCategory category={2} percentage={calculatePercentage(collectRatingByCategory(2))} prepare = {() => prepareReviews(2)} total = {collectRatingByCategory(2).length}/>
+                  <RatingCategory category={3} percentage={calculatePercentage(collectRatingByCategory(3))} prepare = {() => prepareReviews(3)} total = {collectRatingByCategory(3).length}/>
+                  <RatingCategory category={4} percentage={calculatePercentage(collectRatingByCategory(4))} prepare = {() => prepareReviews(4)} total = {collectRatingByCategory(4).length}/>
+                  <RatingCategory category={5} percentage={calculatePercentage(collectRatingByCategory(5))} prepare = {() => prepareReviews(5)} total = {collectRatingByCategory(5).length}/>
                 </Grid>
               </Popover>
               <Typography variant="body2" gutterBottom>
@@ -150,6 +176,7 @@ const ListingCard = (props) => {
           Price : {props.listing.price} AUD / NIGHT
         </Typography>
       </CardContent>
+      {showReview && (<ReviewByCategory close={closeReviews} content = {reviews} category = {reviewCategory}/>)}
     </>
   );
 };

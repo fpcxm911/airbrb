@@ -42,7 +42,7 @@ export default function DisplayReview (props) {
           <Box key={i} height={'180px'}>
             <Grid container alignItems={'center'} sx={{ mb: 2 }}>
               <Avatar alt="Remy Sharp" src={defaultImage} sx={{ width: 56, height: 56 }} />
-              <Typography variant="body2" color={'text.primary'} sx={{ ml: 1 }}>
+              <Typography variant="body2" color={'text.primary'} sx={{ ml: 2 }}>
                 {item.userEmail}
               </Typography>
             </Grid>
