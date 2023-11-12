@@ -15,6 +15,7 @@ import {
   mdiWifi,
   mdiHomeCircleOutline,
   mdiThumbsUpDown,
+  mdiVideo,
 } from '@mdi/js';
 import DisplayReview from '../components/DisplayReview';
 import ErrorDialog from '../components/ErrorPopup';
@@ -34,6 +35,7 @@ import MakeBooking from './MakeBooking';
 // import Fade from '@mui/material/Fade';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ReactPlayer from 'react-player/lazy';
 
 export default function ListingDetail () {
   const { getters, setters } = useContext(Context);
@@ -237,6 +239,20 @@ export default function ListingDetail () {
               </Grid>
                 )}
             <Divider sx={{ my: 3 }} />
+            {listDeatail.metadata.youtubeUrl && (
+              <>
+                <Grid container alignItems={'center'} sx={{ pt: 3 }}>
+                    <Icon path={mdiVideo} size={2} />
+                    <Typography variant="h6" color="text.primary" sx={{ pl: 2 }}>
+                      Checkout the video
+                    </Typography>
+                </Grid>
+                <Grid container alignItems={'center'} sx={{ pt: 3 }} justifyContent={'center'}>
+                  <ReactPlayer url={listDeatail.metadata.youtubeUrl} controls={true} light={true} playing={true} sx={{ width: '100%' }}/>
+                </Grid>
+                <Divider sx={{ my: 3 }} />
+              </>
+            )}
             {listDeatail.reviews.length
               ? (
               <DisplayReview listing={listDeatail} />
