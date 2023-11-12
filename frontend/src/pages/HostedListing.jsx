@@ -158,7 +158,7 @@ export default function HostedListing (props) {
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                 >
-                  <ListingCard listing = {listing} />
+                  <ListingCard listing = {listing} hotedPage = {true} />
                   <CardActions>
                     <Button size="small" onClick={() => navigate(`/hosted/edit/${listing.id}`)}>EDIT</Button>
                     <Button size="small" onClick={() => navigate(`/hosted/booking/${listing.id}`)}>BOOKINGS</Button>
