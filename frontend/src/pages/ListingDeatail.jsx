@@ -28,10 +28,13 @@ import BookingStatus from '../components/BookingStatus';
 import ReviewForm from '../components/ReviewForm';
 import { useContext, Context } from '../Context';
 import MakeBooking from './MakeBooking';
-import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
-import Backdrop from '@mui/material/Backdrop';
-import Fade from '@mui/material/Fade';
+// import Alert from '@mui/material/Alert';
+// import CheckIcon from '@mui/icons-material/Check';
+// import Backdrop from '@mui/material/Backdrop';
+// import Fade from '@mui/material/Fade';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import VideoListing from '../components/VideoListing';
 
 export default function ListingDetail () {
   const { getters, setters } = useContext(Context);
@@ -41,7 +44,7 @@ export default function ListingDetail () {
   const [errorMessage, setErrorMessage] = React.useState('');
   const [newComment, setNewComment] = React.useState(0);
   const [showMakeBooking, setShowMakeBooking] = React.useState(false);
-  const [showBookSuccess, setShowBookSuccess] = React.useState(false);
+  // const [showBookSuccess, setShowBookSuccess] = React.useState(false);
   const [bookingUpdate, setBookingUpdate] = React.useState(0);
   const updateBookings = () => {
     setBookingUpdate(bookingUpdate + 1);
@@ -81,6 +84,8 @@ export default function ListingDetail () {
   const checkAmenities = (target) => {
     return listDeatail.metadata.amenities.includes(target);
   };
+
+  const bookingSuccessNotify = () => toast(`✅ Your booking made at ${listDeatail.title} is successful.`)
 
   React.useEffect(async () => {
     const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
@@ -233,6 +238,12 @@ export default function ListingDetail () {
               </Grid>
                 )}
             <Divider sx={{ my: 3 }} />
+            {listDeatail.metadata.youtubeUrl && (
+              <>
+                <VideoListing url={listDeatail.metadata.youtubeUrl} />
+                <Divider sx={{ my: 3 }} />
+              </>
+            )}
             {listDeatail.reviews.length
               ? (
               <DisplayReview listing={listDeatail} />
@@ -276,7 +287,8 @@ export default function ListingDetail () {
                     price={String(listDeatail.price)}
                     listingid={Number(listDeatail.id)}
                     close={() => setShowMakeBooking(false)}
-                    showBookSuccess={() => setShowBookSuccess(true)}
+                    showBookSuccess={() => bookingSuccessNotify()}
+                    // showBookSuccess={() => setShowBookSuccess(true)}
                   />
                 )}
               </Box>
@@ -289,7 +301,7 @@ export default function ListingDetail () {
                 content={errorMessage}
               />
             )}
-              <Backdrop
+              {/* <Backdrop
               sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
               open={showBookSuccess}
               onClick={() => setShowBookSuccess(false)}
@@ -310,7 +322,13 @@ export default function ListingDetail () {
                     </p>
                   </Alert>
                 </Fade>
-              </Backdrop>
+              </Backdrop> */}
+              <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                closeOnClick
+                />
           </Container>
         </>
       )}

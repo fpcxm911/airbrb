@@ -145,7 +145,7 @@ const Home = () => {
       </Grid>
       <main>
       <Box sx={{ py: 8, mx: 10 }} >
-        <Tooltip title={`Sort by ${sortOption}`} placement="top">
+        <Tooltip title={`Sort by: ${sortOption}`} placement="top">
           <Button
             variant="contained"
             onClick={setNextOption}
