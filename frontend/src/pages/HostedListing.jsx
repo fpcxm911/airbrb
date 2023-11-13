@@ -109,9 +109,6 @@ export default function HostedListing (props) {
     }
   }, [props.listingsUpdate]);
 
-  console.log(getters.loggedIn);
-  console.log(getters.token);
-  console.log(getters.email);
   return (
     <>
     { getters.loggedIn

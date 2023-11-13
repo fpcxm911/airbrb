@@ -85,7 +85,7 @@ export default function ListingDetail () {
     return listDeatail.metadata.amenities.includes(target);
   };
 
-  const bookingSuccessNotify = () => toast(`✅ Your booking made at ${listDeatail.title} is successful.`)
+  const bookingSuccessNotify = () => toast.success(`Your booking made at ${listDeatail.title} is successful.`)
 
   React.useEffect(async () => {
     const listingRes = await apiCallGetAuthen(`listings/${params.id}`);

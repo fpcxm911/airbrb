@@ -14,16 +14,27 @@ import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import PropertyAmenities from '../components/PropertyAmenities';
 import PropertyBedroom from '../components/PropertyBedroom';
 import ImageIcon from '@mui/icons-material/Image';
-import DialogContentText from '@mui/material/DialogContentText';
-import { apiCallBodyAuthen, fileToDataUrl, createMeta, createAddress } from './Helper'
+import {
+  apiCallBodyAuthen,
+  fileToDataUrl,
+  createMeta,
+  createAddress,
+} from './Helper';
+import { mdiCodeJson } from '@mdi/js';
+import Icon from '@mdi/react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Listcreate (props) {
-  const [errorMessage, setErrorMessage] = React.useState('');
-
+  const toastError = (msg) => toast.error(msg);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (data.get('photo') && data.get('photo').name && JSON.parse(data.get('bedrooms')).length > 0) {
+    if (
+      data.get('photo') &&
+      data.get('photo').name &&
+      JSON.parse(data.get('bedrooms')).length > 0
+    ) {
       try {
         const thumbnail = await fileToDataUrl(data.get('photo'));
         const token = localStorage.getItem('token');
@@ -37,31 +48,137 @@ export default function Listcreate (props) {
         const price = data.get('price');
         const propertyType = data.get('prop');
         const bedroomsArray = JSON.parse(data.get('bedrooms'));
-        const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',')
+        const amenitiesList =
+          data.get('amenities') === '' ? [] : data.get('amenities').split(',');
         const youtubeUrl = data.get('youtube') ? data.get('youtube') : null;
         const propertyImages = [];
-        const metadata = createMeta(bathNum, propertyType, bedroomsArray, amenitiesList, youtubeUrl, propertyImages);
-        const res = await apiCallBodyAuthen('listings/new', token, {
-          title,
-          address,
-          price,
-          thumbnail,
-          metadata
-        }, 'POST');
+        const metadata = createMeta(
+          bathNum,
+          propertyType,
+          bedroomsArray,
+          amenitiesList,
+          youtubeUrl,
+          propertyImages
+        );
+        const res = await apiCallBodyAuthen(
+          'listings/new',
+          token,
+          {
+            title,
+            address,
+            price,
+            thumbnail,
+            metadata,
+          },
+          'POST'
+        );
         if (res.error) {
-          setErrorMessage(res.error)
+          toastError(res.error.body);
         } else {
           props.update();
           props.close();
         }
       } catch (error) {
-        setErrorMessage(error);
+        toastError(error);
       }
     } else {
-      (JSON.parse(data.get('bedrooms')).length === 0) && setErrorMessage('Please add at least one bedroom');
-      (!data.get('photo') || !data.get('photo').name) && setErrorMessage('Please upload a photo');
+      JSON.parse(data.get('bedrooms')).length === 0 &&
+        toastError('Please add at least one bedroom');
+      (!data.get('photo') || !data.get('photo').name) &&
+        toastError('Please upload a thumbnail');
     }
-  }
+  };
+
+  const handleJsonCreate = async (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    if (!e.target.files[0].name.endsWith('.json')) {
+      toastError('Please upload only JSON file');
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const contents = e.target.result;
+      const json = JSON.parse(contents);
+      if (!validateJson(json)) {
+        toastError('Fail to create listing: invalid JSON file');
+        e.currentTarget.value = '';
+      } else {
+        console.log(json);
+        const token = localStorage.getItem('token');
+        const res = await apiCallBodyAuthen('listings/new', token, json, 'POST');
+        if (res.error) {
+          toastError(res.error);
+        } else {
+          props.update();
+          props.close();
+        }
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const validateJson = (data) => {
+    if (!data.title || !data.address || !data.price || !data.thumbnail) {
+      return false;
+    }
+
+    if (
+      !data.metadata ||
+      !data.metadata.propertyType ||
+      !data.metadata.amenities ||
+      !data.metadata.bedrooms ||
+      !data.metadata.numberOfBathrooms ||
+      !data.metadata.youtubeUrl ||
+      !data.metadata.propertyImages
+    ) {
+      toastError('JSON file has invalid metadata structure');
+      return false;
+    }
+
+    for (const amenity of data.metadata.amenities) {
+      if (typeof amenity !== 'string') {
+        return false;
+      }
+    }
+
+    if (!Array.isArray(data.metadata.bedrooms)) {
+      toastError('JSON file has invalid metadata structure');
+      return false;
+    }
+    if (data.metadata.bedrooms.length === 0) {
+      toastError('JSON file must have at least one bedroom');
+      return false;
+    }
+
+    if (data.thumbnail === '') {
+      toastError('JSON file must have a thumbnail in dataURL');
+      return false;
+    }
+
+    for (const bedroom of data.metadata.bedrooms) {
+      if (
+        typeof bedroom !== 'object' ||
+        !bedroom.numberOfBeds ||
+        !bedroom.roomType
+      ) {
+        return false;
+      }
+    }
+
+    if (typeof data.metadata.numberOfBathrooms !== 'number') {
+      return false;
+    }
+
+    if (
+      !Array.isArray(data.metadata.propertyImages) ||
+      typeof data.metadata.youtubeUrl !== 'string'
+    ) {
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <React.Fragment>
@@ -71,7 +188,7 @@ export default function Listcreate (props) {
         PaperProps={{ sx: { borderRadius: 6 } }}
       >
         <IconButton
-          aria-label="close"
+          aria-label='close'
           onClick={props.close}
           size='small'
           sx={{
@@ -82,21 +199,28 @@ export default function Listcreate (props) {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent dividers sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          ml: 1.5,
-          mr: 1.5,
-        }}>
+        <DialogContent
+          dividers
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            ml: 1.5,
+            mr: 1.5,
+          }}
+        >
           <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
             <MapsHomeWorkIcon />
           </Avatar>
           <Typography component='h1' variant='h5'>
             Create your Hosted Listing
           </Typography>
-          <Box component='form' onSubmit={handleSubmit} sx={{ pt: 3, overflowY: 'auto' }}>
+          <Box
+            component='form'
+            onSubmit={handleSubmit}
+            sx={{ pt: 3, overflowY: 'auto' }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -147,18 +271,18 @@ export default function Listcreate (props) {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  type="number"
-                  name="bath"
-                  label="Bathrooms"
+                  type='number'
+                  name='bath'
+                  label='Bathrooms'
                   required
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  type="number"
-                  name="price"
-                  label="Price/Night"
+                  type='number'
+                  name='price'
+                  label='Price/Night'
                   required
                 />
               </Grid>
@@ -175,33 +299,46 @@ export default function Listcreate (props) {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  type="text"
-                  name="youtube"
-                  label="Youtube url (Optional)"
+                  type='text'
+                  name='youtube'
+                  label='Youtube url (Optional)'
                 />
               </Grid>
               <Grid item xs={12}>
                 <Button
                   fullWidth
-                  variant="text"
-                  component="label"
+                  variant='text'
+                  component='label'
                   startIcon={<ImageIcon />}
                 >
                   Upload Thumbnail
                   <input
-                    type="file"
+                    type='file'
                     hidden
-                    name = 'photo'
-                    accept="image/jpeg, image/jpg, image/png"
+                    name='photo'
+                    accept='image/jpeg, image/jpg, image/png'
                   />
                 </Button>
               </Grid>
               <Grid item xs={12}>
-                <DialogContentText color='error' sx={{ textAlign: 'center' }} xs={12}>
-                  {errorMessage}
-                </DialogContentText>
+                <Button
+                  fullWidth
+                  variant='text'
+                  component='label'
+                  startIcon={<Icon path={mdiCodeJson} size={1} />}
+                >
+                  Upload .JSON file
+                  <input
+                    type='file'
+                    hidden
+                    name='json'
+                    accept='application/json'
+                    onChange={(e) => {
+                      handleJsonCreate(e);
+                    }}
+                  />
+                </Button>
               </Grid>
-
             </Grid>
             <Button
               type='submit'
@@ -214,6 +351,12 @@ export default function Listcreate (props) {
           </Box>
         </DialogContent>
       </Dialog>
+      <ToastContainer
+        position='top-center'
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+      />
     </React.Fragment>
   );
 }
