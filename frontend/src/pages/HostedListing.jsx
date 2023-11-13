@@ -17,7 +17,7 @@ import ListPublish from './ListPublish';
 import NavAirbrb from '../components/NavAirbrb';
 import ListingCard from '../components/ListingCard';
 import { useContext, Context } from '../Context';
-// import { CardContent } from '@mui/material';
+import ProfitChart from '../components/ProfitChart';
 
 const buttonFontSize = 12;
 export default function HostedListing (props) {
@@ -56,44 +56,56 @@ export default function HostedListing (props) {
   };
 
   const deleteListing = async (listing) => {
-    const res = await apiCallBodyAuthen(`listings/${listing.id}`, localStorage.getItem('token'), {}, 'DELETE');
+    const res = await apiCallBodyAuthen(
+      `listings/${listing.id}`,
+      localStorage.getItem('token'),
+      {},
+      'DELETE'
+    );
     if (res.error) {
-      console.log(listing.id);
+      // console.log(listing.id);
       setErrorMessage({ title: 'Error', body: res.error });
       setShowModal(true);
     } else {
-      const newListings = HostedLists.filter(x => x.id !== listing.id)
-      setHostedLists(newListings)
+      const newListings = HostedLists.filter((x) => x.id !== listing.id);
+      setHostedLists(newListings);
     }
   };
 
   const unpublishListing = async (listing) => {
-    const res = await apiCallBodyAuthen(`listings/unpublish/${listing.id}`, localStorage.getItem('token'), {}, 'PUT');
+    const res = await apiCallBodyAuthen(
+      `listings/unpublish/${listing.id}`,
+      localStorage.getItem('token'),
+      {},
+      'PUT'
+    );
     if (res.error) {
-      console.log(listing.id);
+      // console.log(listing.id);
       setErrorMessage({ title: 'Error', body: res.error });
       setShowModal(true);
     } else {
-      const newListings = HostedLists.map(item => {
+      const newListings = HostedLists.map((item) => {
         if (item.id === listing.id) {
-          return { ...item, published: false }
+          return { ...item, published: false };
         }
         return item;
       });
       setHostedLists(newListings);
     }
-  }
+  };
 
   React.useEffect(async () => {
-    const res = await apiCallGetAuthen('listings',);
+    const res = await apiCallGetAuthen('listings');
     if (res.error) {
       setErrorMessage({ title: 'Error', body: res.error });
       setShowModal(true);
     } else {
       const currentUserEmail = localStorage.getItem('email');
 
-      const myListings = res.listings.filter(x => x.owner === currentUserEmail)
-      const myListingsDetail = []
+      const myListings = res.listings.filter(
+        (x) => x.owner === currentUserEmail
+      );
+      const myListingsDetail = [];
       for (const listing of myListings) {
         const deatailRes = await apiCallGetAuthen(`listings/${listing.id}`);
         if (deatailRes.error) {
@@ -101,87 +113,163 @@ export default function HostedListing (props) {
           setShowModal(true);
         } else {
           const collectListingData = deatailRes.listing;
-          collectListingData.id = listing.id
-          myListingsDetail.push(collectListingData)
+          collectListingData.id = listing.id;
+          myListingsDetail.push(collectListingData);
         }
       }
-      setHostedLists(myListingsDetail)
+      setHostedLists(myListingsDetail);
     }
   }, [props.listingsUpdate]);
 
+  // console.log(getters.loggedIn);
+  // console.log(getters.token);
+  // console.log(getters.email);
   return (
     <>
-    { getters.loggedIn
-      ? (<div>
-      <CssBaseline />
-      <NavAirbrb/>
-      <main>
-        {/* Hero unit */}
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            pt: 8,
-            pb: 6,
-          }}
-        >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
+      {getters.loggedIn
+        ? (
+        <div>
+          <CssBaseline />
+          <NavAirbrb />
+          <main>
+            {/* Hero unit */}
+            <Box
+              sx={{
+                bgcolor: 'background.paper',
+                pt: 8,
+                pb: 6,
+              }}
             >
-              View, create and edit your hosted listing
-            </Typography>
-            <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Airbrb provide you powerful listing management functionalities
-            </Typography>
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              <Button variant="contained" onClick={() => setShowCreate(true)}>Create new listing</Button>
-              <Button variant="outlined" onClick={goBackMain}>Go back</Button>
-            </Stack>
-          </Container>
-        </Box>
-        <Box sx={{ py: 8, mx: 10 }} >
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {HostedLists.map((listing, index) => (
-              <Grid item key={listing.owner + index} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+              <Container maxWidth="sm">
+                <Typography
+                  component="h1"
+                  variant="h2"
+                  align="center"
+                  color="text.primary"
+                  gutterBottom
                 >
-                  <ListingCard listing = {listing} hotedPage = {true} />
-                  <CardActions>
-                    {/* // TODO consider using stack or grid to group buttons */}
-                    <Button size="small" sx={{ fontSize: buttonFontSize }} onClick={() => navigate(`/hosted/edit/${listing.id}`)}>EDIT</Button>
-                    <Button size="small" sx={{ fontSize: buttonFontSize }} onClick={() => navigate(`/hosted/booking/${listing.id}`)}>BOOKINGS</Button>
-                    {!listing.published && <Button size="small" sx={{ fontSize: buttonFontSize }} onClick={() => setShowPublish([true, listing.id])}>PUBLISH</Button>}
-                    {listing.published && <Button size="small" sx={{ fontSize: buttonFontSize }} onClick={() => unpublishListing(listing)}>UNPUBLISH</Button>}
-                    <Button size="small" sx={{ fontSize: buttonFontSize }} color="error" onClick={() => deleteListing(listing)}>DELETE</Button>
-                  </CardActions>
-                </Card>
+                  View, create and edit your hosted listing
+                </Typography>
+                <Typography
+                  variant="h5"
+                  align="center"
+                  color="text.secondary"
+                  paragraph
+                >
+                  Airbrb provide you powerful listing management functionalities
+                </Typography>
+                <Stack
+                  sx={{ pt: 4 }}
+                  direction="row"
+                  spacing={2}
+                  justifyContent="center"
+                >
+                  <Button
+                    variant="contained"
+                    onClick={() => setShowCreate(true)}
+                  >
+                    Create new listing
+                  </Button>
+                  <Button variant="outlined" onClick={goBackMain}>
+                    Go back
+                  </Button>
+                </Stack>
+              </Container>
+            </Box>
+            <Box sx={{ py: 8, mx: { xs: 0, md: 10 } }}>
+              {/* End hero unit */}
+              <Box sx={{ mb: 5 }}>
+                <Typography variant="h5" color="text.primary" paragraph>
+                  Your last 30 days profits
+                </Typography>
+                <ProfitChart myListings={HostedLists} />
+              </Box>
+              <Grid container spacing={4}>
+                {HostedLists.map((listing, index) => (
+                  <Grid item key={listing.owner + index} xs={12} sm={6} md={4}>
+                    <Card
+                      sx={{
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                      }}
+                    >
+                      <ListingCard listing={listing} hotedPage={true} />
+                      <CardActions>
+                        {/* // TODO consider using stack or grid to group buttons */}
+                        <Button
+                          size="small"
+                          sx={{ fontSize: buttonFontSize }}
+                          onClick={() => navigate(`/hosted/edit/${listing.id}`)}
+                        >
+                          EDIT
+                        </Button>
+                        <Button
+                          size="small"
+                          sx={{ fontSize: buttonFontSize }}
+                          onClick={() =>
+                            navigate(`/hosted/booking/${listing.id}`)
+                          }
+                        >
+                          BOOKINGS
+                        </Button>
+                        {!listing.published && (
+                          <Button
+                            size="small"
+                            sx={{ fontSize: buttonFontSize }}
+                            onClick={() => setShowPublish([true, listing.id])}
+                          >
+                            PUBLISH
+                          </Button>
+                        )}
+                        {listing.published && (
+                          <Button
+                            size="small"
+                            sx={{ fontSize: buttonFontSize }}
+                            onClick={() => unpublishListing(listing)}
+                          >
+                            UNPUBLISH
+                          </Button>
+                        )}
+                        <Button
+                          size="small"
+                          sx={{ fontSize: buttonFontSize }}
+                          color="error"
+                          onClick={() => deleteListing(listing)}
+                        >
+                          DELETE
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-        <Copyright />
-      </Box>
-      {/* End footer */}
-      {showModal && (<ErrorDialog close={closeModal} content={errorMessage} />)}
-      {showCreate && (<Listcreate close={closeCreate} update={props.update} />)}
-      {showPublish[1] && (<ListPublish close={closePublish} update={props.update} listingid={showPublish[1]} />)}
-      <Outlet />
-    </div>)
-      : (<>You dont have permission</>)
-    }
-    </>);
+            </Box>
+          </main>
+          {/* Footer */}
+          <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
+            <Copyright />
+          </Box>
+          {/* End footer */}
+          {showModal && (
+            <ErrorDialog close={closeModal} content={errorMessage} />
+          )}
+          {showCreate && (
+            <Listcreate close={closeCreate} update={props.update} />
+          )}
+          {showPublish[1] && (
+            <ListPublish
+              close={closePublish}
+              update={props.update}
+              listingid={showPublish[1]}
+            />
+          )}
+          <Outlet />
+        </div>
+          )
+        : (
+        <>You dont have permission</>
+          )}
+    </>
+  );
 }
