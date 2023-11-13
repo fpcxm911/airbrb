@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { startOfDay, differenceInDays } from 'date-fns';
+import { differenceInDays } from 'date-fns';
 import { apiCallGetAuthen } from '../pages/Helper';
 
 const MyChart = (props) => {
@@ -25,8 +25,9 @@ const MyChart = (props) => {
   const generateChart = () => {
     // Get the current date
     const datas = []
-    const today = startOfDay(new Date());
-    for (let i = 0; i < 30; i++) {
+    const now = new Date();
+    const today = new Date(now.toISOString().split('T')[0])
+    for (let i = 0; i <= 30; i++) {
       datas.push({ name: i, profit: 0 })
     }
     // console.log(datas);
@@ -36,26 +37,34 @@ const MyChart = (props) => {
       const dayDiffStart = differenceInDays(today, startDate);
       const dayDiffEnd = differenceInDays(endDate, today);
       const dayDiffStartEnd = differenceInDays(endDate, startDate);
-      if (dayDiffStart < 30 && dayDiffStart >= 0 && dayDiffEnd > 0) {
+      if (dayDiffStart <= 30 && dayDiffStart >= 0 && dayDiffEnd > 0) {
+        console.log(dayDiffStartEnd);
+        console.log(today);
         console.log(startDate);
         console.log(endDate);
         console.log(booking);
+        console.log('hrere');
+        console.log(dayDiffStart);
         console.log();
         for (let index = 0; index <= dayDiffStart; index++) {
           console.log(index);
           datas[index].profit += booking.totalPrice / dayDiffStartEnd;
         }
-      } else if (dayDiffStart < 30 && dayDiffStart >= 0 && dayDiffEnd < 0) {
+      } else if (dayDiffStart <= 30 && dayDiffStart >= 0 && dayDiffEnd <= 0) {
+        console.log(today);
         console.log(startDate);
         console.log(endDate);
         console.log(booking);
         console.log();
-        for (let index = Math.abs(dayDiffEnd); index <= dayDiffStart; index++) {
+        console.log('hrere');
+        console.log(dayDiffStart);
+        for (let index = dayDiffStart; index > Math.abs(dayDiffEnd); index--) {
           console.log(index);
           datas[index].profit += booking.totalPrice / dayDiffStartEnd;
         }
       }
     }
+    console.log(datas);
     return datas;
   }
   // generateChart();
