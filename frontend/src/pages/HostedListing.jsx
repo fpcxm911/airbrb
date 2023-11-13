@@ -176,7 +176,7 @@ export default function HostedListing (props) {
                 </Stack>
               </Container>
             </Box>
-            <Box sx={{ py: 8, mx: { xs: 0, md: 10 } }}>
+            <Box sx={{ py: 8, mx: { xs: 4, md: 10 } }}>
               {/* End hero unit */}
               <Box sx={{ mb: 5 }}>
                 <Typography variant="h5" color="text.primary" paragraph>
