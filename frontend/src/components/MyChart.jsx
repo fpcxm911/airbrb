@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { differenceInDays } from 'date-fns';
+import { subDays, differenceInDays, format } from 'date-fns';
 import { apiCallGetAuthen } from '../pages/Helper';
 
 const MyChart = (props) => {
@@ -28,7 +28,9 @@ const MyChart = (props) => {
     const now = new Date();
     const today = new Date(now.toISOString().split('T')[0])
     for (let i = 0; i <= 30; i++) {
-      datas.push({ name: i, profit: 0 })
+      const date = subDays(today, i);
+      const formatDate = format(date, 'MM/dd')
+      datas.push({ name: formatDate, profit: 0 })
     }
     // console.log(datas);
     for (const booking of listBookings) {
