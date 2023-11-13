@@ -51,5 +51,7 @@ export default function PropertyAmenities () {
 const amenitiesOptions = [
   'Wifi',
   'Wash Machine',
-  'Oven'
+  'Oven',
+  'Pool',
+  'Air Conditioning',
 ];

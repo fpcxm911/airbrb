@@ -15,6 +15,8 @@ import {
   mdiWifi,
   mdiHomeCircleOutline,
   mdiThumbsUpDown,
+  mdiPool,
+  mdiAirConditioner,
 } from '@mdi/js';
 import DisplayReview from '../components/DisplayReview';
 import ErrorDialog from '../components/ErrorPopup';
@@ -71,11 +73,11 @@ export default function ListingDetail () {
   const addressCreate = () => {
     const address = listDeatail.address;
     return (
-      address.postcode +
-      ' ' +
       address.street +
       ', ' +
       address.city +
+      ', ' +
+      address.postcode +
       ', ' +
       address.country
     );
@@ -224,6 +226,30 @@ export default function ListingDetail () {
                       color="text.secondary"
                     >
                       Washing Machine provided
+                    </Typography>
+                  </Grid>
+                )}
+                {checkAmenities('Pool') && (
+                  <Grid container alignItems={'center'} sx={{ pt: 3 }}>
+                    <Icon path={mdiPool} size={2} />
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ pl: 3 }}
+                      color="text.secondary"
+                    >
+                      Swimming Pool provided
+                    </Typography>
+                  </Grid>
+                )}
+                {checkAmenities('Air Conditioning') && (
+                  <Grid container alignItems={'center'} sx={{ pt: 3 }}>
+                    <Icon path={mdiAirConditioner} size={2} />
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ pl: 3 }}
+                      color="text.secondary"
+                    >
+                      Air Conditioning
                     </Typography>
                   </Grid>
                 )}
