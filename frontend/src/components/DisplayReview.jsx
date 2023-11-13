@@ -1,17 +1,24 @@
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography, Box, Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { calculateAverageRating } from '../pages/Helper';
 import { parseISO, format } from 'date-fns';
-import defaultImage from '../assets/man.png'
+import defaultImage from '../assets/man.png';
+import FullReview from './FullReview';
 
 export default function DisplayReview (props) {
   const copiedReviews = [...props.listing.reviews];
   const reversedReviews = copiedReviews.reverse();
+  const [fullReview, setShowFullReview] = React.useState(false);
+  const [reviewTarget, setReviewTarget] = React.useState(null);
+  const handleOnclick = (item) => {
+    setShowFullReview(true);
+    setReviewTarget(item);
+  };
   return (
     <>
       <Grid container justifyContent={'center'}>
@@ -28,9 +35,8 @@ export default function DisplayReview (props) {
       >
         Slide to view other reviews
       </Typography>
-
       <Carousel
-        sx={{ width: '100%', mb: 10 }}
+        sx={{ width: '100%', mb: 2 }}
         duration={500}
         swipe
         indicators={false}
@@ -39,14 +45,23 @@ export default function DisplayReview (props) {
         animation="slide"
       >
         {reversedReviews.map((item, i) => (
-          <Box key={i} height={'180px'}>
+          <Box key={i} height={'270px'}>
+            <Grid container justifyContent={'center'} sx={{ mb: 2 }}>
+              <Button variant="text" onClick={() => handleOnclick(item)}>
+                Click Here to view full content of review
+              </Button>
+            </Grid>
             <Grid container alignItems={'center'} sx={{ mb: 2 }}>
-              <Avatar alt="Remy Sharp" src={defaultImage} sx={{ width: 56, height: 56 }} />
+              <Avatar
+                alt="Remy Sharp"
+                src={defaultImage}
+                sx={{ width: 56, height: 56 }}
+              />
               <Typography variant="body2" color={'text.primary'} sx={{ ml: 2 }}>
                 {item.userEmail}
               </Typography>
             </Grid>
-            <Grid container minheight={'170px'}>
+            <Grid container>
               <Grid container>
                 <Rating
                   value={item.rating}
@@ -78,6 +93,12 @@ export default function DisplayReview (props) {
           </Box>
         ))}
       </Carousel>
+      {fullReview && (
+        <FullReview
+          close={() => setShowFullReview(false)}
+          content={reviewTarget}
+        />
+      )}
     </>
   );
 }
