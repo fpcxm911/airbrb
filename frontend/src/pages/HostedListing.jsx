@@ -17,6 +17,7 @@ import ListPublish from './ListPublish';
 import NavAirbrb from '../components/NavAirbrb';
 import ListingCard from '../components/ListingCard';
 import { useContext, Context } from '../Context';
+// import { CardContent } from '@mui/material';
 
 const buttonFontSize = 12;
 export default function HostedListing (props) {
@@ -108,9 +109,6 @@ export default function HostedListing (props) {
     }
   }, [props.listingsUpdate]);
 
-  console.log(getters.loggedIn);
-  console.log(getters.token);
-  console.log(getters.email);
   return (
     <>
     { getters.loggedIn
