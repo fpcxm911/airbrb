@@ -8,7 +8,6 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import PropertyType from '../components/PropertyType';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';

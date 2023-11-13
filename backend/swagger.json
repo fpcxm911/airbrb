@@ -124,7 +124,7 @@
           "example": {
             "bookingId": 78204786,
             "email": "christian@unsw.edu.au",
-            "rating": 5,
+            "rating": 4.5,
             "comment": "This was a great place to stay",
             "date": "2020-10-31T14:45:21.077Z"
           }
