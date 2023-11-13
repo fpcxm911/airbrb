@@ -8,7 +8,6 @@ import EditListing from '../pages/EditListing';
 import ListingDetail from './ListingDeatail';
 import { Context, initialValue } from '../Context';
 import Dashboard from './Dashboard';
-import MyChart from '../components/MyChart';
 
 const Pagelist = () => {
   const [listingsUpdate, setListingsUpdate] = React.useState(0);
@@ -55,7 +54,6 @@ const Pagelist = () => {
         </Route>
         <Route path="listing/:id" element={<ListingDetail />} />
         <Route path="hosted/booking/:id" element={<Dashboard />} />
-        <Route path="test" element={<MyChart />} />
       </Routes>
     </Context.Provider>
   );

@@ -17,7 +17,7 @@ import ListPublish from './ListPublish';
 import NavAirbrb from '../components/NavAirbrb';
 import ListingCard from '../components/ListingCard';
 import { useContext, Context } from '../Context';
-import MyChart from '../components/MyChart';
+import ProfitChart from '../components/ProfitChart';
 
 const buttonFontSize = 12;
 export default function HostedListing (props) {
@@ -182,7 +182,7 @@ export default function HostedListing (props) {
                 <Typography variant="h5" color="text.primary" paragraph>
                   Your last 30 days profits
                 </Typography>
-                <MyChart myListings={HostedLists} />
+                <ProfitChart myListings={HostedLists} />
               </Box>
               <Grid container spacing={4}>
                 {HostedLists.map((listing, index) => (

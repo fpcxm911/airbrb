@@ -3,7 +3,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Toolti
 import { subDays, differenceInDays, format } from 'date-fns';
 import { apiCallGetAuthen } from '../pages/Helper';
 
-const MyChart = (props) => {
+const ProfitChart = (props) => {
   const [listBookings, setListBookings] = React.useState([]);
   React.useEffect(async () => {
     const bookingRes = await apiCallGetAuthen(
@@ -91,4 +91,4 @@ const MyChart = (props) => {
   );
 };
 
-export default MyChart;
+export default ProfitChart;
