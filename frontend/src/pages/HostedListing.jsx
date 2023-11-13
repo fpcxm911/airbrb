@@ -17,6 +17,7 @@ import ListPublish from './ListPublish';
 import NavAirbrb from '../components/NavAirbrb';
 import ListingCard from '../components/ListingCard';
 import { useContext, Context } from '../Context';
+import MyChart from '../components/MyChart';
 
 const buttonFontSize = 12;
 export default function HostedListing (props) {
@@ -57,7 +58,7 @@ export default function HostedListing (props) {
   const deleteListing = async (listing) => {
     const res = await apiCallBodyAuthen(`listings/${listing.id}`, localStorage.getItem('token'), {}, 'DELETE');
     if (res.error) {
-      console.log(listing.id);
+      // console.log(listing.id);
       setErrorMessage({ title: 'Error', body: res.error });
       setShowModal(true);
     } else {
@@ -69,7 +70,7 @@ export default function HostedListing (props) {
   const unpublishListing = async (listing) => {
     const res = await apiCallBodyAuthen(`listings/unpublish/${listing.id}`, localStorage.getItem('token'), {}, 'PUT');
     if (res.error) {
-      console.log(listing.id);
+      // console.log(listing.id);
       setErrorMessage({ title: 'Error', body: res.error });
       setShowModal(true);
     } else {
@@ -108,9 +109,9 @@ export default function HostedListing (props) {
     }
   }, [props.listingsUpdate]);
 
-  console.log(getters.loggedIn);
-  console.log(getters.token);
-  console.log(getters.email);
+  // console.log(getters.loggedIn);
+  // console.log(getters.token);
+  // console.log(getters.email);
   return (
     <>
     { getters.loggedIn
@@ -150,6 +151,7 @@ export default function HostedListing (props) {
             </Stack>
           </Container>
         </Box>
+        <MyChart myListings= {HostedLists}/>
         <Box sx={{ py: 8, mx: 10 }} >
           {/* End hero unit */}
           <Grid container spacing={4}>
