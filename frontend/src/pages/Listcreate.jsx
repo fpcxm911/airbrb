@@ -73,13 +73,13 @@ export default function Listcreate (props) {
           'POST'
         );
         if (res.error) {
-          toastError(res.error.body);
+          toastError(res.error);
         } else {
           props.update();
           props.close();
         }
       } catch (error) {
-        toastError(error);
+        toastError(error.toString());
       }
     } else {
       JSON.parse(data.get('bedrooms')).length === 0 &&
