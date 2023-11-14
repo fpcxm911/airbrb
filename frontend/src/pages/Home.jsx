@@ -20,7 +20,6 @@ const Home = (props) => {
   const [publishedListings, setpublishedListings] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
-  // const [sortOption, setSortOption] = React.useState('');
   const [sortOption, setSortOption] = React.useState('title');
   const navigate = useNavigate();
   // fetch localstorage to context state prevent lossing data by refreshing
@@ -32,6 +31,7 @@ const Home = (props) => {
       setters.setEmail(email);
       setters.setLoggedIn(true);
     }
+    props.setNumberOfNights(null);
   }, []);
 
   const sortListings = async (listings) => {
@@ -158,15 +158,14 @@ const Home = (props) => {
           </Button>
         </Tooltip>
           {/* End hero unit */}
-          <Grid container spacing={4}>
-          {/* // TODO eric if no listing is found, improve how it looks */}
+          <Grid container spacing={4} justifyContent={'flex-end'} alignItems={'center'} sx={{ mt: 3 }}>
             {publishedListings.length === 0 && (
               <>
                 <Grid item xs={2}>
-                  <Icon path={mdiExclamationThick} size={3} />
+                  <Icon path={mdiExclamationThick} size={'auto'} />
                 </Grid>
                 <Grid item xs={8}>
-                  <Typography component="h4" variant="h6" gutterBottom>
+                  <Typography component="h4" variant="h4" gutterBottom>
                     Sorry, we could not find any listing
                   </Typography>
                 </Grid>
@@ -178,7 +177,6 @@ const Home = (props) => {
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
                   onClick={() => navigate(`/listing/${listing.id}`)}
                 >
-                  {/* // TODO 2.4.1 pass some prop to inform about search by price */}
                   <ListingCard listing = {listing} hotedPage = {false} />
                   <CardActions>
                   </CardActions>
