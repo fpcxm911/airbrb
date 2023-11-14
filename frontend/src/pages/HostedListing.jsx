@@ -18,6 +18,7 @@ import NavAirbrb from '../components/NavAirbrb';
 import ListingCard from '../components/ListingCard';
 import { useContext, Context } from '../Context';
 import ProfitChart from '../components/ProfitChart';
+import NoPermission from './NoPermission';
 
 const buttonFontSize = 12;
 export default function HostedListing (props) {
@@ -268,7 +269,7 @@ export default function HostedListing (props) {
         </div>
           )
         : (
-        <>You dont have permission</>
+          <NoPermission />
           )}
     </>
   );
