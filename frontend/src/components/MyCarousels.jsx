@@ -11,7 +11,7 @@ const ResonsiveImg = styled('img')({
 
 export default function MyCarousels (props) {
   return (
-    <Carousel sx={{ width: '100%', border: 'none' }} autoPlay stopAutoPlayOnHover duration={1200} swipe >
+    <Carousel sx={{ width: '100%', aspectRatio: '16 / 9' }} autoPlay stopAutoPlayOnHover duration={1200} swipe navButtonsAlwaysVisible cycleNavigation={false}>
       {
           props.images.map((item, i) =>
           <Box sx={{ width: '100%' }} key={i}>
