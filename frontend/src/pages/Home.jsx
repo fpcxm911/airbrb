@@ -21,6 +21,7 @@ const Home = (props) => {
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [sortOption, setSortOption] = React.useState('title');
+  const [reset, setReset] = React.useState(0);
   const navigate = useNavigate();
   // fetch localstorage to context state prevent lossing data by refreshing
   React.useEffect(() => {
@@ -32,8 +33,11 @@ const Home = (props) => {
       setters.setLoggedIn(true);
     }
     props.setNumberOfNights(null);
-  }, []);
-
+  }, [reset]);
+  const handleReset = () => {
+    setSortOption('title');
+    setReset(reset + 1);
+  }
   const sortListings = async (listings) => {
     // have login
     if (getters.loggedIn) {
@@ -42,7 +46,7 @@ const Home = (props) => {
         setErrorMessage({ title: 'Error', body: res.error });
         setShowModal(true);
       } else {
-        const accecptPendingBookings = res.bookings.filter(x => x.status === 'accepted' || x.status === 'pending');
+        const accecptPendingBookings = res.bookings.filter(x => (x.status === 'accepted' || x.status === 'pending') && x.owner === localStorage.getItem('email'));
         const extractedLitingsId = accecptPendingBookings.map(x => x.listingId);
         console.log(extractedLitingsId);
         return listings.sort((a, b) => {
@@ -56,7 +60,7 @@ const Home = (props) => {
             return 1;
           } else if (aIn && bIn) {
             console.log('789');
-            return 1;
+            return a.title.localeCompare(b.title);
           } else {
             console.log('haha');
             return a.title.localeCompare(b.title);
@@ -91,7 +95,7 @@ const Home = (props) => {
       const newList = await sortListings(myListingsDetail.filter(x => x.published));
       setpublishedListings(newList);
     }
-  }, [getters.loggedIn]);
+  }, [getters.loggedIn, reset]);
   console.log('rendering again');
 
   // sort if sortOption changes
@@ -144,7 +148,7 @@ const Home = (props) => {
           <SearchBar update={setpublishedListings} setNumberOfNights={props.setNumberOfNights}/>
       </Grid>
       <main>
-      <Box sx={{ py: 3, mx: 10 }} >
+      <Box sx={{ py: 3, mx: { xs: 4, md: 10 } }} >
         <Tooltip title={`Sort by: ${sortOption}`} placement="top">
           <Button
             variant="contained"
@@ -157,6 +161,13 @@ const Home = (props) => {
             { sortOption === optionList[2] && <Icon path={mdiSortNumericDescending} size={1} />}
           </Button>
         </Tooltip>
+        <Button
+            variant="contained"
+            onClick={handleReset}
+            sx={{ mb: 2, borderRadius: 8, ml: 2 }}
+            >
+            Reset &nbsp;
+          </Button>
           {/* End hero unit */}
           <Grid container spacing={4}>
             {publishedListings.map((listing, index) => (
