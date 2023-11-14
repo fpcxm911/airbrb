@@ -140,11 +140,11 @@ const Home = (props) => {
   return (
     <div>
       <NavAirbrb/>
-      <Grid container justifyContent={'center'} sx={{ mt: 5, mb: 3 }}>
-          <SearchBar update={setpublishedListings} />
+      <Grid container justifyContent={'center'} sx={{ mt: 4, mb: 3 }}>
+          <SearchBar update={setpublishedListings} setNumberOfNights={props.setNumberOfNights}/>
       </Grid>
       <main>
-      <Box sx={{ py: 8, mx: 10 }} >
+      <Box sx={{ py: 3, mx: 10 }} >
         <Tooltip title={`Sort by: ${sortOption}`} placement="top">
           <Button
             variant="contained"
