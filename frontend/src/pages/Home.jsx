@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import NavAirbrb from '../components/NavAirbrb';
 import SearchBar from '../components/SearchBar';
-import { Grid, Box } from '@mui/material';
+import { Grid, Box, Typography } from '@mui/material';
 import { apiCallGetAuthen } from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 import Card from '@mui/material/Card';
@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { calculateAverageRating } from '../pages/Helper';
 import Icon from '@mdi/react';
-import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending } from '@mdi/js';
+import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending, mdiExclamationThick } from '@mdi/js';
 
 const Home = (props) => {
   const { getters, setters } = useContext(Context);
@@ -140,11 +140,11 @@ const Home = (props) => {
   return (
     <div>
       <NavAirbrb/>
-      <Grid container justifyContent={'center'} sx={{ mt: 5, mb: 3 }}>
-          <SearchBar update={setpublishedListings} />
+      <Grid container justifyContent={'center'} sx={{ mt: 4, mb: 3 }}>
+          <SearchBar update={setpublishedListings} setNumberOfNights={props.setNumberOfNights}/>
       </Grid>
       <main>
-      <Box sx={{ py: 8, mx: 10 }} >
+      <Box sx={{ py: 3, mx: 10 }} >
         <Tooltip title={`Sort by: ${sortOption}`} placement="top">
           <Button
             variant="contained"
@@ -159,9 +159,18 @@ const Home = (props) => {
         </Tooltip>
           {/* End hero unit */}
           <Grid container spacing={4}>
-          {/* // TODO eric if no listing is found, show some message */}
+          {/* // TODO eric if no listing is found, improve how it looks */}
             {publishedListings.length === 0 && (
-              <p>no listings found</p>
+              <>
+                <Grid item xs={2}>
+                  <Icon path={mdiExclamationThick} size={3} />
+                </Grid>
+                <Grid item xs={8}>
+                  <Typography component="h4" variant="h6" gutterBottom>
+                    Sorry, we could not find any listing
+                  </Typography>
+                </Grid>
+              </>
             )}
             {publishedListings.map((listing, index) => (
               <Grid item key={listing.owner + index} xs={12} sm={6} md={4} >
