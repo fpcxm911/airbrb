@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { FormControl, TextField, DialogContentText } from '@mui/material';
+import { FormControl, TextField } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import { apiCallGetAuthen, sortListings } from '../pages/Helper';
 import BedroomRangeSlider from './BedroomRangeSlider';
@@ -13,11 +13,23 @@ import Divider from '@mui/material/Divider';
 import PriceSlider from './PriceSlider';
 import DateSearch from './DateSearch';
 import differenceInDays from 'date-fns/differenceInDays';
+import { ToastContainer, toast } from 'react-toastify';
 
 const SearchBar = (props) => {
   const [searchOption, setSearchOption] = React.useState('titleLocation');
-  const [errorMessage, setErrorMessage] = React.useState('');
+  // const [errorMessage, setErrorMessage] = React.useState('');
   const [clickable, setClickable] = React.useState(true);
+
+  React.useEffect(() => {
+    setClickable(true);
+  }, [searchOption]);
+
+  const toastWarning = (msg) => {
+    toast.warning(msg);
+  }
+  const toastError = (msg) => {
+    toast.error(msg);
+  }
 
   const handleSelectChange = (event) => {
     setSearchOption(event.target.value);
@@ -29,7 +41,8 @@ const SearchBar = (props) => {
     const data = new FormData(e.currentTarget);
     const res = await apiCallGetAuthen('listings');
     if (res.error) {
-      setErrorMessage({ title: 'Error', body: res.error });
+      toastError(res.error);
+      // setErrorMessage({ title: 'Error', body: res.error });
       console.error(res.error);
       return;
     }
@@ -37,17 +50,18 @@ const SearchBar = (props) => {
     for (const listing of res.listings) {
       const detailRes = await apiCallGetAuthen(`listings/${listing.id}`);
       if (detailRes.error) {
-        setErrorMessage({ title: 'Error', body: detailRes.error });
+        toastError(detailRes.error);
+        // setErrorMessage({ title: 'Error', body: detailRes.error });
         return;
       }
       const collectListingData = detailRes.listing;
       collectListingData.id = listing.id;
       listingsDetail.push(collectListingData);
     }
-    // TODO eric wired eslint warning
     const newList = await sortListings(listingsDetail.filter(x => x.published));
     if (newList.error) {
-      setErrorMessage({ title: 'Error', body: newList.error });
+      toastError(newList.error);
+      // setErrorMessage({ title: 'Error', body: newList.error });
       return;
     }
     let searchInput;
@@ -157,7 +171,7 @@ const SearchBar = (props) => {
             )}
             {/* // TODO eric search bar width gets too big when date range option is selected */}
             {searchOption === 'date' && (
-              <DateSearch setSearch={setClickable} setErrorMessage={setErrorMessage} />
+              <DateSearch setSearch={setClickable} setErrorMessage={toastWarning} />
             )}
             {searchOption === 'price' && (
               <PriceSlider />
@@ -165,14 +179,15 @@ const SearchBar = (props) => {
           </Grid>
           <Grid item xs={1} sx={{ alignItems: 'center', pr: 2 }}>
             <IconButton type="submit" aria-label="search" disabled={!clickable} sx={{ p: 0 }}>
-              <SearchIcon style={{ fill: 'blue' }} />
+              <SearchIcon />
             </IconButton>
           </Grid>
         </Grid>
       </Paper>
-      <DialogContentText color='error'>
+      <ToastContainer />
+      {/* <DialogContentText color='error'>
         {errorMessage}
-      </DialogContentText>
+      </DialogContentText> */}
     </>
   );
 }
