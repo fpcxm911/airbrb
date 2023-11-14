@@ -196,7 +196,13 @@ export default function HostedListing (props) {
                       }}
                     >
                       <ListingCard listing={listing} hotedPage={true} />
-                      <CardActions>
+                      <CardActions
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'flex-start',
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                        }}>
                         {/* // TODO consider using stack or grid to group buttons */}
                         <Button
                           size="small"

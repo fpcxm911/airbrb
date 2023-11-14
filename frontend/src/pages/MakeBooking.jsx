@@ -169,7 +169,7 @@ const ListingBooking = (props) => {
       </Dialog>
       <ToastContainer
         position='top-center'
-        autoClose={6000}
+        autoClose={5000}
         hideProgressBar={false}
         closeOnClick
       />

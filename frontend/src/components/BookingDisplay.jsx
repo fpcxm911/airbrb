@@ -21,8 +21,8 @@ export default function BookingDisplay (props) {
   const handleAccept = async (bookingId) => {
     const res = await apiCallBodyAuthen(`bookings/accept/${bookingId}`, localStorage.getItem('token'), {}, 'PUT');
     if (res.error) {
-      props.setErrorMessage({ title: 'Error', body: res.error });
-      props.setShowModal(true);
+      console.log('cathcerrr')
+      props.toastError(res.error);
     } else {
       props.setBookingUpdate();
     }
@@ -30,8 +30,7 @@ export default function BookingDisplay (props) {
   const handleDeny = async (bookingId) => {
     const res = await apiCallBodyAuthen(`bookings/decline/${bookingId}`, localStorage.getItem('token'), {}, 'PUT');
     if (res.error) {
-      props.setErrorMessage({ title: 'Error', body: res.error });
-      props.setShowModal(true);
+      props.toastError(res.error);
     } else {
       props.setBookingUpdate();
     }

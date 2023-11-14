@@ -31,7 +31,6 @@ const apiCallGetAuthen = async (path, token, queryString) => {
     });
     return await response.json();
   } catch (error) {
-    // Handle error appropriately
     console.error('Error:', error);
     throw error;
   }
@@ -50,7 +49,6 @@ const apiCallBodyAuthen = async (path, token, body, method) => {
     });
     return await response.json();
   } catch (error) {
-    // Handle error appropriately
     console.error('Error:', error);
     throw error;
   }
