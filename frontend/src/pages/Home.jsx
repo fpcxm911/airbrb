@@ -159,12 +159,17 @@ const Home = () => {
         </Tooltip>
           {/* End hero unit */}
           <Grid container spacing={4}>
+          {/* // TODO eric if no listing is found, show some message */}
+            {publishedListings.length === 0 && (
+              <p>no listings found</p>
+            )}
             {publishedListings.map((listing, index) => (
               <Grid item key={listing.owner + index} xs={12} sm={6} md={4} >
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
                   onClick={() => navigate(`/listing/${listing.id}`)}
                 >
+                  {/* // TODO 2.4.1 pass some prop to inform about search by price */}
                   <ListingCard listing = {listing} hotedPage = {false} />
                   <CardActions>
                   </CardActions>
