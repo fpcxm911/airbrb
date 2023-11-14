@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import PriceSlider from './PriceSlider';
 import DateSearch from './DateSearch';
+import differenceInDays from 'date-fns/differenceInDays';
 
 const SearchBar = (props) => {
   const [searchOption, setSearchOption] = React.useState('titleLocation');
@@ -23,6 +24,7 @@ const SearchBar = (props) => {
   }
 
   const handleSearchSubmit = async (e) => {
+    props.setNumberOfNights(null);
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const res = await apiCallGetAuthen('listings');
@@ -79,6 +81,10 @@ const SearchBar = (props) => {
           }
           return false;
         });
+        console.log('cust stay for number of nights');
+        console.log(differenceInDays(new Date(searchInput.end), new Date(searchInput.start)));
+        console.log(typeof (differenceInDays(new Date(searchInput.end), new Date(searchInput.start))));
+        props.setNumberOfNights(differenceInDays(new Date(searchInput.end), new Date(searchInput.start)));
         props.update(filteredList);
         break;
       case 'price':
