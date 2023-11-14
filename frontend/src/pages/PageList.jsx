@@ -11,6 +11,7 @@ import Dashboard from './Dashboard';
 
 const Pagelist = () => {
   const [listingsUpdate, setListingsUpdate] = React.useState(0);
+  const [numberOfNights, setNumberOfNights] = React.useState(null);
 
   const updateListing = () => {
     setListingsUpdate(listingsUpdate + 1);
@@ -33,7 +34,7 @@ const Pagelist = () => {
   return (
     <Context.Provider value={{ getters, setters }}>
       <Routes>
-        <Route path="/" element={<Home />}>
+        <Route path="/" element={<Home numberOfNights= {numberOfNights} setNumberOfNights = {setNumberOfNights}/>}>
           <Route path="register" element={<SignUp />} />
           <Route path="login" element={<Login />} />
         </Route>
