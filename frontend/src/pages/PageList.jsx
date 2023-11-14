@@ -53,7 +53,7 @@ const Pagelist = () => {
             element={<EditListing update={updateListing} />}
           />
         </Route>
-        <Route path="listing/:id" element={<ListingDetail />} />
+        <Route path="listing/:id" element={<ListingDetail numberOfNights = {numberOfNights}/>} />
         <Route path="hosted/booking/:id" element={<Dashboard />} />
       </Routes>
     </Context.Provider>
