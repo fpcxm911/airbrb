@@ -34,7 +34,6 @@ const DateSearch = (props) => {
       setErrorMessage('Start date must precede end date');
       return false;
     }
-    setErrorMessage('');
     return true;
   }
 

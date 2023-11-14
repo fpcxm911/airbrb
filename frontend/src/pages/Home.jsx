@@ -151,7 +151,7 @@ const Home = (props) => {
             onClick={setNextOption}
             sx={{ mb: 2, borderRadius: 8 }}
             >
-            Sort option &nbsp;
+            Sorting by &nbsp;
             { sortOption === optionList[0] && <Icon path={mdiSortAlphabeticalAscending} size={1} />}
             { sortOption === optionList[1] && <Icon path={mdiSortNumericAscending} size={1} />}
             { sortOption === optionList[2] && <Icon path={mdiSortNumericDescending} size={1} />}
