@@ -178,7 +178,7 @@ export default function ListingDetail (props) {
                   </Typography>
                 </Grid>
                 <Typography variant="h5" color="text.primary">
-                  {props.numberOfNights === null ? `${listDeatail.price} AUD / NIGHT` : `${listDeatail.price * props.numberOfNights} AUD/STAY`}
+                  {props.numberOfNights === null ? `${listDeatail.price} AUD / NIGHT` : `${listDeatail.price * props.numberOfNights} AUD / STAY`}
                 </Typography>
               </Grid>
             </Grid>
