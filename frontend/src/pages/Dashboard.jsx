@@ -16,6 +16,7 @@ import differenceInDays from 'date-fns/differenceInDays';
 import EarningImg from '../assets/earning.png';
 import CanlendarImg from '../assets/calendar.png';
 import { ToastContainer, toast } from 'react-toastify';
+import NoPermission from './NoPermission';
 
 export default function Dashboard () {
   const { getters, setters } = useContext(Context);
@@ -224,7 +225,7 @@ export default function Dashboard () {
         </Box>
           )
         : (
-        <></>
+          <NoPermission />
           )}
     </>
   );
