@@ -14,20 +14,24 @@ import Grid from '@mui/material/Grid';
 import ConfirmPopup from '../components/ConfirmPopup';
 import AvailabilityRange from '../components/AvailabilityRange';
 import { apiCallBodyAuthen } from './Helper';
-import ErrorDialog from '../components/ErrorPopup';
+// import ErrorDialog from '../components/ErrorPopup';
+import { ToastContainer, toast } from 'react-toastify';
 
 const ListingBooking = (props) => {
   const { getters } = useContext(Context);
-  const [errorMessage, setErrorMessage] = React.useState({
-    title: '',
-    body: '',
-  });
+  // const [errorMessage, setErrorMessage] = React.useState({
+  //   title: '',
+  //   body: '',
+  // });
+  // const [showErrorModal, setShowErrorModal] = React.useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = React.useState(false);
   const [confirmMessage, setConfirmMessage] = React.useState('');
   const [submitClickable, setSubmitClickable] = React.useState(false);
   const [checkinISO, setCheckinISO] = React.useState('');
   const [checkoutISO, setCheckoutISO] = React.useState('');
-  const [showErrorModal, setShowErrorModal] = React.useState(false);
+
+  const toastError = (msg) => toast.error(msg);
+  const toastWarning = (msg) => toast.warning(msg);
 
   React.useEffect(() => {
     const numOfNights =
@@ -75,8 +79,7 @@ const ListingBooking = (props) => {
       'POST'
     );
     if (res.error) {
-      setShowErrorModal(true);
-      setErrorMessage({ title: 'Fail to make booking', body: res.error });
+      toastError(res.error + '. Please try again.');
     } else {
       props.setBookingUpdate();
       props.showBookSuccess();
@@ -132,8 +135,11 @@ const ListingBooking = (props) => {
                 <AvailabilityRange
                   setSubmit={setSubmitClickable}
                   singleRange={true}
+                  toastWarning={toastWarning}
+                  availability={props.listingDetail.availability}
                 />
               </Grid>
+              {/* // TODO eric bouns for showing availability slots for user */}
             </Grid>
             <Button
               type='submit'
@@ -154,13 +160,19 @@ const ListingBooking = (props) => {
             title={'Confirmation'}
           />
         )}
-        {showErrorModal && (
+        {/* {showErrorModal && (
           <ErrorDialog
             close={() => setShowErrorModal(false)}
             content={errorMessage}
           />
-        )}
+        )} */}
       </Dialog>
+      <ToastContainer
+        position='top-center'
+        autoClose={6000}
+        hideProgressBar={false}
+        closeOnClick
+      />
     </React.Fragment>
   );
 };

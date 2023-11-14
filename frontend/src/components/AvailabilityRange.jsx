@@ -46,12 +46,55 @@ const AvailabilityRange = (props) => {
   }
 
   const checkDates = (datesRangeStrArr) => {
+    const checkDatesOutofAvailability = (datesRangeStrArr, availability) => {
+      // const warning = props.toastWarning;
+      const checkinStr = datesRangeStrArr[0].start;
+      const checkoutStr = datesRangeStrArr[0].end;
+      const todayISOString = new Date().toISOString().split('T')[0];
+      console.log('today iso');
+      console.log(todayISOString);
+      if (checkinStr === '' || checkoutStr === '') return false;
+      if (checkinStr < todayISOString) {
+        setErrorMessage('Check-in date cannot be in the past');
+        return false;
+      }
+      const checkinDate = new Date(checkinStr);
+      const checkoutDate = new Date(checkoutStr);
+      console.log('availability');
+      console.log(availability);
+      console.log('checkin date');
+      console.log(checkinDate);
+      console.log('checkout date');
+      console.log(checkoutDate);
+      for (const availRange of availability) {
+        const availStart = new Date(availRange.start).toISOString().split('T')[0];
+        const availEnd = new Date(availRange.end).toISOString().split('T')[0];
+        console.log('avail start');
+        console.log(availStart);
+        console.log('avail end');
+        console.log(availEnd);
+        if (availStart <= checkinStr && availEnd >= checkoutStr) {
+          console.log('fitted');
+          return true;
+        }
+      }
+      // const checkin = new Date(datesRangeStrArr[0].start);
+      // const checkout = new Date(datesRangeStrArr[0].end);
+      // for (const item of availability) {
+      //   if (item.start <= checkin && item.end >= checkout) {
+      //     return true;
+      //   }
+      // }
+      setErrorMessage('Accommodation is unavailable during the time.');
+      return false;
+    }
+
     /**
- * Checks if any of the dates in the given array overlap with each other.
- *
- * @param {Array} datesRangeStrArr - An array of date range objects, each with start and end dates in string.
- * @return {Boolean} Returns true if there are no overlapping dates, false otherwise.
- */
+    * Checks if any of the dates in the given array overlap with each other.
+    *
+    * @param {Array} datesRangeStrArr - An array of date range objects, each with start and end dates in string.
+    * @return {Boolean} Returns true if there are no overlapping dates, false otherwise.
+    */
     const checkDatesOverlap = (datesRangeStrArr) => {
       const dates = [];
       datesRangeStrArr.forEach((str) => {
@@ -102,6 +145,12 @@ const AvailabilityRange = (props) => {
       return false;
     }
     setErrorMessage('');
+
+    if (props.singleRange) {
+      if (!checkDatesOutofAvailability(datesRangeStrArr, props.availability)) {
+        return false;
+      }
+    }
     return true;
   }
 

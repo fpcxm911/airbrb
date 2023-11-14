@@ -97,18 +97,6 @@ const EditListing = (props) => {
       setErrorMessage('Please add at least one bedroom');
     }
   }
-  // TODO eric remove the route to /edit (route without propertyID)
-  // if (!params.id) {
-  //   return (
-  //     <>
-  //       Listing id: <input value={id} onChange={(e) => setId(e.target.value)} />
-  //       <Button onClick={() => navigate(`/edit/${id}`)}>
-  //         Go!
-  //       </Button>
-  //       <GoBackBtn />
-  //     </>
-  //   );
-  // }
 
   return (
     <React.Fragment>
@@ -285,7 +273,7 @@ const EditListing = (props) => {
                   />
                 </Button>
               </Grid>
-              {/* // TODO eric when updating prop imgs, show images uploaded before and decide delete, keep, or add more */}
+              {/* // TODO eric bonus eric when updating prop imgs, show images uploaded before and decide delete, keep, or add more */}
               <Grid item xs={12}>
                 <Button
                   fullWidth

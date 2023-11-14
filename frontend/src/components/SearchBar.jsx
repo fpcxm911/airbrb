@@ -13,7 +13,6 @@ import Divider from '@mui/material/Divider';
 import PriceSlider from './PriceSlider';
 import DateSearch from './DateSearch';
 
-// TODO eric if no listing is found, show some message
 const SearchBar = (props) => {
   const [searchOption, setSearchOption] = React.useState('titleLocation');
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -175,6 +174,6 @@ const optionsArray = [
   { value: 'titleLocation', label: 'Title location' },
   { value: 'bedrooms', label: 'Bedrooms' },
   { value: 'date', label: 'Date' },
-  { value: 'price', label: 'Price' }
+  { value: 'price', label: 'Price/night' }
 ]
 export default SearchBar;
