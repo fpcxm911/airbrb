@@ -310,7 +310,7 @@ export default function ListingDetail () {
                     listingid={Number(listDeatail.id)}
                     close={() => setShowMakeBooking(false)}
                     showBookSuccess={() => bookingSuccessNotify()}
-                    // showBookSuccess={() => setShowBookSuccess(true)}
+                    listingDetail={listDeatail}
                   />
                 )}
               </Box>
