@@ -20,7 +20,6 @@ const Home = (props) => {
   const [publishedListings, setpublishedListings] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
-  // const [sortOption, setSortOption] = React.useState('');
   const [sortOption, setSortOption] = React.useState('title');
   const navigate = useNavigate();
   // fetch localstorage to context state prevent lossing data by refreshing
@@ -32,6 +31,7 @@ const Home = (props) => {
       setters.setEmail(email);
       setters.setLoggedIn(true);
     }
+    props.setNumberOfNights(null);
   }, []);
 
   const sortListings = async (listings) => {
@@ -177,7 +177,6 @@ const Home = (props) => {
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
                   onClick={() => navigate(`/listing/${listing.id}`)}
                 >
-                  {/* // TODO 2.4.1 pass some prop to inform about search by price */}
                   <ListingCard listing = {listing} hotedPage = {false} />
                   <CardActions>
                   </CardActions>
