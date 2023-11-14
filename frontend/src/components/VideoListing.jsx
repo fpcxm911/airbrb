@@ -17,8 +17,9 @@ const VideoListing = (props) => {
       <Grid
         container
         alignItems={'center'}
-        sx={{ pt: 3 }}
         justifyContent={'center'}
+        position={'relative'}
+        sx={{ pt: 3 }}
       >
         <ReactPlayer
           url={url}
@@ -26,7 +27,8 @@ const VideoListing = (props) => {
           light={true}
           playing={true}
           playIcon={<Icon path={mdiPlayCircle} size={3} />}
-          width='100%'
+          position={'absolute'}
+          sx={{ pt: '56.25%' }}
         />
       </Grid>
     </>

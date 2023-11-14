@@ -9,22 +9,24 @@ import Statistic from '../components/Statistic';
 import BookingDisplay from '../components/BookingDisplay';
 import NavAirbrb from '../components/NavAirbrb';
 import Copyright from '../components/Copyright';
-import ErrorDialog from '../components/ErrorPopup';
 import { apiCallGetAuthen } from './Helper';
 import { useContext, Context } from '../Context';
 import { useParams } from 'react-router-dom';
 import differenceInDays from 'date-fns/differenceInDays';
-import EarningImg from '../assets/earning.png'
-import CanlendarImg from '../assets/calendar.png'
+import EarningImg from '../assets/earning.png';
+import CanlendarImg from '../assets/calendar.png';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Dashboard () {
   const { getters, setters } = useContext(Context);
-  const [showModal, setShowModal] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
   const [allBookings, setAllbookings] = React.useState([]);
   const [bookingUpdate, setBookingUpdate] = React.useState(0);
   const [postedOn, setPublishedOn] = React.useState('');
   const params = useParams();
+
+  const toastError = (msg) => {
+    toast.error(msg);
+  }
 
   const updateBookings = () => {
     setBookingUpdate(bookingUpdate + 1);
@@ -105,8 +107,7 @@ export default function Dashboard () {
         localStorage.getItem('token')
       );
       if (bookingRes.error) {
-        setErrorMessage({ title: 'Error', body: bookingRes.error });
-        setShowModal(true);
+        toastError(bookingRes.error);
       } else {
         setAllbookings(bookingRes.bookings);
       }
@@ -118,8 +119,7 @@ export default function Dashboard () {
   React.useEffect(async () => {
     const res = await apiCallGetAuthen(`listings/${params.id}`);
     if (res.error) {
-      setErrorMessage({ title: 'Error', body: res.error });
-      setShowModal(true);
+      toastError(res.error);
     } else {
       setPublishedOn(res.listing.postedOn)
     }
@@ -196,8 +196,7 @@ export default function Dashboard () {
                       data={pendingBookings(allBookings)}
                       current={true}
                       setBookingUpdate={updateBookings}
-                      setShowModal={setShowModal}
-                      setErrorMessage={setErrorMessage}
+                      toastError={toastError}
                     />
                   </Paper>
                 </Grid>
@@ -208,8 +207,7 @@ export default function Dashboard () {
                     <BookingDisplay
                       data={bookingHistories(allBookings)}
                       current={false}
-                      setShowModal={setShowModal}
-                      setErrorMessage={setErrorMessage}
+                      toastError={toastError}
                     />
                   </Paper>
                 </Grid>
@@ -217,12 +215,12 @@ export default function Dashboard () {
               <Copyright sx={{ pt: 4 }} />
             </Container>
           </Box>
-          {showModal && (
-            <ErrorDialog
-              close={() => setShowModal(false)}
-              content={errorMessage}
-            />
-          )}
+          <ToastContainer
+            position='top-center'
+            autoClose={5000}
+            hideProgressBar={false}
+            closeOnClick
+          />
         </Box>
           )
         : (
