@@ -34,7 +34,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import VideoListing from '../components/VideoListing';
 
-export default function ListingDetail () {
+export default function ListingDetail (props) {
   const { getters, setters } = useContext(Context);
   const [listDeatail, setListDetail] = React.useState({});
   const [listBookings, setListBookings] = React.useState([]);
@@ -178,7 +178,7 @@ export default function ListingDetail () {
                   </Typography>
                 </Grid>
                 <Typography variant="h5" color="text.primary">
-                  ${listDeatail.price} AUD
+                  {props.numberOfNights === null ? `${listDeatail.price} AUD / NIGHT` : `${listDeatail.price * props.numberOfNights} AUD/STAY`}
                 </Typography>
               </Grid>
             </Grid>
