@@ -158,15 +158,14 @@ const Home = (props) => {
           </Button>
         </Tooltip>
           {/* End hero unit */}
-          <Grid container spacing={4}>
-          {/* // TODO eric if no listing is found, improve how it looks */}
+          <Grid container spacing={4} justifyContent={'flex-end'} alignItems={'center'} sx={{ mt: 3 }}>
             {publishedListings.length === 0 && (
               <>
                 <Grid item xs={2}>
-                  <Icon path={mdiExclamationThick} size={3} />
+                  <Icon path={mdiExclamationThick} size={'auto'} />
                 </Grid>
                 <Grid item xs={8}>
-                  <Typography component="h4" variant="h6" gutterBottom>
+                  <Typography component="h4" variant="h4" gutterBottom>
                     Sorry, we could not find any listing
                   </Typography>
                 </Grid>
