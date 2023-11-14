@@ -15,7 +15,7 @@ import { calculateAverageRating } from '../pages/Helper';
 import Icon from '@mdi/react';
 import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending } from '@mdi/js';
 
-const Home = () => {
+const Home = (props) => {
   const { getters, setters } = useContext(Context);
   const [publishedListings, setpublishedListings] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
