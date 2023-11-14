@@ -47,7 +47,6 @@ const Pagelist = () => {
             />
           }
         >
-          <Route path="edit" element={<EditListing />} />
           <Route
             path="edit/:id"
             element={<EditListing update={updateListing} />}
