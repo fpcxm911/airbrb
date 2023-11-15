@@ -1,4 +1,4 @@
-import { Button, IconButton, Stack, TextField } from '@mui/material';
+import { Button, IconButton, Stack, TextField, Grid } from '@mui/material';
 import * as React from 'react';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import AddIcon from '@mui/icons-material/Add';
@@ -47,7 +47,6 @@ const AvailabilityRange = (props) => {
 
   const checkDates = (datesRangeStrArr) => {
     const checkDatesOutofAvailability = (datesRangeStrArr, availability) => {
-      // const warning = props.toastWarning;
       const checkinStr = datesRangeStrArr[0].start;
       const checkoutStr = datesRangeStrArr[0].end;
       const todayISOString = new Date().toISOString().split('T')[0];
@@ -58,33 +57,14 @@ const AvailabilityRange = (props) => {
         setErrorMessage('Check-in date cannot be in the past');
         return false;
       }
-      const checkinDate = new Date(checkinStr);
-      const checkoutDate = new Date(checkoutStr);
-      console.log('availability');
-      console.log(availability);
-      console.log('checkin date');
-      console.log(checkinDate);
-      console.log('checkout date');
-      console.log(checkoutDate);
       for (const availRange of availability) {
         const availStart = new Date(availRange.start).toISOString().split('T')[0];
         const availEnd = new Date(availRange.end).toISOString().split('T')[0];
-        console.log('avail start');
-        console.log(availStart);
-        console.log('avail end');
-        console.log(availEnd);
         if (availStart <= checkinStr && availEnd >= checkoutStr) {
           console.log('fitted');
           return true;
         }
       }
-      // const checkin = new Date(datesRangeStrArr[0].start);
-      // const checkout = new Date(datesRangeStrArr[0].end);
-      // for (const item of availability) {
-      //   if (item.start <= checkin && item.end >= checkout) {
-      //     return true;
-      //   }
-      // }
       setErrorMessage('Accommodation is unavailable during the time.');
       return false;
     }
@@ -157,37 +137,45 @@ const AvailabilityRange = (props) => {
   const dateInputRow = (dates, idx) => {
     return (
         <Stack key={idx} direction='row' spacing={3} mb={1}>
-            <TextField
-              required
-              fullWidth
-              type='date'
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={dates.start}
-              // isOptionEqualToValue={(option, value) => option.id === value.id}
-              label={props.singleRange ? 'Check-in date' : `Start date ${idx + 1}`}
-              id={`startDateInput${idx}`}
-              onChange={(e) => handleStartDateChange(e.target.value, idx)}
-            />
-            <TextField
-              required
-              fullWidth
-              type='date'
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={dates.end}
-              // isOptionEqualToValue={(option, value) => option.id === value.id}
-              label={props.singleRange ? 'Check-out date' : `End date ${idx + 1}`}
-              id={`endDateInput${idx}`}
-              onChange={(e) => handleEndDateChange(e.target.value, idx)}
-            />
-            {!props.singleRange && (
-              <IconButton onClick={() => handleRemove(idx)}>
-                  <ClearOutlinedIcon />
-              </IconButton>
-            )}
+          <Grid container spacing={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+            <Grid item xs={5}>
+              <TextField
+                required
+                type='date'
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={dates.start}
+                // isOptionEqualToValue={(option, value) => option.id === value.id}
+                label={props.singleRange ? 'Check-in date' : `Start date ${idx + 1}`}
+                id={`startDateInput${idx}`}
+                onChange={(e) => handleStartDateChange(e.target.value, idx)}
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs={5}>
+              <TextField
+                required
+                type='date'
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={dates.end}
+                // isOptionEqualToValue={(option, value) => option.id === value.id}
+                label={props.singleRange ? 'Check-out date' : `End date ${idx + 1}`}
+                id={`endDateInput${idx}`}
+                onChange={(e) => handleEndDateChange(e.target.value, idx)}
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              {!props.singleRange && (
+                <IconButton onClick={() => handleRemove(idx)} id='removeInputRole'>
+                    <ClearOutlinedIcon />
+                </IconButton>
+              )}
+            </Grid>
+          </Grid>
         </Stack>
     );
   };
@@ -216,6 +204,7 @@ const AvailabilityRange = (props) => {
           startIcon={<AddIcon />}
           onClick={handleOneMore}
           size='small'
+          id='addAvailability'
         >
           Add availability range
         </Button>

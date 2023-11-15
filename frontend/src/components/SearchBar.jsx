@@ -116,7 +116,6 @@ const SearchBar = (props) => {
   }
 
   return (
-    // TODO eric recheck nothing overflow in the searchbar component
     <>
       <Paper
         component="form"

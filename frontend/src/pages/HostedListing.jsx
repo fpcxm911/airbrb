@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Copyright from '../components/Copyright';
 import { apiCallGetAuthen, apiCallBodyAuthen } from './Helper';
-import ErrorDialog from '../components/ErrorPopup';
 import Listcreate from './Listcreate';
 import { useNavigate, Outlet } from 'react-router-dom';
 import ListPublish from './ListPublish';
@@ -19,13 +18,12 @@ import ListingCard from '../components/ListingCard';
 import { useContext, Context } from '../Context';
 import ProfitChart from '../components/ProfitChart';
 import NoPermission from './NoPermission';
+import { ToastContainer, toast } from 'react-toastify';
 
 const buttonFontSize = 12;
 export default function HostedListing (props) {
   const { getters, setters } = useContext(Context);
   const [HostedLists, setHostedLists] = React.useState([]);
-  const [showModal, setShowModal] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
   const [showCreate, setShowCreate] = React.useState(false);
   const [showPublish, setShowPublish] = React.useState([false, '']);
 
@@ -40,6 +38,7 @@ export default function HostedListing (props) {
   }, []);
 
   const navigate = useNavigate();
+  const toastError = (msg) => toast.error(msg);
 
   const goBackMain = () => {
     navigate('/');
@@ -52,10 +51,6 @@ export default function HostedListing (props) {
     setShowPublish(false);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
   const deleteListing = async (listing) => {
     const res = await apiCallBodyAuthen(
       `listings/${listing.id}`,
@@ -64,9 +59,7 @@ export default function HostedListing (props) {
       'DELETE'
     );
     if (res.error) {
-      // console.log(listing.id);
-      setErrorMessage({ title: 'Error', body: res.error });
-      setShowModal(true);
+      toastError(res.error);
     } else {
       const newListings = HostedLists.filter((x) => x.id !== listing.id);
       setHostedLists(newListings);
@@ -81,9 +74,7 @@ export default function HostedListing (props) {
       'PUT'
     );
     if (res.error) {
-      // console.log(listing.id);
-      setErrorMessage({ title: 'Error', body: res.error });
-      setShowModal(true);
+      toastError(res.error);
     } else {
       const newListings = HostedLists.map((item) => {
         if (item.id === listing.id) {
@@ -98,8 +89,7 @@ export default function HostedListing (props) {
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings');
     if (res.error) {
-      setErrorMessage({ title: 'Error', body: res.error });
-      setShowModal(true);
+      toastError(res.error);
     } else {
       const currentUserEmail = localStorage.getItem('email');
 
@@ -110,8 +100,7 @@ export default function HostedListing (props) {
       for (const listing of myListings) {
         const deatailRes = await apiCallGetAuthen(`listings/${listing.id}`);
         if (deatailRes.error) {
-          setErrorMessage({ title: 'Error', body: res.error });
-          setShowModal(true);
+          toastError(deatailRes.error);
         } else {
           const collectListingData = deatailRes.listing;
           collectListingData.id = listing.id;
@@ -204,7 +193,6 @@ export default function HostedListing (props) {
                           flexDirection: 'row',
                           flexWrap: 'wrap',
                         }}>
-                        {/* // TODO consider using stack or grid to group buttons */}
                         <Button
                           size="small"
                           name={`edit-list${index}`}
@@ -262,9 +250,12 @@ export default function HostedListing (props) {
             <Copyright />
           </Box>
           {/* End footer */}
-          {showModal && (
-            <ErrorDialog close={closeModal} content={errorMessage} />
-          )}
+          <ToastContainer
+            position='top-center'
+            autoClose={5000}
+            hideProgressBar={false}
+            closeOnClick
+          />
           {showCreate && (
             <Listcreate close={closeCreate} update={props.update} />
           )}

@@ -13,7 +13,7 @@ import PropertyBedroom from '../components/PropertyBedroom';
 import ImageIcon from '@mui/icons-material/Image';
 import DialogContentText from '@mui/material/DialogContentText';
 import { apiCallBodyAuthen, apiCallGetAuthen, createAddress, fileToDataUrl, createMeta } from './Helper';
-import ErrorDialog from '../components/ErrorPopup';
+import { ToastContainer, toast } from 'react-toastify';
 import PropertyType from '../components/PropertyType';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
@@ -24,9 +24,7 @@ const EditListing = (props) => {
   const params = useParams();
   const navigate = useNavigate();
 
-  // const [id, setId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
-  const [showModal, setShowModal] = React.useState(false);
   const [listingData, setListingData] = React.useState({
     title: '',
     owner: '',
@@ -40,11 +38,14 @@ const EditListing = (props) => {
     postedOn: null,
   });
 
+  const toastError = (msg) => {
+    toast.error(msg);
+  }
+
   React.useEffect(async () => {
     const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
     if (listingRes.error) {
-      setErrorMessage({ title: 'Error', body: listingRes.error });
-      setShowModal(true);
+      toastError(listingRes.error);
       console.error(listingRes.error);
     } else {
       setListingData(listingRes.listing);
@@ -312,7 +313,12 @@ const EditListing = (props) => {
             </Button>
           </Box>
         </DialogContent>
-        {showModal && <ErrorDialog content={errorMessage} close={setShowModal} />}
+        <ToastContainer
+          position='top-center'
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+        />
       </Dialog>
     </React.Fragment>
   );

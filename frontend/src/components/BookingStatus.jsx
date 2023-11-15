@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Pagination from '@mui/material/Pagination';
 
-export default function BookingDisplay (props) {
+export default function BookingStatus (props) {
   const [renderList, setRenderLst] = React.useState([]);
   const [pageNum, setPageNum] = React.useState(1);
   const totalPage = Math.ceil(props.bookings.length / 5);
