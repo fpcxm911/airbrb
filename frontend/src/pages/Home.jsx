@@ -4,8 +4,6 @@ import NavAirbrb from '../components/NavAirbrb';
 import SearchBar from '../components/SearchBar';
 import { Grid, Box } from '@mui/material';
 import { apiCallGetAuthen } from './Helper';
-// TODO eric use toast
-import ErrorDialog from '../components/ErrorPopup';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import ListingCard from '../components/ListingCard';
@@ -17,16 +15,19 @@ import Icon from '@mdi/react';
 import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending } from '@mdi/js';
 import NoResult from '../components/NoResult';
 import Spinner from '../components/Spinner';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Home = (props) => {
   const { getters, setters } = useContext(Context);
   const [publishedListings, setpublishedListings] = React.useState([]);
-  const [showModal, setShowModal] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
   const [sortOption, setSortOption] = React.useState('title');
   const [reset, setReset] = React.useState(0);
   const [noResult, setNoResult] = React.useState(false);
   const [spinner, setSpinner] = React.useState(false);
+
+  const toastError = (msg) => {
+    toast.error(msg);
+  }
 
   const navigate = useNavigate();
   // fetch localstorage to context state prevent lossing data by refreshing
@@ -49,8 +50,7 @@ const Home = (props) => {
     if (getters.loggedIn) {
       const res = await apiCallGetAuthen('bookings', localStorage.getItem('token'));
       if (res.error) {
-        setErrorMessage({ title: 'Error', body: res.error });
-        setShowModal(true);
+        toastError(res.error);
       } else {
         const accecptPendingBookings = res.bookings.filter(x => (x.status === 'accepted' || x.status === 'pending') && x.owner === localStorage.getItem('email'));
         const extractedLitingsId = accecptPendingBookings.map(x => x.listingId);
@@ -83,15 +83,13 @@ const Home = (props) => {
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings');
     if (res.error) {
-      setErrorMessage({ title: 'Error', body: res.error });
-      setShowModal(true);
+      toastError(res.error);
     } else {
       const myListingsDetail = []
       for (const listing of res.listings) {
         const deatailRes = await apiCallGetAuthen(`listings/${listing.id}`);
         if (deatailRes.error) {
-          setErrorMessage({ title: 'Error', body: deatailRes.error });
-          setShowModal(true);
+          toastError(deatailRes.error);
         } else {
           const collectListingData = deatailRes.listing;
           collectListingData.id = listing.id
@@ -127,8 +125,7 @@ const Home = (props) => {
         for (const listing of unsortedListings) {
           const deatailRes = await apiCallGetAuthen(`listings/${listing.id}`);
           if (deatailRes.error) {
-            setErrorMessage({ title: 'Error', body: deatailRes.error });
-            setShowModal(true);
+            toastError(deatailRes.error);
           } else {
             const collectListingData = deatailRes.listing;
             collectListingData.id = listing.id;
@@ -212,7 +209,12 @@ const Home = (props) => {
           {noResult && <NoResult />}
         </Box>
       </main>
-      {showModal && (<ErrorDialog close={() => setShowModal(false)} content={errorMessage} />)}
+      <ToastContainer
+        position='top-center'
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+      />
       <Outlet />
     </div>
   );
