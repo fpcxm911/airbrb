@@ -300,7 +300,7 @@ export default function ListingDetail (props) {
                   </Grid>
               )}
               <Box textAlign={'center'}>
-                <Button variant="contained" sx={{ mb: 3, mx: 1.5 }} onClick={() => setShowMakeBooking(true)} >
+                <Button name='booking' variant="contained" sx={{ mb: 3, mx: 1.5 }} onClick={() => setShowMakeBooking(true)} >
                   Book this accomodation
                 </Button>
                 {showMakeBooking && (

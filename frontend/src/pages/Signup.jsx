@@ -156,6 +156,7 @@ export default function SignUp () {
             </Grid>
             <Button
               type='submit'
+              name='submit'
               fullWidth
               variant='contained'
               sx={{ mt: 3, mb: 2 }}

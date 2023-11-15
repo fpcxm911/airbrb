@@ -40,7 +40,7 @@ export default function PropertyAmenities () {
           </li>
         )}
         renderInput={(params) => (
-          <TextField {...params} label="Amenities (Optional)" placeholder="Optional" />
+          <TextField {...params} label="Amenities (Optional)" name='amen' placeholder="Optional" />
         )}
       />
       <input type="hidden" name="amenities" value={hiddenInputValue} />

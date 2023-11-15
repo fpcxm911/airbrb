@@ -55,6 +55,7 @@ export default function NavAirbrb () {
           {checkLogin() && <nav>
             <Link
               variant="button"
+              name='hosted-link'
               color="text.primary"
               sx={{ my: 1, mx: 1.5, cursor: 'pointer' }}
               onClick={() => {
@@ -65,6 +66,7 @@ export default function NavAirbrb () {
             </Link>
             <Link
               variant="button"
+              name='all-listings-link'
               color="text.primary"
               sx={{ my: 1, mx: 1.5, cursor: 'pointer' }}
               onClick={() => {
@@ -75,21 +77,21 @@ export default function NavAirbrb () {
             </Link>
           </nav>}
           {!checkLogin() &&
-          <Button href="#" variant="outlined" sx={{ my: 1, mx: 1.5 }} onClick={() => {
+          <Button name= 'register-btn' variant="outlined" sx={{ my: 1, mx: 1.5 }} onClick={() => {
             navigate('/register');
           }}>
             Register
           </Button>
           }
           {!checkLogin() &&
-          <Button href="#" variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={() => {
+          <Button name= 'login-btn' variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={() => {
             navigate('/login');
           }}>
             Login
           </Button>
           }
           {checkLogin() &&
-          <Button variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={handleLogout}>
+          <Button name= 'logout-btn' variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={handleLogout}>
             Logout
           </Button>
           }

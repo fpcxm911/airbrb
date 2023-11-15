@@ -167,6 +167,7 @@ export default function HostedListing (props) {
                 >
                   <Button
                     variant="contained"
+                    name='create-list'
                     onClick={() => setShowCreate(true)}
                   >
                     Create new listing
@@ -206,6 +207,7 @@ export default function HostedListing (props) {
                         {/* // TODO consider using stack or grid to group buttons */}
                         <Button
                           size="small"
+                          name={`edit-list${index}`}
                           sx={{ fontSize: buttonFontSize }}
                           onClick={() => navigate(`/hosted/edit/${listing.id}`)}
                         >
@@ -223,6 +225,7 @@ export default function HostedListing (props) {
                         {!listing.published && (
                           <Button
                             size="small"
+                            name={`set-publish${index}`}
                             sx={{ fontSize: buttonFontSize }}
                             onClick={() => setShowPublish([true, listing.id])}
                           >
@@ -232,6 +235,7 @@ export default function HostedListing (props) {
                         {listing.published && (
                           <Button
                             size="small"
+                            name={`set-unpublish${index}`}
                             sx={{ fontSize: buttonFontSize }}
                             onClick={() => unpublishListing(listing)}
                           >

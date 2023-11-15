@@ -99,6 +99,7 @@ const ListPublish = (props) => {
               <Button
                 type='submit'
                 fullWidth
+                name='submit'
                 variant='contained'
                 sx={{ mt: 3, mb: 2 }}
                 disabled={!submitClickable}

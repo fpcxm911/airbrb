@@ -93,6 +93,7 @@ const Login = () => {
               label='Email Address'
               type='email'
               value={email}
+              name='email'
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={(e) => (e.key === 'Enter') && handleLoginForm(e)}
             />
@@ -101,6 +102,7 @@ const Login = () => {
               margin='dense'
               label='Password'
               type='password'
+              name='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => (e.key === 'Enter') && handleLoginForm(e)}
@@ -111,7 +113,7 @@ const Login = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={returnHome}>Cancel</Button>
-            <Button onClick={handleLoginForm}>Login</Button>
+            <Button onClick={handleLoginForm} name='login'>Login</Button>
           </DialogActions>
         </Dialog>
       </React.Fragment>
