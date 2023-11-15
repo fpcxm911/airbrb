@@ -196,6 +196,7 @@ const Home = (props) => {
             {publishedListings.map((listing, index) => (
               <Grid item key={listing.owner + index} xs={12} sm={6} md={4} >
                 <Card
+                  id={`listing${index}`}
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
                   onClick={() => navigate(`/listing/${listing.id}`)}
                 >

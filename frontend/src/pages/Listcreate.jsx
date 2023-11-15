@@ -310,6 +310,7 @@ export default function Listcreate (props) {
                   fullWidth
                   variant='text'
                   component='label'
+                  name='ph'
                   startIcon={<ImageIcon />}
                 >
                   Upload Thumbnail
@@ -317,7 +318,6 @@ export default function Listcreate (props) {
                     type='file'
                     hidden
                     name='photo'
-                    accept='image/jpeg, image/jpg, image/png'
                   />
                 </Button>
               </Grid>
@@ -344,6 +344,7 @@ export default function Listcreate (props) {
             <Button
               type='submit'
               fullWidth
+              name='submit'
               variant='contained'
               sx={{ mt: 5, mb: 2 }}
             >
