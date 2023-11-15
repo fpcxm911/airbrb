@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import NavAirbrb from '../components/NavAirbrb';
 import SearchBar from '../components/SearchBar';
-import { Grid, Box, Typography } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { apiCallGetAuthen } from './Helper';
 // TODO eric use toast
 import ErrorDialog from '../components/ErrorPopup';
@@ -14,7 +14,9 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { calculateAverageRating } from '../pages/Helper';
 import Icon from '@mdi/react';
-import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending, mdiExclamationThick } from '@mdi/js';
+import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending } from '@mdi/js';
+import NoResult from '../components/NoResult';
+import Spinner from '../components/Spinner';
 
 const Home = (props) => {
   const { getters, setters } = useContext(Context);
@@ -23,6 +25,9 @@ const Home = (props) => {
   const [errorMessage, setErrorMessage] = React.useState('');
   const [sortOption, setSortOption] = React.useState('title');
   const [reset, setReset] = React.useState(0);
+  const [noResult, setNoResult] = React.useState(false);
+  const [spinner, setSpinner] = React.useState(false);
+
   const navigate = useNavigate();
   // fetch localstorage to context state prevent lossing data by refreshing
   React.useEffect(() => {
@@ -97,7 +102,6 @@ const Home = (props) => {
       setpublishedListings(newList);
     }
   }, [getters.loggedIn, reset]);
-  console.log('rendering again');
 
   // sort if sortOption changes
   React.useEffect(async () => {
@@ -136,6 +140,26 @@ const Home = (props) => {
     }
   }, [sortOption]);
 
+  // set up loading spinner and no result notice
+  React.useEffect(() => {
+    setSpinner(false);
+    setNoResult(false);
+    if (publishedListings.length > 0) {
+      setSpinner(false);
+      setNoResult(false);
+      return;
+    }
+    setSpinner(true);
+    setNoResult(false);
+    const timeout = setTimeout(() => {
+      if (publishedListings.length === 0) {
+        setSpinner(false);
+        setNoResult(true);
+      }
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [publishedListings])
+
   const setNextOption = () => {
     const curIndex = optionList.indexOf(sortOption);
     const nextIndex = (curIndex + 1) % optionList.length;
@@ -154,7 +178,7 @@ const Home = (props) => {
           <Button
             variant="contained"
             onClick={setNextOption}
-            sx={{ mb: 2, borderRadius: 8 }}
+            sx={{ mb: 2, borderRadius: 8, mr: 2 }}
             >
             Sorting by &nbsp;
             { sortOption === optionList[0] && <Icon path={mdiSortAlphabeticalAscending} size={1} />}
@@ -163,12 +187,13 @@ const Home = (props) => {
           </Button>
         </Tooltip>
         <Button
-            variant="contained"
-            onClick={handleReset}
-            sx={{ mb: 2, borderRadius: 8, ml: 2 }}
-            >
-            Reset &nbsp;
-          </Button>
+          variant="contained"
+          onClick={handleReset}
+          sx={{ mb: 2, borderRadius: 8 }}
+          >
+          Reset
+        </Button>
+          {spinner && <Spinner />}
           {/* End hero unit */}
           <Grid container spacing={4}>
             {publishedListings.map((listing, index) => (
@@ -184,18 +209,7 @@ const Home = (props) => {
               </Grid>
             ))}
           </Grid>
-          {publishedListings.length === 0 && (
-              <Grid container spacing={4} justifyContent={'flex-end'} alignItems={'center'} sx={{ mt: 3 }}>
-                <Grid item xs={2}>
-                  <Icon path={mdiExclamationThick} size={'auto'} />
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography component="h4" variant="h4" gutterBottom>
-                    Sorry, we could not find any listing
-                  </Typography>
-                </Grid>
-              </Grid>
-          )}
+          {noResult && <NoResult />}
         </Box>
       </main>
       {showModal && (<ErrorDialog close={() => setShowModal(false)} content={errorMessage} />)}

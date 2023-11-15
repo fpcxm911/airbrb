@@ -21,7 +21,6 @@ export default function BookingDisplay (props) {
   const handleAccept = async (bookingId) => {
     const res = await apiCallBodyAuthen(`bookings/accept/${bookingId}`, localStorage.getItem('token'), {}, 'PUT');
     if (res.error) {
-      console.log('cathcerrr')
       props.toastError(res.error);
     } else {
       props.setBookingUpdate();
