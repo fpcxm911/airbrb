@@ -178,7 +178,7 @@ const Home = (props) => {
           <Button
             variant="contained"
             onClick={setNextOption}
-            sx={{ mb: 2, borderRadius: 8 }}
+            sx={{ mb: 2, borderRadius: 8, mr: 2 }}
             >
             Sorting by &nbsp;
             { sortOption === optionList[0] && <Icon path={mdiSortAlphabeticalAscending} size={1} />}
@@ -187,12 +187,12 @@ const Home = (props) => {
           </Button>
         </Tooltip>
         <Button
-            variant="contained"
-            onClick={handleReset}
-            sx={{ mb: 2, borderRadius: 8, ml: 2 }}
-            >
-            Reset &nbsp;
-          </Button>
+          variant="contained"
+          onClick={handleReset}
+          sx={{ mb: 2, borderRadius: 8 }}
+          >
+          Reset
+        </Button>
           {spinner && <Spinner />}
           {/* End hero unit */}
           <Grid container spacing={4}>

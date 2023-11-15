@@ -17,7 +17,7 @@ const NoResult = () => {
           <Icon path={mdiAlertCircleOutline} size={1} />
         </Grid>
         <Grid item xs={8}>
-          <Typography component='body1' gutterBottom>
+          <Typography component='h6' gutterBottom>
             Sorry, we could not find any listing
           </Typography>
         </Grid>
