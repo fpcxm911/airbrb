@@ -188,7 +188,7 @@ export default function HostedListing (props) {
               </Box>
               <Grid container spacing={4}>
                 {HostedLists.map((listing, index) => (
-                  <Grid item key={listing.owner + index} xs={12} sm={6} md={4}>
+                  <Grid item id={`hosted${index}`} key={listing.owner + index} xs={12} sm={6} md={4}>
                     <Card
                       sx={{
                         height: '100%',
