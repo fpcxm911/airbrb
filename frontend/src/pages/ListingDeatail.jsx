@@ -19,7 +19,7 @@ import {
   mdiAirConditioner,
 } from '@mdi/js';
 import DisplayReview from '../components/DisplayReview';
-import ErrorDialog from '../components/ErrorPopup';
+// import ErrorDialog from '../components/ErrorPopup';
 import {
   apiCallGetAuthen,
   calculateNumBedrooms,
@@ -38,8 +38,8 @@ export default function ListingDetail (props) {
   const { getters, setters } = useContext(Context);
   const [listDeatail, setListDetail] = React.useState({});
   const [listBookings, setListBookings] = React.useState([]);
-  const [showModal, setShowModal] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
+  // const [showModal, setShowModal] = React.useState(false);
+  // const [errorMessage, setErrorMessage] = React.useState('');
   const [newComment, setNewComment] = React.useState(0);
   const [showMakeBooking, setShowMakeBooking] = React.useState(false);
   // const [showBookSuccess, setShowBookSuccess] = React.useState(false);
@@ -49,6 +49,7 @@ export default function ListingDetail (props) {
   };
 
   const params = useParams();
+  const toastError = (msg) => toast.error(msg);
 
   React.useEffect(() => {
     const email = localStorage.getItem('email');
@@ -88,8 +89,7 @@ export default function ListingDetail (props) {
   React.useEffect(async () => {
     const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
     if (listingRes.error) {
-      setErrorMessage({ title: 'Error', body: listingRes.error });
-      setShowModal(true);
+      toastError(listingRes.error);
     } else {
       const collectListingData = listingRes.listing;
       collectListingData.id = params.id;
@@ -105,8 +105,7 @@ export default function ListingDetail (props) {
         localStorage.getItem('token')
       );
       if (bookingRes.error) {
-        setErrorMessage({ title: 'Error', body: bookingRes.error });
-        setShowModal(true);
+        toastError(bookingRes.error);
       } else {
         const myBookings = bookingRes.bookings.filter(
           (x) =>
@@ -285,7 +284,7 @@ export default function ListingDetail (props) {
                   Leave your reviews
                 </Typography>
               <Grid container direction='row' justifyContent='center' >
-                <ReviewForm setErrorMessage = {setErrorMessage} setShowModal = {setShowModal} bookings={listBookings} listingId = {listDeatail.id} setNewComment={setNewComment} newComment={newComment}/>
+                <ReviewForm toastError={toastError} bookings={listBookings} listingId = {listDeatail.id} setNewComment={setNewComment} newComment={newComment}/>
               </Grid>
             </Grid>
             </>}
@@ -293,8 +292,6 @@ export default function ListingDetail (props) {
               <Divider sx={{ my: 3 }}/>
               {listBookings.length !== 0 && getters.loggedIn && (<Grid sx={{ mb: 3 }}>
                     <BookingStatus
-                      setErrorMessage={setErrorMessage}
-                      setShowModal={setShowModal}
                       bookings={listBookings}
                     />
                   </Grid>
@@ -317,34 +314,12 @@ export default function ListingDetail (props) {
               </>
             )}
             <Copyright sx={{ my: 5 }} />
-            {showModal && (
+            {/* {showModal && (
               <ErrorDialog
                 close={() => setShowModal(false)}
                 content={errorMessage}
               />
-            )}
-              {/* <Backdrop
-              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={showBookSuccess}
-              onClick={() => setShowBookSuccess(false)}
-                >
-                <Fade
-                  in={showBookSuccess}
-                  timeout={{ enter: 1000, exit: 1000 }}
-                  addEndListener={() => {
-                    setTimeout(() => {
-                      setShowBookSuccess(false);
-                    }, 3500);
-                  }}
-                  >
-                  <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" sx={{ maxWidth: '85%' }}>
-                    Your booking made at {listDeatail.title} is successful.
-                    <p>
-                      Please wait for confirmation.
-                    </p>
-                  </Alert>
-                </Fade>
-              </Backdrop> */}
+            )} */}
               <ToastContainer
                 position="top-center"
                 autoClose={5000}
