@@ -43,6 +43,7 @@ export default function DisplayReview (props) {
         autoPlay={false}
         cycleNavigation={false}
         animation="slide"
+        className='carousel'
       >
         {reversedReviews.map((item, i) => (
           <Box key={i} height={'270px'}>
