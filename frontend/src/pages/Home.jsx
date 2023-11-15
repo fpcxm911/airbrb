@@ -16,6 +16,8 @@ import { calculateAverageRating } from '../pages/Helper';
 import Icon from '@mdi/react';
 import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending } from '@mdi/js';
 import NoResult from '../components/NoResult';
+import Spinner from '../components/Spinner';
+
 const Home = (props) => {
   const { getters, setters } = useContext(Context);
   const [publishedListings, setpublishedListings] = React.useState([]);
@@ -23,6 +25,9 @@ const Home = (props) => {
   const [errorMessage, setErrorMessage] = React.useState('');
   const [sortOption, setSortOption] = React.useState('title');
   const [reset, setReset] = React.useState(0);
+  const [noResult, setNoResult] = React.useState(false);
+  const [spinner, setSpinner] = React.useState(false);
+
   const navigate = useNavigate();
   // fetch localstorage to context state prevent lossing data by refreshing
   React.useEffect(() => {
@@ -97,7 +102,6 @@ const Home = (props) => {
       setpublishedListings(newList);
     }
   }, [getters.loggedIn, reset]);
-  console.log('rendering again');
 
   // sort if sortOption changes
   React.useEffect(async () => {
@@ -136,6 +140,26 @@ const Home = (props) => {
     }
   }, [sortOption]);
 
+  // set up loading spinner and no result notice
+  React.useEffect(() => {
+    setSpinner(false);
+    setNoResult(false);
+    if (publishedListings.length > 0) {
+      setSpinner(false);
+      setNoResult(false);
+      return;
+    }
+    setSpinner(true);
+    setNoResult(false);
+    const timeout = setTimeout(() => {
+      if (publishedListings.length === 0) {
+        setSpinner(false);
+        setNoResult(true);
+      }
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [publishedListings])
+
   const setNextOption = () => {
     const curIndex = optionList.indexOf(sortOption);
     const nextIndex = (curIndex + 1) % optionList.length;
@@ -169,6 +193,7 @@ const Home = (props) => {
             >
             Reset &nbsp;
           </Button>
+          {spinner && <Spinner />}
           {/* End hero unit */}
           <Grid container spacing={4}>
             {publishedListings.map((listing, index) => (
@@ -184,7 +209,7 @@ const Home = (props) => {
               </Grid>
             ))}
           </Grid>
-          {publishedListings.length === 0 && <NoResult />}
+          {noResult && <NoResult />}
         </Box>
       </main>
       {showModal && (<ErrorDialog close={() => setShowModal(false)} content={errorMessage} />)}
