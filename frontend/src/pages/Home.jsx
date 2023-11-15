@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import NavAirbrb from '../components/NavAirbrb';
 import SearchBar from '../components/SearchBar';
-import { Grid, Box, Typography } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { apiCallGetAuthen } from './Helper';
 // TODO eric use toast
 import ErrorDialog from '../components/ErrorPopup';
@@ -14,8 +14,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { calculateAverageRating } from '../pages/Helper';
 import Icon from '@mdi/react';
-import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending, mdiExclamationThick } from '@mdi/js';
-
+import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending } from '@mdi/js';
+import NoResult from '../components/NoResult';
 const Home = (props) => {
   const { getters, setters } = useContext(Context);
   const [publishedListings, setpublishedListings] = React.useState([]);
@@ -184,18 +184,7 @@ const Home = (props) => {
               </Grid>
             ))}
           </Grid>
-          {publishedListings.length === 0 && (
-              <Grid container spacing={4} justifyContent={'flex-end'} alignItems={'center'} sx={{ mt: 3 }}>
-                <Grid item xs={2}>
-                  <Icon path={mdiExclamationThick} size={'auto'} />
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography component="h4" variant="h4" gutterBottom>
-                    Sorry, we could not find any listing
-                  </Typography>
-                </Grid>
-              </Grid>
-          )}
+          {publishedListings.length === 0 && <NoResult />}
         </Box>
       </main>
       {showModal && (<ErrorDialog close={() => setShowModal(false)} content={errorMessage} />)}
