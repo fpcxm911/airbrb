@@ -170,7 +170,7 @@ const AvailabilityRange = (props) => {
             </Grid>
             <Grid item xs={2}>
               {!props.singleRange && (
-                <IconButton onClick={() => handleRemove(idx)}>
+                <IconButton onClick={() => handleRemove(idx)} id='removeInputRole'>
                     <ClearOutlinedIcon />
                 </IconButton>
               )}
