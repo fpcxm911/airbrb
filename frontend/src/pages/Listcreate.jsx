@@ -91,6 +91,7 @@ export default function Listcreate (props) {
 
   const handleJsonCreate = async (e) => {
     e.preventDefault();
+    console.log('receiving json file');
     const file = e.target.files[0];
     if (!e.target.files[0].name.endsWith('.json')) {
       toastError('Please upload only JSON file');
@@ -101,7 +102,7 @@ export default function Listcreate (props) {
       const contents = e.target.result;
       const json = JSON.parse(contents);
       if (!validateJson(json)) {
-        toastError('Fail to create listing: invalid JSON file');
+        toastError('Fail to create listing: invalid data structure in JSON file');
         e.currentTarget.value = '';
       } else {
         console.log(json);
