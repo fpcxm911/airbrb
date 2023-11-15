@@ -97,7 +97,6 @@ it('rendering different title', () => {
   const result = render(
       <ListingCard listing = {listing} hotedPgae = {false}/>
   );
-  result.debug();
   expect(result.getByText(/different title/i)).toBeInTheDocument();
   expect(result.getByText(/Number of reviews : 3/i)).toBeInTheDocument();
   expect(result.getByText(/3.3/i)).toBeInTheDocument();
