@@ -303,6 +303,7 @@ const EditListing = (props) => {
             </Grid>
             <Button
               type='submit'
+              name='submit'
               fullWidth
               variant='contained'
               sx={{ mt: 5, mb: 2 }}

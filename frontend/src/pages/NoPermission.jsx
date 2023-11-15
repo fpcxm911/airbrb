@@ -11,7 +11,7 @@ const NoPermission = () => {
     <div>
       <p>You do not have permission to visit this page.</p>
       <p>If you are not redirected, please click the button below which redirected to the homepage.</p>
-      <button onClick={handleClick}>Go to Home</button>
+      <button onClick={handleClick} id='redirect'>Go to Home</button>
     </div>
   );
 };
