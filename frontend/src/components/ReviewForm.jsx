@@ -37,9 +37,7 @@ export default function ReviewForm (props) {
       }
     }, 'PUT')
     if (res.error) {
-      console.log('123');
-      props.setErrorMessage({ title: 'Error', body: res.error });
-      props.setShowModal(true);
+      props.toastError(res.error);
     } else {
       setOption('');
       setComment('');
