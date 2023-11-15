@@ -277,7 +277,7 @@ export default function ListingDetail (props) {
                 </Typography>
               </Grid>
                 )}
-            {listBookings.length !== 0 && getters.loggedIn && <>
+            {listBookings.length !== 0 && getters.loggedIn && <div id='leave-review'>
               <Divider sx={{ mt: 3 }}/>
             <Grid container direction='column' sx={{ my: 3 }} >
                 <Typography variant="h6" sx={{ mb: 3 }} color="text.primary">
@@ -287,10 +287,10 @@ export default function ListingDetail (props) {
                 <ReviewForm toastError={toastError} bookings={listBookings} listingId = {listDeatail.id} setNewComment={setNewComment} newComment={newComment}/>
               </Grid>
             </Grid>
-            </>}
+            </div>}
             {getters.loggedIn && (<>
               <Divider sx={{ my: 3 }}/>
-              {listBookings.length !== 0 && getters.loggedIn && (<Grid sx={{ mb: 3 }}>
+              {listBookings.length !== 0 && getters.loggedIn && (<Grid sx={{ mb: 3 }} id='booking-summary' >
                     <BookingStatus
                       bookings={listBookings}
                     />
