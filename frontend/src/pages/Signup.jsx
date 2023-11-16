@@ -21,14 +21,22 @@ import ErrorDialog from '../components/ErrorPopup';
 import { useContext, Context } from '../Context';
 
 export default function SignUp () {
+  // get context states setter
   const { setters } = useContext(Context);
+  // usetate to decide whether the register modal should open or not
   const [openRegister, setOpenRegister] = React.useState(true);
+  // usetate to decide whether the error dialog should open or not
   const [showModal, setShowModal] = React.useState(false);
+  // usetate to record error message
   const [errorMessage, setErrorMessage] = React.useState('');
+
+  // close error dialog
   const closeModal = () => {
     setShowModal(false);
   };
+
   const navigate = useNavigate();
+
   // handle close
   const goBackMain = () => {
     setOpenRegister(false);
@@ -49,18 +57,20 @@ export default function SignUp () {
         setErrorMessage({ title: 'Error', body: res.error });
         setShowModal(true);
       } else {
+        // set token and email to localstorage
         localStorage.setItem('token', res.token);
         localStorage.setItem('email', data.get('email'));
+        // set context state
         setters.setToken(res.token);
         setters.setEmail(data.get('email'));
         setters.setLoggedIn(true);
         setOpenRegister(false);
         navigate('/');
       }
-      // Handle the response from the API
     }
   };
 
+  // validate the sign up details
   const validRegisterForm = (data) => {
     if (!EMAIL_REGEX.test(data.get('email'))) {
       setErrorMessage({

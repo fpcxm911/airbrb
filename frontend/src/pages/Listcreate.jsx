@@ -26,7 +26,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Listcreate (props) {
+  // error  display
   const toastError = (msg) => toast.error(msg);
+
+  // handle listing create submit
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -75,6 +78,7 @@ export default function Listcreate (props) {
         if (res.error) {
           toastError(res.error);
         } else {
+          // indicate there should be a update for hosted listing page and close create listing modal
           props.update();
           props.close();
         }

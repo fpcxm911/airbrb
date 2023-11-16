@@ -19,30 +19,41 @@ import { ToastContainer, toast } from 'react-toastify';
 import NoPermission from './NoPermission';
 
 export default function Dashboard () {
+  // get context usestate setter and getter
   const { getters, setters } = useContext(Context);
+  // usestate to store all bookings
   const [allBookings, setAllbookings] = React.useState([]);
+  // usestate to store whether there should be a update for booking
   const [bookingUpdate, setBookingUpdate] = React.useState(0);
+  // usestate to store listing posted on time
   const [postedOn, setPublishedOn] = React.useState(null);
+  // use url params
   const params = useParams();
 
+  // error display
   const toastError = (msg) => {
     toast.error(msg);
   }
 
+  // set update bookings
   const updateBookings = () => {
     setBookingUpdate(bookingUpdate + 1);
   };
 
+  // collect all pending bookings for current listing
   const pendingBookings = (bookings) => {
     const pendings = bookings.filter(
       (x) => x.listingId === params.id && x.status === 'pending'
     );
     return pendings;
   };
+
+  // current year
   const currentYear = () => {
     return new Date().getFullYear();
   }
 
+  // check if iso time is in current year or not
   const isCurrentYear = (isoTime) => {
     const date = new Date(isoTime);
     const yearFromIsoTime = date.getFullYear();
@@ -50,6 +61,7 @@ export default function Dashboard () {
     return yearFromIsoTime === currentYear;
   }
 
+  // calculate the days between two iso dates
   const daysBetweenDates = (dateRange) => {
     const isoDate1 = dateRange.start;
     const isoDate2 = dateRange.end;
@@ -58,12 +70,14 @@ export default function Dashboard () {
     return differenceInDays(date2, date1);
   }
 
+  // calculate the number of days from now given a iso time
   const daysFromNow = (startTime) => {
     const currentDate = new Date();
     const startDate = new Date(startTime);
     return differenceInDays(currentDate, startDate);
   }
 
+  // calculate total profit for current listing
   const calculateProfit = (bookings) => {
     const acceptedBookings = bookings.filter(
       (x) =>
@@ -73,6 +87,7 @@ export default function Dashboard () {
     return totalProfit
   };
 
+  // calculate the total number of booked days for current listing
   const calculateDays = (bookings) => {
     const acceptedBookings = bookings.filter(
       (x) =>
@@ -82,6 +97,7 @@ export default function Dashboard () {
     return totalDays;
   };
 
+  // collect all accepted or denied bookings for current listing
   const bookingHistories = (bookings) => {
     const histories = bookings.filter(
       (x) => x.listingId === params.id && x.status !== 'pending'
@@ -89,6 +105,7 @@ export default function Dashboard () {
     return histories;
   };
 
+  // retrive context state from localstorage preventing state lost due to refresh
   React.useEffect(() => {
     const email = localStorage.getItem('email');
     const token = localStorage.getItem('token');
@@ -99,7 +116,9 @@ export default function Dashboard () {
     }
   }, []);
 
+  // fetch all bookings once there is a booking update / user login status change
   React.useEffect(async () => {
+    // if login fetech
     if (getters.loggedIn) {
       const bookingRes = await apiCallGetAuthen(
         'bookings',
@@ -110,11 +129,13 @@ export default function Dashboard () {
       } else {
         setAllbookings(bookingRes.bookings);
       }
+    // otherwise empty
     } else {
       setAllbookings([]);
     }
   }, [getters.loggedIn, bookingUpdate]);
 
+  // fetch all bookings once there is a booking update / user login status change
   React.useEffect(async () => {
     const res = await apiCallGetAuthen(`listings/${params.id}`);
     if (res.error) {

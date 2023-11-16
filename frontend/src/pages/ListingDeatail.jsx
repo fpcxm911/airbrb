@@ -19,7 +19,6 @@ import {
   mdiAirConditioner,
 } from '@mdi/js';
 import DisplayReview from '../components/DisplayReview';
-// import ErrorDialog from '../components/ErrorPopup';
 import {
   apiCallGetAuthen,
   calculateNumBedrooms,
@@ -35,22 +34,30 @@ import 'react-toastify/dist/ReactToastify.css';
 import VideoListing from '../components/VideoListing';
 
 export default function ListingDetail (props) {
+  // get context states setter and getter
   const { getters, setters } = useContext(Context);
+  // usestate to record current listing's detail
   const [listDeatail, setListDetail] = React.useState({});
+  // usestate to record current listing's bookings
   const [listBookings, setListBookings] = React.useState([]);
-  // const [showModal, setShowModal] = React.useState(false);
-  // const [errorMessage, setErrorMessage] = React.useState('');
+  // usestate to indicate there is a new comment created
   const [newComment, setNewComment] = React.useState(0);
+  // usestate to decide whether or not show make booking modal
   const [showMakeBooking, setShowMakeBooking] = React.useState(false);
-  // const [showBookSuccess, setShowBookSuccess] = React.useState(false);
+  // usestate to indicate there is a booking update
   const [bookingUpdate, setBookingUpdate] = React.useState(0);
+
+  // set booking update usestate
   const updateBookings = () => {
     setBookingUpdate(bookingUpdate + 1);
   };
 
   const params = useParams();
+
+  // error display
   const toastError = (msg) => toast.error(msg);
 
+  // fetch localstorage to context state prevent lossing data by refreshing
   React.useEffect(() => {
     const email = localStorage.getItem('email');
     const token = localStorage.getItem('token');
@@ -61,12 +68,14 @@ export default function ListingDetail (props) {
     }
   }, []);
 
+  // collect all images for current listing
   const imageCollection = () => {
     const newArray = [listDeatail.thumbnail];
     newArray.push(...listDeatail.metadata.propertyImages);
     return newArray;
   };
 
+  // create address
   const addressCreate = () => {
     const address = listDeatail.address;
     return (
@@ -80,13 +89,16 @@ export default function ListingDetail (props) {
     );
   };
 
+  // check if current listing contains given amenity
   const checkAmenities = (target) => {
     return listDeatail.metadata.amenities.includes(target);
   };
 
+  // booking succesful notification
   const bookingSuccessNotify = () =>
     toast.success(`Your booking made at ${listDeatail.title} is successful.`);
 
+  // fetch listing detail once there is a new comment
   React.useEffect(async () => {
     const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
     if (listingRes.error) {
@@ -98,6 +110,7 @@ export default function ListingDetail (props) {
     }
   }, [newComment]);
 
+  // set current listing's bookings once there is a booking update state change
   React.useEffect(async () => {
     if (getters.loggedIn) {
       const bookingRes = await apiCallGetAuthen(

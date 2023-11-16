@@ -9,13 +9,17 @@ import TableRow from '@mui/material/TableRow';
 import Pagination from '@mui/material/Pagination';
 
 export default function BookingStatus (props) {
+  // create usestate to record current page bookings for rendering and record the current page number
   const [renderList, setRenderLst] = React.useState([]);
   const [pageNum, setPageNum] = React.useState(1);
+  // calculate total page number base on all bookings, one page present 5 bookings
   const totalPage = Math.ceil(props.bookings.length / 5);
+  // update pagenumber after user click the pagination
   const handlePageChange = (event, newPageNumber) => {
     setPageNum(newPageNumber);
   };
 
+  // set bookings to be rendered base on page number
   React.useEffect(() => {
     if (props.bookings.length !== 0) {
       const start = (pageNum - 1) * 5;

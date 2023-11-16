@@ -160,7 +160,6 @@ const AvailabilityRange = (props) => {
                 shrink: true,
               }}
               value={dates.start}
-              // isOptionEqualToValue={(option, value) => option.id === value.id}
               label={
                 props.singleRange ? 'Check-in date' : `Start date ${idx + 1}`
               }
@@ -177,7 +176,6 @@ const AvailabilityRange = (props) => {
                 shrink: true,
               }}
               value={dates.end}
-              // isOptionEqualToValue={(option, value) => option.id === value.id}
               label={
                 props.singleRange ? 'Check-out date' : `End date ${idx + 1}`
               }
