@@ -19,7 +19,6 @@ import {
   mdiAirConditioner,
 } from '@mdi/js';
 import DisplayReview from '../components/DisplayReview';
-// import ErrorDialog from '../components/ErrorPopup';
 import {
   apiCallGetAuthen,
   calculateNumBedrooms,
@@ -38,11 +37,8 @@ export default function ListingDetail (props) {
   const { getters, setters } = useContext(Context);
   const [listDeatail, setListDetail] = React.useState({});
   const [listBookings, setListBookings] = React.useState([]);
-  // const [showModal, setShowModal] = React.useState(false);
-  // const [errorMessage, setErrorMessage] = React.useState('');
   const [newComment, setNewComment] = React.useState(0);
   const [showMakeBooking, setShowMakeBooking] = React.useState(false);
-  // const [showBookSuccess, setShowBookSuccess] = React.useState(false);
   const [bookingUpdate, setBookingUpdate] = React.useState(0);
   const updateBookings = () => {
     setBookingUpdate(bookingUpdate + 1);
