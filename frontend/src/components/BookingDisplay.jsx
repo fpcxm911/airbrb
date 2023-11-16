@@ -56,9 +56,9 @@ export default function BookingDisplay (props) {
             {/* <TableCell align="right">Sale Amount</TableCell> */}
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody className='renderListContainer'>
           {renderList.map((booking, idx) => (
-            <TableRow key={idx}>
+            <TableRow key={idx} className='bookingRow'>
               <TableCell>{booking.owner}</TableCell>
               <TableCell>{format(parseISO(booking.dateRange.start), 'do MMMM yyyy')}</TableCell>
               <TableCell>{format(parseISO(booking.dateRange.end), 'do MMMM yyyy')}</TableCell>

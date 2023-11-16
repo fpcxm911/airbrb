@@ -109,4 +109,53 @@ describe('DateSearch', () => {
 
     expect(setErrorMessage).toHaveBeenCalledTimes(1);
   });
+
+  it('should not display error message when valid dates are selected', () => {
+    const setSearch = jest.fn();
+    const setErrorMessage = jest.fn();
+
+    const result = render(
+          <DateSearch setSearch={setSearch} setErrorMessage={setErrorMessage} />
+    );
+
+    const startTextfield = result.container.querySelector('#start_date_input');
+    const endTextfield = result.container.querySelector('#end_date_input');
+
+    fireEvent.change(startTextfield, { target: { value: '2023-12-20' } });
+    fireEvent.change(endTextfield, { target: { value: '2023-12-29' } });
+
+    expect(setErrorMessage).toHaveBeenCalledTimes(0);
+  });
+
+  it('should allow only start date to be selected', () => {
+    const setSearch = jest.fn();
+    const setErrorMessage = jest.fn();
+    const result = render(
+          <DateSearch setSearch={setSearch} setErrorMessage={setErrorMessage} />
+    );
+
+    const startTextfield = result.container.querySelector('#start_date_input');
+    const endTextfield = result.container.querySelector('#end_date_input');
+
+    fireEvent.change(startTextfield, { target: { value: '2024-01-01' } });
+    fireEvent.change(endTextfield, { target: { value: '' } });
+
+    expect(setErrorMessage).toHaveBeenCalledTimes(0);
+  });
+
+  it('should allow only end date to be selected', () => {
+    const setSearch = jest.fn();
+    const setErrorMessage = jest.fn();
+    const result = render(
+          <DateSearch setSearch={setSearch} setErrorMessage={setErrorMessage} />
+    );
+
+    const startTextfield = result.container.querySelector('#start_date_input');
+    const endTextfield = result.container.querySelector('#end_date_input');
+
+    fireEvent.change(startTextfield, { target: { value: '' } });
+    fireEvent.change(endTextfield, { target: { value: '2024-01-01' } });
+
+    expect(setErrorMessage).toHaveBeenCalledTimes(0);
+  });
 });

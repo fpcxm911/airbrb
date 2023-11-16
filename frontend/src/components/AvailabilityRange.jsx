@@ -50,8 +50,6 @@ const AvailabilityRange = (props) => {
       const checkinStr = datesRangeStrArr[0].start;
       const checkoutStr = datesRangeStrArr[0].end;
       const todayISOString = new Date().toISOString().split('T')[0];
-      console.log('today iso');
-      console.log(todayISOString);
       if (checkinStr === '' || checkoutStr === '') return false;
       if (checkinStr < todayISOString) {
         setErrorMessage('Check-in date cannot be in the past');
@@ -61,7 +59,6 @@ const AvailabilityRange = (props) => {
         const availStart = new Date(availRange.start).toISOString().split('T')[0];
         const availEnd = new Date(availRange.end).toISOString().split('T')[0];
         if (availStart <= checkinStr && availEnd >= checkoutStr) {
-          console.log('fitted');
           return true;
         }
       }
