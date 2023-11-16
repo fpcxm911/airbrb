@@ -22,7 +22,7 @@ export default function Dashboard () {
   const { getters, setters } = useContext(Context);
   const [allBookings, setAllbookings] = React.useState([]);
   const [bookingUpdate, setBookingUpdate] = React.useState(0);
-  const [postedOn, setPublishedOn] = React.useState('');
+  const [postedOn, setPublishedOn] = React.useState(null);
   const params = useParams();
 
   const toastError = (msg) => {
@@ -175,7 +175,7 @@ export default function Dashboard () {
                 <Grid item xs={12} md={4} >
                     <Statistic
                         title="Days From Publishing"
-                        content={`${daysFromNow(postedOn)} Days`}
+                        content={postedOn !== null ? `${daysFromNow(postedOn)} Days` : '0 Days'}
                         id='published-days'
                         icon={
                           <img
