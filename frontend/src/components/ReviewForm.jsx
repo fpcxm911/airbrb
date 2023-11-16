@@ -58,7 +58,7 @@ export default function ReviewForm (props) {
         <Select
           labelId="bookings-option"
           label="Your Booking"
-          id="demo-simple-select-helper"
+          id="bookings-selector"
           onChange={handleChange}
           value={option}
           name="select"
@@ -82,7 +82,7 @@ export default function ReviewForm (props) {
         <Typography variant="h6" color="text.primary">
           Give your comment
         </Typography>
-        <CommentTextArea rows={5} sx={{ my: 1 }} name='comment' value = {comment} required onChange={(e) => setComment(e.target.value)}/>
+        <CommentTextArea id='comment-textarea' rows={5} sx={{ my: 1 }} name='comment' value = {comment} required onChange={(e) => setComment(e.target.value)}/>
       </FormControl>
         <Grid item sx={{ mb: 4 }}>
           <Typography variant="h6" color="text.primary" gutterBottom>
@@ -90,7 +90,7 @@ export default function ReviewForm (props) {
           </Typography>
           <HoverRating value={value} setValue = {setValue} hover={hover} setHover = {setHover}/>
         </Grid>
-      <Button type="submit" fullWidth variant="contained">
+      <Button type="submit" fullWidth variant="contained" name='submit'>
         Comment
       </Button>
     </Box>

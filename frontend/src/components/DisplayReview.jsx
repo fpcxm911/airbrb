@@ -20,7 +20,7 @@ export default function DisplayReview (props) {
     setReviewTarget(item);
   };
   return (
-    <>
+    <div id='reviews-display'>
       <Grid container justifyContent={'center'}>
         <StarBorderIcon sx={{ fontSize: '70px', mr: 2 }} />
         <Typography variant="h2" color="text.primary" paragraph>
@@ -100,6 +100,6 @@ export default function DisplayReview (props) {
           content={reviewTarget}
         />
       )}
-    </>
+    </div>
   );
 }

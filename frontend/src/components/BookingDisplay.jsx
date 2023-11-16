@@ -65,8 +65,8 @@ export default function BookingDisplay (props) {
               <TableCell>{`$${booking.totalPrice}`}</TableCell>
               <TableCell>{props.current
                 ? <Grid container>
-                  <Button size='small' onClick={() => handleAccept(booking.id)}>Accept</Button>
-                  <Button size='small' onClick={() => handleDeny(booking.id)}>Deny</Button>
+                  <Button size='small' onClick={() => handleAccept(booking.id)} name={`accept${idx}`}>Accept</Button>
+                  <Button size='small' onClick={() => handleDeny(booking.id)} name={`deny${idx}`}>Deny</Button>
                 </Grid>
                 : `${booking.status}`}</TableCell>
             </TableRow>

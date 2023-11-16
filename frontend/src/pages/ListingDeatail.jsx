@@ -267,12 +267,12 @@ export default function ListingDetail (props) {
             )}
             {listDeatail.reviews.length
               ? (
-              <DisplayReview listing={listDeatail} />
+              <DisplayReview listing={listDeatail}/>
                 )
               : (
               <Grid container alignItems={'center'}>
                 <Icon path={mdiThumbsUpDown} size={2} />
-                <Typography variant="h6" color="text.primary" sx={{ pl: 2 }}>
+                <Typography id='no-reviews-text' variant="h6" color="text.primary" sx={{ pl: 2 }}>
                   No rating and reviews yet
                 </Typography>
               </Grid>
