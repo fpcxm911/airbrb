@@ -185,7 +185,7 @@ export default function HostedListing (props) {
                         flexDirection: 'column',
                       }}
                     >
-                      <ListingCard listing={listing} hotedPage={true} />
+                      <ListingCard listing={listing} hotedPage={true} index={index} />
                       <CardActions
                         sx={{
                           display: 'flex',
@@ -203,6 +203,7 @@ export default function HostedListing (props) {
                         </Button>
                         <Button
                           size="small"
+                          name={`booking-list${index}`}
                           sx={{ fontSize: buttonFontSize }}
                           onClick={() =>
                             navigate(`/hosted/booking/${listing.id}`)
@@ -232,6 +233,7 @@ export default function HostedListing (props) {
                         )}
                         <Button
                           size="small"
+                          name={`delete-list${index}`}
                           sx={{ fontSize: buttonFontSize }}
                           color="error"
                           onClick={() => deleteListing(listing)}

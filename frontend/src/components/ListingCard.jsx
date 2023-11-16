@@ -58,18 +58,18 @@ const ListingCard = (props) => {
       />
       <CardContent sx={{ flexGrow: 1, ml: 1 }}>
         <Box sx={{ mb: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold' }} id={`title${props.index}`}>
             {props.listing.title}
           </Typography>
         </Box>
-        <Typography variant="body2" gutterBottom>
+        <Typography variant="body2" gutterBottom id={`prop-type${props.index}`}>
           Property type : {props.listing.metadata.propertyType}
         </Typography>
-        <Typography variant="body2" gutterBottom>
+        <Typography variant="body2" gutterBottom id={`num-bath${props.index}`}>
           Number of bathrooms : {props.listing.metadata.numberOfBathrooms}
         </Typography>
 
-        <Typography variant="body2" gutterBottom>
+        <Typography variant="body2" gutterBottom id={`num-beds${props.index}`}>
           Number of beds : {calculateNumBeds(props.listing)}
         </Typography>
 
@@ -172,7 +172,7 @@ const ListingCard = (props) => {
             </>
               )}
         </Box>
-        <Typography variant="button" gutterBottom sx={{ fontWeight: 'bold' }}>
+        <Typography variant="button" gutterBottom sx={{ fontWeight: 'bold' }} id={`price${props.index}`}>
           Price : {props.listing.price} AUD / NIGHT
         </Typography>
       </CardContent>
