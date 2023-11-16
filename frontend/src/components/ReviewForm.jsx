@@ -24,9 +24,6 @@ export default function ReviewForm (props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(option);
-    console.log(comment);
-    console.log(value);
     const res = apiCallBodyAuthen(`listings/${props.listingId}/review/${option}`, localStorage.getItem('token'), {
       review: {
         userEmail: localStorage.getItem('email'),

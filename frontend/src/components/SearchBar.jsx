@@ -94,9 +94,6 @@ const SearchBar = (props) => {
           }
           return false;
         });
-        console.log('cust stay for number of nights');
-        console.log(differenceInDays(new Date(searchInput.end), new Date(searchInput.start)));
-        console.log(typeof (differenceInDays(new Date(searchInput.end), new Date(searchInput.start))));
         props.setNumberOfNights(differenceInDays(new Date(searchInput.end), new Date(searchInput.start)));
         props.update(filteredList);
         break;

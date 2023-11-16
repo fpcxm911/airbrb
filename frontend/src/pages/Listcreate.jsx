@@ -91,7 +91,6 @@ export default function Listcreate (props) {
 
   const handleJsonCreate = async (e) => {
     e.preventDefault();
-    console.log('receiving json file');
     const file = e.target.files[0];
     if (!e.target.files[0].name.endsWith('.json')) {
       toastError('Please upload only JSON file');
@@ -105,7 +104,6 @@ export default function Listcreate (props) {
         toastError('Fail to create listing: invalid data structure in JSON file');
         e.currentTarget.value = '';
       } else {
-        console.log(json);
         const token = localStorage.getItem('token');
         const res = await apiCallBodyAuthen('listings/new', token, json, 'POST');
         if (res.error) {

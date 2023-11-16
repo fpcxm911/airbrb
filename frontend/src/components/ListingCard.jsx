@@ -44,7 +44,6 @@ const ListingCard = (props) => {
     setReviews(collectRatingByCategory(category));
     setShowReview(true)
     setReviewCategory(category)
-    console.log('123');
   }
   return (
     <>

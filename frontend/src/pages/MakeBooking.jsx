@@ -67,7 +67,6 @@ const ListingBooking = (props) => {
         60 /
         24) *
         props.price;
-    console.log(typeof props.listingid);
     const res = await apiCallBodyAuthen(
       `bookings/new/${props.listingid}`,
       getters.token,

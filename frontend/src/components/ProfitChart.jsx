@@ -37,33 +37,15 @@ const ProfitChart = (props) => {
       const dayDiffEnd = differenceInDays(endDate, today);
       const dayDiffStartEnd = differenceInDays(endDate, startDate);
       if (dayDiffStart <= 30 && dayDiffStart >= 0 && dayDiffEnd > 0) {
-        // console.log(dayDiffStartEnd);
-        // console.log(today);
-        // console.log(startDate);
-        // console.log(endDate);
-        // console.log(booking);
-        // console.log('hrere');
-        // console.log(dayDiffStart);
-        // console.log();
         for (let index = 0; index <= dayDiffStart; index++) {
-          console.log(index);
           datas[index].profit += booking.totalPrice / dayDiffStartEnd;
         }
       } else if (dayDiffStart <= 30 && dayDiffStart >= 0 && dayDiffEnd <= 0) {
-        // console.log(today);
-        // console.log(startDate);
-        // console.log(endDate);
-        // console.log(booking);
-        // console.log();
-        // console.log('hrere');
-        // console.log(dayDiffStart);
         for (let index = dayDiffStart; index > Math.abs(dayDiffEnd); index--) {
-          // console.log(index);
           datas[index].profit += booking.totalPrice / dayDiffStartEnd;
         }
       }
     }
-    // console.log(datas);
     return datas;
   }
 

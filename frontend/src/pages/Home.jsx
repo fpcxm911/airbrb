@@ -54,27 +54,21 @@ const Home = (props) => {
       } else {
         const accecptPendingBookings = res.bookings.filter(x => (x.status === 'accepted' || x.status === 'pending') && x.owner === localStorage.getItem('email'));
         const extractedLitingsId = accecptPendingBookings.map(x => x.listingId);
-        console.log(extractedLitingsId);
         return listings.sort((a, b) => {
           const aIn = extractedLitingsId.includes(String(a.id));
           const bIn = extractedLitingsId.includes(String(b.id));
           if (aIn && !bIn) {
-            console.log('123');
             return -1;
           } else if (!aIn && bIn) {
-            console.log('456');
             return 1;
           } else if (aIn && bIn) {
-            console.log('789');
             return a.title.localeCompare(b.title);
           } else {
-            console.log('haha');
             return a.title.localeCompare(b.title);
           }
         });
       }
     } else {
-      console.log('noway');
       return listings.sort((a, b) => a.title.localeCompare(b.title));
     }
   }

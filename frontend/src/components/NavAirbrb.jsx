@@ -24,7 +24,7 @@ export default function NavAirbrb () {
   const handleLogout = async () => {
     const res = await apiCallBodyAuthen('user/auth/logout', localStorage.getItem('token'), {}, 'POST');
     if (res.error) {
-      console.log(res.error);
+      console.error(res.error);
     } else {
       // clear token in local storage and props
       localStorage.clear();

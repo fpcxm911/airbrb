@@ -93,7 +93,6 @@ export default function ListingDetail (props) {
     } else {
       const collectListingData = listingRes.listing;
       collectListingData.id = params.id;
-      console.log(collectListingData);
       setListDetail(collectListingData);
     }
   }, [newComment]);

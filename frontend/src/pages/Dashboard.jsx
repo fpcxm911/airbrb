@@ -59,7 +59,6 @@ export default function Dashboard () {
   }
 
   const daysFromNow = (startTime) => {
-    console.log(startTime);
     const currentDate = new Date();
     const startDate = new Date(startTime);
     return differenceInDays(currentDate, startDate);
@@ -84,7 +83,6 @@ export default function Dashboard () {
   };
 
   const bookingHistories = (bookings) => {
-    console.log(params.id);
     const histories = bookings.filter(
       (x) => x.listingId === params.id && x.status !== 'pending'
     );
@@ -126,7 +124,6 @@ export default function Dashboard () {
     }
   }, []);
 
-  console.log(getters.loggedIn);
   return (
     <>
       {getters.loggedIn
