@@ -150,6 +150,7 @@ export default function Dashboard () {
                     <Statistic
                         title={`${currentYear()} Booked Days`}
                         content={`${calculateDays(allBookings)} Days`}
+                        id='booked-days'
                         icon={
                           <img
                             alt="icon"
@@ -164,6 +165,7 @@ export default function Dashboard () {
                     <Statistic
                         title={`${currentYear()} Total Earning`}
                         content={`$${calculateProfit(allBookings)}`}
+                        id='total-earning'
                         icon={
                           <img
                             alt="icon"
@@ -178,6 +180,7 @@ export default function Dashboard () {
                     <Statistic
                         title="Days From Publishing"
                         content={`${daysFromNow(postedOn)} Days`}
+                        id='published-days'
                         icon={
                           <img
                             alt="icon"

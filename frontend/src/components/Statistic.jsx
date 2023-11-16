@@ -16,12 +16,12 @@ export default function Statistic ({ title, content, icon, sx, ...other }) {
         borderRadius: 2,
         ...sx,
       }}
-      {...other}
+
     >
       {icon && <Box sx={{ width: 64, height: 64 }}>{icon}</Box>}
 
       <Stack spacing={0.5}>
-        <Typography variant="h5" >{content}</Typography>
+        <Typography variant="h5" {...other} >{content}</Typography>
 
         <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
           {title}
