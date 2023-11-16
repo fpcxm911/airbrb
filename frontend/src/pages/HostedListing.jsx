@@ -173,7 +173,7 @@ export default function HostedListing (props) {
                 <Typography variant="h5" color="text.primary" paragraph>
                   Your last 30 days profits
                 </Typography>
-                <ProfitChart myListings={HostedLists} />
+                <ProfitChart myListings={HostedLists} toastError={toastError}/>
               </Box>
               <Grid container spacing={4}>
                 {HostedLists.map((listing, index) => (

@@ -11,8 +11,7 @@ const ProfitChart = (props) => {
       localStorage.getItem('token')
     );
     if (bookingRes.error) {
-      props.setErrorMessage({ title: 'Error', body: bookingRes.error });
-      props.setShowModal(true);
+      props.toastError(bookingRes.error);
     } else {
       const myBookings = bookingRes.bookings.filter(
         (x) =>
@@ -21,7 +20,6 @@ const ProfitChart = (props) => {
       setListBookings(myBookings);
     }
   }, [props.myListings]);
-  // console.log(listBookings);
   const generateChart = () => {
     // Get the current date
     const datas = []
@@ -32,7 +30,6 @@ const ProfitChart = (props) => {
       const formatDate = format(date, 'MM/dd')
       datas.push({ name: formatDate, profit: 0 })
     }
-    // console.log(datas);
     for (const booking of listBookings) {
       const startDate = new Date(booking.dateRange.start);
       const endDate = new Date(booking.dateRange.end);
@@ -40,42 +37,35 @@ const ProfitChart = (props) => {
       const dayDiffEnd = differenceInDays(endDate, today);
       const dayDiffStartEnd = differenceInDays(endDate, startDate);
       if (dayDiffStart <= 30 && dayDiffStart >= 0 && dayDiffEnd > 0) {
-        console.log(dayDiffStartEnd);
-        console.log(today);
-        console.log(startDate);
-        console.log(endDate);
-        console.log(booking);
-        console.log('hrere');
-        console.log(dayDiffStart);
-        console.log();
+        // console.log(dayDiffStartEnd);
+        // console.log(today);
+        // console.log(startDate);
+        // console.log(endDate);
+        // console.log(booking);
+        // console.log('hrere');
+        // console.log(dayDiffStart);
+        // console.log();
         for (let index = 0; index <= dayDiffStart; index++) {
           console.log(index);
           datas[index].profit += booking.totalPrice / dayDiffStartEnd;
         }
       } else if (dayDiffStart <= 30 && dayDiffStart >= 0 && dayDiffEnd <= 0) {
-        console.log(today);
-        console.log(startDate);
-        console.log(endDate);
-        console.log(booking);
-        console.log();
-        console.log('hrere');
-        console.log(dayDiffStart);
+        // console.log(today);
+        // console.log(startDate);
+        // console.log(endDate);
+        // console.log(booking);
+        // console.log();
+        // console.log('hrere');
+        // console.log(dayDiffStart);
         for (let index = dayDiffStart; index > Math.abs(dayDiffEnd); index--) {
-          console.log(index);
+          // console.log(index);
           datas[index].profit += booking.totalPrice / dayDiffStartEnd;
         }
       }
     }
-    console.log(datas);
+    // console.log(datas);
     return datas;
   }
-  // generateChart();
-  // const data = [
-  //   { name: 'Category 1', profit: 10 },
-  //   { name: 'Category 2', profit: 20 },
-  //   { name: 'Category 3', profit: 15 },
-  //   // Add more data as needed
-  // ];
 
   return (
     <ResponsiveContainer width="100%" height={400}>
