@@ -56,3 +56,10 @@
 1. On hover of star rating we also show the total number of reviews.
 
 2. On hover of star rating we have a progress bar to indicate the percentage of the specific rating reviews in all reviews.
+
+
+Addition:
+
+1. On hosted page, hosted-bookings page, after user logout, they will navigate the no permission page, which has a redirect button could redirect them to home page.
+
+2. If user try to access our authorized page by url without login, no permission page will render.
