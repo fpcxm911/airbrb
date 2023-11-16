@@ -8,9 +8,7 @@ import { Box, Grid, Rating } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import defaultImage from '../assets/man.png';
 import { parseISO, format } from 'date-fns';
-
 import Avatar from '@mui/material/Avatar';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 
 export default function FullReview (props) {

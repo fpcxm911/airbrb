@@ -14,15 +14,21 @@ const CommentTextArea = styled('textarea')({
 });
 
 const ReviewForm = (props) => {
+  // usestate to record the booking user seleted to review
   const [option, setOption] = React.useState('');
+  // usestate to record the comment user typed
   const [comment, setComment] = React.useState('');
+  // usestate to record the rating user give, initially it is 4 star
   const [value, setValue] = React.useState(4);
+  // usestate to record hover state
   const [hover, setHover] = React.useState(-1);
 
+  // set option when it change
   const handleChange = (event) => {
     setOption(event.target.value);
   };
 
+  // handle user submit review
   const handleSubmit = (event) => {
     event.preventDefault();
     const res = apiCallBodyAuthen(
@@ -42,9 +48,11 @@ const ReviewForm = (props) => {
     if (res.error) {
       props.toastError(res.error);
     } else {
+      // reset usestate / form after it submit
       setOption('');
       setComment('');
       setValue(4);
+      // update usestate to indicate there is a new comment
       props.setNewComment(props.newComment + 1);
     }
   };

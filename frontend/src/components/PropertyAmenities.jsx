@@ -9,16 +9,21 @@ const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
 export default function PropertyAmenities () {
+  // userstate to record the selected amenities
   const [selectedAmenities, setSelectedAmenities] = React.useState([]);
+  // userstate to store the joined selected amenities in hidden input
   const [hiddenInputValue, setHiddenInputValue] = React.useState([]);
 
+  // update hiddenInputValue once the selected amenities changed
   React.useEffect(() => {
     setHiddenInputValue(selectedAmenities.join(','));
   }, [selectedAmenities]);
 
+  // set selectedAmenities when it changes
   const handleAmenitiesChange = (event, values) => {
     setSelectedAmenities(values);
   };
+
   return (
     <>
       <Autocomplete
