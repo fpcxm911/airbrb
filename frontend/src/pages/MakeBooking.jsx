@@ -169,9 +169,10 @@ const ListingBooking = (props) => {
       </Dialog>
       <ToastContainer
         position='top-center'
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar={false}
         closeOnClick
+        pauseOnFocusLoss={false}
       />
     </React.Fragment>
   );

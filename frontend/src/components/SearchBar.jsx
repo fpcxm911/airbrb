@@ -17,7 +17,6 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const SearchBar = (props) => {
   const [searchOption, setSearchOption] = React.useState('titleLocation');
-  // const [errorMessage, setErrorMessage] = React.useState('');
   const [clickable, setClickable] = React.useState(true);
 
   React.useEffect(() => {
@@ -185,9 +184,11 @@ const SearchBar = (props) => {
       </Paper>
       <ToastContainer
         position='top-center'
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar={false}
         closeOnClick
+        pauseOnFocusLoss={false}
+        limit={2}
       />
     </>
   );

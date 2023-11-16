@@ -322,9 +322,10 @@ export default function ListingDetail (props) {
             )} */}
               <ToastContainer
                 position="top-center"
-                autoClose={5000}
+                autoClose={4000}
                 hideProgressBar={false}
                 closeOnClick
+                pauseOnFocusLoss={false}
                 />
           </Container>
         </>

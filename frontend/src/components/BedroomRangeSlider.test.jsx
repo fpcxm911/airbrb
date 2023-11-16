@@ -9,7 +9,7 @@ describe('BedroomRangeSlider', () => {
     const slider = result.container.querySelector('.bedroom-range-slider');
     expect(slider).toBeInTheDocument();
 
-    const input = result.container.querySelector('#bedroomRangeHiddenInput')
+    const input = result.container.querySelector('#bedroomRangeHiddenInput');
     expect(input).toBeInTheDocument();
     // bedroom default value should be 3 and 5
     expect(input.value).toBe('3-5');
@@ -17,7 +17,6 @@ describe('BedroomRangeSlider', () => {
 
   it('should update slider values when dragged', () => {
     const result = render(<BedroomRangeSlider />);
-    result.debug();
 
     const sliders = result.getAllByRole('slider');
     const input = result.container.querySelector('#bedroomRangeHiddenInput')
