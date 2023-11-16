@@ -200,7 +200,7 @@ const Home = (props) => {
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
                   onClick={() => navigate(`/listing/${listing.id}`)}
                 >
-                  <ListingCard listing = {listing} hotedPage = {false} />
+                  <ListingCard listing = {listing} hotedPage = {false} index={index}/>
                   <CardActions>
                   </CardActions>
                 </Card>
