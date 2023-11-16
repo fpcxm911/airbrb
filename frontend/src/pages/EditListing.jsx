@@ -12,7 +12,13 @@ import PropertyAmenities from '../components/PropertyAmenities';
 import PropertyBedroom from '../components/PropertyBedroom';
 import ImageIcon from '@mui/icons-material/Image';
 import DialogContentText from '@mui/material/DialogContentText';
-import { apiCallBodyAuthen, apiCallGetAuthen, createAddress, fileToDataUrl, createMeta } from './Helper';
+import {
+  apiCallBodyAuthen,
+  apiCallGetAuthen,
+  createAddress,
+  fileToDataUrl,
+  createMeta,
+} from './Helper';
 import { ToastContainer, toast } from 'react-toastify';
 import PropertyType from '../components/PropertyType';
 import Dialog from '@mui/material/Dialog';
@@ -31,7 +37,14 @@ const EditListing = (props) => {
     address: { country: '', city: '', street: '', postcode: '' },
     price: '',
     thumbnail: '',
-    metadata: { numberOfBathrooms: '', propertyType: '', amenities: [], bedrooms: [], youtubeUrl: '', propertyImages: [] },
+    metadata: {
+      numberOfBathrooms: '',
+      propertyType: '',
+      amenities: [],
+      bedrooms: [],
+      youtubeUrl: '',
+      propertyImages: [],
+    },
     reviews: [],
     availability: [],
     published: false,
@@ -40,7 +53,7 @@ const EditListing = (props) => {
 
   const toastError = (msg) => {
     toast.error(msg);
-  }
+  };
 
   React.useEffect(async () => {
     const listingRes = await apiCallGetAuthen(`listings/${params.id}`);
@@ -58,7 +71,9 @@ const EditListing = (props) => {
     if (JSON.parse(data.get('bedrooms')).length > 0) {
       try {
         let thumbnail;
-        (data.get('thumbnail') && data.get('thumbnail').name) ? thumbnail = await fileToDataUrl(data.get('thumbnail')) : thumbnail = listingData.thumbnail;
+        data.get('thumbnail') && data.get('thumbnail').name
+          ? (thumbnail = await fileToDataUrl(data.get('thumbnail')))
+          : (thumbnail = listingData.thumbnail);
         const token = localStorage.getItem('token');
         const title = data.get('title');
         const country = data.get('country');
@@ -70,21 +85,34 @@ const EditListing = (props) => {
         const price = data.get('price');
         const propertyType = data.get('prop');
         const bedroomsArray = JSON.parse(data.get('bedrooms'));
-        const amenitiesList = data.get('amenities') === '' ? [] : data.get('amenities').split(',');
+        const amenitiesList =
+          data.get('amenities') === '' ? [] : data.get('amenities').split(',');
         const youtubeUrl = data.get('youtube') ? data.get('youtube') : null;
         const propertyImages = [];
         const images = data.getAll('images');
         for (const image of images) {
-          (image.name) && propertyImages.push(await fileToDataUrl(image));
+          image.name && propertyImages.push(await fileToDataUrl(image));
         }
-        const metadata = createMeta(bathNum, propertyType, bedroomsArray, amenitiesList, youtubeUrl, propertyImages);
-        const res = await apiCallBodyAuthen(`listings/${params.id}`, token, {
-          title,
-          address,
-          thumbnail,
-          price,
-          metadata
-        }, 'PUT');
+        const metadata = createMeta(
+          bathNum,
+          propertyType,
+          bedroomsArray,
+          amenitiesList,
+          youtubeUrl,
+          propertyImages
+        );
+        const res = await apiCallBodyAuthen(
+          `listings/${params.id}`,
+          token,
+          {
+            title,
+            address,
+            thumbnail,
+            price,
+            metadata,
+          },
+          'PUT'
+        );
         if (res.error) {
           setErrorMessage(res.error);
         } else {
@@ -97,7 +125,7 @@ const EditListing = (props) => {
     } else {
       setErrorMessage('Please add at least one bedroom');
     }
-  }
+  };
 
   return (
     <React.Fragment>
@@ -106,11 +134,11 @@ const EditListing = (props) => {
           setOpenEditing(false);
           navigate('/hosted');
         }}
-        open = {openEditing}
+        open={openEditing}
         PaperProps={{ sx: { borderRadius: 6 } }}
       >
         <IconButton
-          aria-label="close"
+          aria-label='close'
           onClick={() => {
             setOpenEditing(false);
             navigate('/hosted');
@@ -124,8 +152,7 @@ const EditListing = (props) => {
         >
           <CloseIcon />
         </IconButton>
-          <Grid container justify='flex-end' alignItems={'flex-end'}>
-          </Grid>
+        <Grid container justify='flex-end' alignItems={'flex-end'}></Grid>
         <DialogContent
           dividers
           sx={{
@@ -143,7 +170,11 @@ const EditListing = (props) => {
           <Typography component='h1' variant='h5'>
             Edit your Listing
           </Typography>
-          <Box component='form' onSubmit={handleSubmit} sx={{ pt: 3, overflowY: 'auto' }}>
+          <Box
+            component='form'
+            onSubmit={handleSubmit}
+            sx={{ pt: 3, overflowY: 'auto' }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -168,7 +199,13 @@ const EditListing = (props) => {
                   autoComplete='country'
                   value={listingData.address.country}
                   onChange={(e) => {
-                    setListingData({ ...listingData, address: { ...listingData.address, country: e.target.value } });
+                    setListingData({
+                      ...listingData,
+                      address: {
+                        ...listingData.address,
+                        country: e.target.value,
+                      },
+                    });
                   }}
                 />
               </Grid>
@@ -181,7 +218,10 @@ const EditListing = (props) => {
                   autoComplete='city'
                   value={listingData.address.city}
                   onChange={(e) => {
-                    setListingData({ ...listingData, address: { ...listingData.address, city: e.target.value } });
+                    setListingData({
+                      ...listingData,
+                      address: { ...listingData.address, city: e.target.value },
+                    });
                   }}
                 />
               </Grid>
@@ -194,7 +234,13 @@ const EditListing = (props) => {
                   autoComplete='street'
                   value={listingData.address.street}
                   onChange={(e) => {
-                    setListingData({ ...listingData, address: { ...listingData.address, street: e.target.value } });
+                    setListingData({
+                      ...listingData,
+                      address: {
+                        ...listingData.address,
+                        street: e.target.value,
+                      },
+                    });
                   }}
                 />
               </Grid>
@@ -207,7 +253,13 @@ const EditListing = (props) => {
                   autoComplete='postcode'
                   value={listingData.address.postcode}
                   onChange={(e) => {
-                    setListingData({ ...listingData, address: { ...listingData.address, postcode: e.target.value } });
+                    setListingData({
+                      ...listingData,
+                      address: {
+                        ...listingData.address,
+                        postcode: e.target.value,
+                      },
+                    });
                   }}
                 />
               </Grid>
@@ -220,7 +272,13 @@ const EditListing = (props) => {
                   label='Bathrooms'
                   value={listingData.metadata.numberOfBathrooms}
                   onChange={(e) => {
-                    setListingData({ ...listingData, metadata: { ...listingData.metadata, numberOfBathrooms: e.target.value } });
+                    setListingData({
+                      ...listingData,
+                      metadata: {
+                        ...listingData.metadata,
+                        numberOfBathrooms: e.target.value,
+                      },
+                    });
                   }}
                 />
               </Grid>
@@ -254,7 +312,13 @@ const EditListing = (props) => {
                   label='Youtube URL (Optional)'
                   value={listingData.metadata.youtubeUrl}
                   onChange={(e) => {
-                    setListingData({ ...listingData, metadata: { ...listingData.metadata, youtubeUrl: e.target.value } });
+                    setListingData({
+                      ...listingData,
+                      metadata: {
+                        ...listingData.metadata,
+                        youtubeUrl: e.target.value,
+                      },
+                    });
                   }}
                 />
               </Grid>
@@ -274,7 +338,6 @@ const EditListing = (props) => {
                   />
                 </Button>
               </Grid>
-              {/* // TODO eric bonus eric when updating prop imgs, show images uploaded before and decide delete, keep, or add more */}
               <Grid item xs={12}>
                 <Button
                   fullWidth
@@ -322,6 +385,6 @@ const EditListing = (props) => {
       </Dialog>
     </React.Fragment>
   );
-}
+};
 
 export default EditListing;

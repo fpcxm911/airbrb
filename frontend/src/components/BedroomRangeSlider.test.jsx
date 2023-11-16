@@ -19,17 +19,17 @@ describe('BedroomRangeSlider', () => {
     const result = render(<BedroomRangeSlider />);
 
     const sliders = result.getAllByRole('slider');
-    const input = result.container.querySelector('#bedroomRangeHiddenInput')
+    const input = result.container.querySelector('#bedroomRangeHiddenInput');
     fireEvent.change(sliders[0], { target: { value: 4 } });
     fireEvent.change(sliders[1], { target: { value: 7 } });
     expect(input.value).toBe('4-7');
-  })
+  });
 
   it('should update slider values when dragged to the min value', () => {
     const result = render(<BedroomRangeSlider />);
     const sliders = result.getAllByRole('slider');
     fireEvent.change(sliders[0], { target: { value: 1 } });
-    const input = result.container.querySelector('#bedroomRangeHiddenInput')
+    const input = result.container.querySelector('#bedroomRangeHiddenInput');
     expect(input.value).toBe('1-5');
   });
 
@@ -37,9 +37,9 @@ describe('BedroomRangeSlider', () => {
     const result = render(<BedroomRangeSlider />);
     const sliders = result.getAllByRole('slider');
     fireEvent.change(sliders[1], { target: { value: 10 } });
-    const input = result.container.querySelector('#bedroomRangeHiddenInput')
+    const input = result.container.querySelector('#bedroomRangeHiddenInput');
     expect(input.value).toBe('3-10');
-  })
+  });
 
   it('should limit the max and min of slider', () => {
     const result = render(<BedroomRangeSlider />);
@@ -50,7 +50,7 @@ describe('BedroomRangeSlider', () => {
     expect(sliders[1].min).toBe('1');
     fireEvent.change(sliders[0], { target: { value: -5 } });
     fireEvent.change(sliders[1], { target: { value: 11 } });
-    const input = result.container.querySelector('#bedroomRangeHiddenInput')
+    const input = result.container.querySelector('#bedroomRangeHiddenInput');
     expect(input.value).toBe('1-10');
   });
 });

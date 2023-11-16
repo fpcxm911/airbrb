@@ -12,23 +12,23 @@ describe('DisplayReview', () => {
           bookingId: 799384397,
           rating: 4,
           comment: 'absolute boncus',
-          date: '2023-11-15T06:52:35.278Z'
+          date: '2023-11-15T06:52:35.278Z',
         },
         {
           userEmail: 'cust@email.com',
           bookingId: 799384397,
           rating: 5,
           comment: 'absolute boncus',
-          date: '2023-11-15T06:52:35.278Z'
+          date: '2023-11-15T06:52:35.278Z',
         },
         {
           userEmail: 'cust@email.com',
           bookingId: 799384397,
           rating: 3,
           comment: 'absolute boncus',
-          date: '2023-11-15T06:52:35.278Z'
+          date: '2023-11-15T06:52:35.278Z',
         },
-      ]
+      ],
     };
 
     const result = render(<DisplayReview listing={listing} />);
@@ -47,23 +47,23 @@ describe('DisplayReview', () => {
           bookingId: 799384397,
           rating: 4,
           comment: 'absolute boncus',
-          date: '2023-11-15T06:52:35.278Z'
+          date: '2023-11-15T06:52:35.278Z',
         },
         {
           userEmail: 'cust@email.com',
           bookingId: 799384397,
           rating: 5,
           comment: 'absolute boncus',
-          date: '2023-11-15T06:52:35.278Z'
+          date: '2023-11-15T06:52:35.278Z',
         },
         {
           userEmail: 'cust@email.com',
           bookingId: 799384397,
           rating: 3,
           comment: 'absolute boncus',
-          date: '2023-11-15T06:52:35.278Z'
+          date: '2023-11-15T06:52:35.278Z',
         },
-      ]
+      ],
     };
 
     const result = render(<DisplayReview listing={listing} />);
@@ -71,7 +71,9 @@ describe('DisplayReview', () => {
     // Assert
     expect(result.getByText('Slide to view other reviews')).toBeInTheDocument();
     expect(result.container.querySelector('.carousel')).toBeInTheDocument();
-    expect(result.container.querySelector('.carousel').childElementCount).toBe(2);
+    expect(result.container.querySelector('.carousel').childElementCount).toBe(
+      2
+    );
   });
 
   // Listing has one review
@@ -83,9 +85,9 @@ describe('DisplayReview', () => {
           bookingId: 799384397,
           rating: 4,
           comment: 'absolute boncus',
-          date: '2023-11-15T06:52:35.278Z'
-        }
-      ]
+          date: '2023-11-15T06:52:35.278Z',
+        },
+      ],
     };
 
     const result = render(<DisplayReview listing={listing} />);

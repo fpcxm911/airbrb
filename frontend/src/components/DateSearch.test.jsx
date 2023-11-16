@@ -115,7 +115,7 @@ describe('DateSearch', () => {
     const setErrorMessage = jest.fn();
 
     const result = render(
-          <DateSearch setSearch={setSearch} setErrorMessage={setErrorMessage} />
+      <DateSearch setSearch={setSearch} setErrorMessage={setErrorMessage} />
     );
 
     const startTextfield = result.container.querySelector('#start_date_input');
@@ -131,7 +131,7 @@ describe('DateSearch', () => {
     const setSearch = jest.fn();
     const setErrorMessage = jest.fn();
     const result = render(
-          <DateSearch setSearch={setSearch} setErrorMessage={setErrorMessage} />
+      <DateSearch setSearch={setSearch} setErrorMessage={setErrorMessage} />
     );
 
     const startTextfield = result.container.querySelector('#start_date_input');
@@ -147,7 +147,7 @@ describe('DateSearch', () => {
     const setSearch = jest.fn();
     const setErrorMessage = jest.fn();
     const result = render(
-          <DateSearch setSearch={setSearch} setErrorMessage={setErrorMessage} />
+      <DateSearch setSearch={setSearch} setErrorMessage={setErrorMessage} />
     );
 
     const startTextfield = result.container.querySelector('#start_date_input');

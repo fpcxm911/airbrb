@@ -11,32 +11,42 @@ import { Button, Grid, TableContainer } from '@mui/material';
 import { apiCallBodyAuthen } from '../pages/Helper';
 
 export default function BookingDisplay (props) {
-  const [renderList, setRenderLst] = React.useState([])
-  const [pageNum, setPageNum] = React.useState(1)
-  const totalPage = Math.ceil(props.data.length / 5)
+  const [renderList, setRenderLst] = React.useState([]);
+  const [pageNum, setPageNum] = React.useState(1);
+  const totalPage = Math.ceil(props.data.length / 5);
   const handlePageChange = (event, newPageNumber) => {
     setPageNum(newPageNumber);
   };
 
   const handleAccept = async (bookingId) => {
-    const res = await apiCallBodyAuthen(`bookings/accept/${bookingId}`, localStorage.getItem('token'), {}, 'PUT');
+    const res = await apiCallBodyAuthen(
+      `bookings/accept/${bookingId}`,
+      localStorage.getItem('token'),
+      {},
+      'PUT'
+    );
     if (res.error) {
       props.toastError(res.error);
     } else {
       props.setBookingUpdate();
     }
-  }
+  };
   const handleDeny = async (bookingId) => {
-    const res = await apiCallBodyAuthen(`bookings/decline/${bookingId}`, localStorage.getItem('token'), {}, 'PUT');
+    const res = await apiCallBodyAuthen(
+      `bookings/decline/${bookingId}`,
+      localStorage.getItem('token'),
+      {},
+      'PUT'
+    );
     if (res.error) {
       props.toastError(res.error);
     } else {
       props.setBookingUpdate();
     }
-  }
+  };
   React.useEffect(() => {
-    const start = (pageNum - 1) * 5
-    const end = pageNum * 5
+    const start = (pageNum - 1) * 5;
+    const end = pageNum * 5;
     const currentPage = props.data.slice(start, end);
     setRenderLst(currentPage);
   }, [pageNum, props.data]);
@@ -45,37 +55,64 @@ export default function BookingDisplay (props) {
       <Title>{props.current ? 'Booking Request' : 'Booking History'}</Title>
 
       <TableContainer>
-      <Table size="large">
-        <TableHead>
-          <TableRow>
-            <TableCell>Owner Email</TableCell>
-            <TableCell>Start Date</TableCell>
-            <TableCell>End Date</TableCell>
-            <TableCell>Total Price</TableCell>
-            <TableCell>{props.current ? 'Handle Request' : 'Booking Status'}</TableCell>
-            {/* <TableCell align="right">Sale Amount</TableCell> */}
-          </TableRow>
-        </TableHead>
-        <TableBody className='renderListContainer'>
-          {renderList.map((booking, idx) => (
-            <TableRow key={idx} className='bookingRow'>
-              <TableCell>{booking.owner}</TableCell>
-              <TableCell>{format(parseISO(booking.dateRange.start), 'do MMMM yyyy')}</TableCell>
-              <TableCell>{format(parseISO(booking.dateRange.end), 'do MMMM yyyy')}</TableCell>
-              <TableCell>{`$${booking.totalPrice}`}</TableCell>
-              <TableCell>{props.current
-                ? <Grid container>
-                  <Button size='small' onClick={() => handleAccept(booking.id)} name={`accept${idx}`}>Accept</Button>
-                  <Button size='small' onClick={() => handleDeny(booking.id)} name={`deny${idx}`}>Deny</Button>
-                </Grid>
-                : `${booking.status}`}</TableCell>
+        <Table size='large'>
+          <TableHead>
+            <TableRow>
+              <TableCell>Owner Email</TableCell>
+              <TableCell>Start Date</TableCell>
+              <TableCell>End Date</TableCell>
+              <TableCell>Total Price</TableCell>
+              <TableCell>
+                {props.current ? 'Handle Request' : 'Booking Status'}
+              </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody className='renderListContainer'>
+            {renderList.map((booking, idx) => (
+              <TableRow key={idx} className='bookingRow'>
+                <TableCell>{booking.owner}</TableCell>
+                <TableCell>
+                  {format(parseISO(booking.dateRange.start), 'do MMMM yyyy')}
+                </TableCell>
+                <TableCell>
+                  {format(parseISO(booking.dateRange.end), 'do MMMM yyyy')}
+                </TableCell>
+                <TableCell>{`$${booking.totalPrice}`}</TableCell>
+                <TableCell>
+                  {props.current
+                    ? (
+                    <Grid container>
+                      <Button
+                        size='small'
+                        onClick={() => handleAccept(booking.id)}
+                        name={`accept${idx}`}
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        size='small'
+                        onClick={() => handleDeny(booking.id)}
+                        name={`deny${idx}`}
+                      >
+                        Deny
+                      </Button>
+                    </Grid>
+                      )
+                    : (
+                    `${booking.status}`
+                      )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </TableContainer>
       <Grid container justifyContent={'center'} sx={{ mt: 2 }}>
-        <Pagination count={totalPage} color="primary" onChange={handlePageChange}/>
+        <Pagination
+          count={totalPage}
+          color='primary'
+          onChange={handlePageChange}
+        />
       </Grid>
     </Grid>
   );

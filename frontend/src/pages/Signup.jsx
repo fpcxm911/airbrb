@@ -11,8 +11,12 @@ import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX, apiCallPostNoAuthen } from './Helper'
-// TODO eric use toastError
+import {
+  EMAIL_REGEX,
+  PASSWORD_REGEX,
+  USERNAME_REGEX,
+  apiCallPostNoAuthen,
+} from './Helper';
 import ErrorDialog from '../components/ErrorPopup';
 import { useContext, Context } from '../Context';
 
@@ -39,7 +43,7 @@ export default function SignUp () {
       const res = await apiCallPostNoAuthen('user/auth/register', {
         email: data.get('email'),
         password: data.get('password'),
-        name: data.get('name')
+        name: data.get('name'),
       });
       if (res.error) {
         setErrorMessage({ title: 'Error', body: res.error });
@@ -50,7 +54,7 @@ export default function SignUp () {
         setters.setToken(res.token);
         setters.setEmail(data.get('email'));
         setters.setLoggedIn(true);
-        setOpenRegister(false)
+        setOpenRegister(false);
         navigate('/');
       }
       // Handle the response from the API
@@ -59,19 +63,31 @@ export default function SignUp () {
 
   const validRegisterForm = (data) => {
     if (!EMAIL_REGEX.test(data.get('email'))) {
-      setErrorMessage({ title: 'Invalid Email', body: 'Please use a valid email address.' });
+      setErrorMessage({
+        title: 'Invalid Email',
+        body: 'Please use a valid email address.',
+      });
       setShowModal(true);
       return false;
     } else if (!USERNAME_REGEX.test(data.get('name'))) {
-      setErrorMessage({ title: 'Invalid Name', body: 'Usernames must be 3-20 characters long and can contain only letters, numbers, and underscores.' });
+      setErrorMessage({
+        title: 'Invalid Name',
+        body: 'Usernames must be 3-20 characters long and can contain only letters, numbers, and underscores.',
+      });
       setShowModal(true);
       return false;
     } else if (!PASSWORD_REGEX.test(data.get('password'))) {
-      setErrorMessage({ title: 'Invalid Password', body: 'Passwords must be at least 8 characters long and include a letter, a digit, and may contain special characters.' });
+      setErrorMessage({
+        title: 'Invalid Password',
+        body: 'Passwords must be at least 8 characters long and include a letter, a digit, and may contain special characters.',
+      });
       setShowModal(true);
       return false;
     } else if (data.get('password') !== data.get('confirm')) {
-      setErrorMessage({ title: 'Password Mismatch', body: 'Passwords do not match. Please try again.' });
+      setErrorMessage({
+        title: 'Password Mismatch',
+        body: 'Passwords do not match. Please try again.',
+      });
       setShowModal(true);
       return false;
     }
@@ -87,7 +103,7 @@ export default function SignUp () {
         PaperProps={{ sx: { borderRadius: 6 } }}
       >
         <IconButton
-          aria-label="close"
+          aria-label='close'
           onClick={goBackMain}
           sx={{
             position: 'absolute',
@@ -97,19 +113,27 @@ export default function SignUp () {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent dividers sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
+        <DialogContent
+          dividers
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component='h1' variant='h5'>
             Sign up
           </Typography>
-          <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component='form'
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -165,7 +189,7 @@ export default function SignUp () {
             </Button>
           </Box>
         </DialogContent>
-        {showModal && (<ErrorDialog close = {closeModal} content = {errorMessage} />)}
+        {showModal && <ErrorDialog close={closeModal} content={errorMessage} />}
       </Dialog>
     </React.Fragment>
   );

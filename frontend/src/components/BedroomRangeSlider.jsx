@@ -26,7 +26,12 @@ const BedroomRangeSlider = () => {
         step={1}
         className='bedroom-range-slider'
       />
-      <Input type='hidden' id='bedroomRangeHiddenInput' name='bedroomRange' value={hiddenBedroomRange} />
+      <Input
+        type='hidden'
+        id='bedroomRangeHiddenInput'
+        name='bedroomRange'
+        value={hiddenBedroomRange}
+      />
     </>
   );
 };

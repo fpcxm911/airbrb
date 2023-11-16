@@ -159,7 +159,7 @@ export default function HostedListing (props) {
                     Create new listing
                   </Button>
                   <Button variant="outlined" onClick={goBackMain}>
-                    Go back
+                    Return to main page
                   </Button>
                 </Stack>
               </Container>

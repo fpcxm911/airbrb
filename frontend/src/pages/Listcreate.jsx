@@ -101,11 +101,18 @@ export default function Listcreate (props) {
       const contents = e.target.result;
       const json = JSON.parse(contents);
       if (!validateJson(json)) {
-        toastError('Fail to create listing: invalid data structure in JSON file');
+        toastError(
+          'Fail to create listing: invalid data structure in JSON file'
+        );
         e.currentTarget.value = '';
       } else {
         const token = localStorage.getItem('token');
-        const res = await apiCallBodyAuthen('listings/new', token, json, 'POST');
+        const res = await apiCallBodyAuthen(
+          'listings/new',
+          token,
+          json,
+          'POST'
+        );
         if (res.error) {
           toastError(res.error);
         } else {
@@ -312,11 +319,7 @@ export default function Listcreate (props) {
                   startIcon={<ImageIcon />}
                 >
                   Upload Thumbnail
-                  <input
-                    type='file'
-                    hidden
-                    name='photo'
-                  />
+                  <input type='file' hidden name='photo' />
                 </Button>
               </Grid>
               <Grid item xs={12}>

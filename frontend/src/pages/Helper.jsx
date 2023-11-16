@@ -22,13 +22,16 @@ const apiCallPostNoAuthen = async (path, body) => {
 // authorize http get request
 const apiCallGetAuthen = async (path, token, queryString) => {
   try {
-    const response = await fetch(`http://localhost:5005/${path}?${queryString}`, {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `http://localhost:5005/${path}?${queryString}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return await response.json();
   } catch (error) {
     console.error('Error:', error);
@@ -55,8 +58,8 @@ const apiCallBodyAuthen = async (path, token, body, method) => {
 };
 
 const fileToDataUrl = (file) => {
-  const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg']
-  const valid = validFileTypes.find(type => type === file.type);
+  const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  const valid = validFileTypes.find((type) => type === file.type);
   // Bad data, let's walk away.
   if (!valid) {
     throw Error('provided file is not a png, jpg or jpeg image.');
@@ -71,15 +74,22 @@ const fileToDataUrl = (file) => {
   return dataUrlPromise;
 };
 
-const createMeta = (numberOfBathrooms, propertyType, bedrooms, amenities, youtubeUrl, propertyImages) => {
+const createMeta = (
+  numberOfBathrooms,
+  propertyType,
+  bedrooms,
+  amenities,
+  youtubeUrl,
+  propertyImages
+) => {
   return {
     propertyType,
     numberOfBathrooms,
     amenities,
     bedrooms,
     youtubeUrl,
-    propertyImages
-  }
+    propertyImages,
+  };
 };
 
 const createAddress = (country, city, street, postcode) => {
@@ -87,20 +97,23 @@ const createAddress = (country, city, street, postcode) => {
     country,
     city,
     street,
-    postcode
-  }
+    postcode,
+  };
 };
 
 const checkLogin = () => {
-  return localStorage.getItem('token') && localStorage.getItem('email')
+  return localStorage.getItem('token') && localStorage.getItem('email');
 };
 
 const calculateNumBeds = (listing) => {
-  return (listing.metadata.bedrooms.reduce((accumulator, bedroom) => accumulator + Number(bedroom.numberOfBeds), 0));
+  return listing.metadata.bedrooms.reduce(
+    (accumulator, bedroom) => accumulator + Number(bedroom.numberOfBeds),
+    0
+  );
 };
 
 const calculateNumBedrooms = (listing) => {
-  return (listing.metadata.bedrooms.length);
+  return listing.metadata.bedrooms.length;
 };
 
 const convertPrecision = (number) => {
@@ -108,8 +121,11 @@ const convertPrecision = (number) => {
 };
 
 const calculateAverageRating = (listing) => {
-  const sum = listing.reviews.reduce((accumulator, review) => accumulator + review.rating, 0);
-  return convertPrecision(sum / listing.reviews.length)
+  const sum = listing.reviews.reduce(
+    (accumulator, review) => accumulator + review.rating,
+    0
+  );
+  return convertPrecision(sum / listing.reviews.length);
 };
 
 /**
@@ -121,13 +137,18 @@ const calculateAverageRating = (listing) => {
 const sortListings = async (listings) => {
   // have login
   if (checkLogin()) {
-    const res = await apiCallGetAuthen('bookings', localStorage.getItem('token'));
+    const res = await apiCallGetAuthen(
+      'bookings',
+      localStorage.getItem('token')
+    );
     if (res.error) {
       console.error('Error:', res.error);
       throw res.error;
     } else {
-      const accecptPendingBookings = res.bookings.filter(x => x.status === 'accepted' || x.status === 'pending');
-      const extractedLitingsId = accecptPendingBookings.map(x => x.listingId);
+      const accecptPendingBookings = res.bookings.filter(
+        (x) => x.status === 'accepted' || x.status === 'pending'
+      );
+      const extractedLitingsId = accecptPendingBookings.map((x) => x.listingId);
       return listings.sort((a, b) => {
         const aIn = extractedLitingsId.includes(a.id);
         const bIn = extractedLitingsId.includes(b.id);
@@ -145,7 +166,7 @@ const sortListings = async (listings) => {
   } else {
     return listings.sort((a, b) => a.title.localeCompare(b.title));
   }
-}
+};
 
 export {
   EMAIL_REGEX,
@@ -161,5 +182,5 @@ export {
   calculateNumBeds,
   calculateAverageRating,
   calculateNumBedrooms,
-  sortListings
+  sortListings,
 };

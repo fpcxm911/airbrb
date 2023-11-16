@@ -3,19 +3,10 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 
-const labels = {
-  1: 'Bad',
-  2: 'Poor',
-  3: 'Ok',
-  4: 'Good',
-  5: 'Excellent',
-};
-
-function getLabelText (value) {
-  return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
-}
-
 export default function HoverRating (props) {
+  function getLabelText (value) {
+    return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
+  }
   return (
     <Box
       sx={{
@@ -25,7 +16,7 @@ export default function HoverRating (props) {
       }}
     >
       <Rating
-        name="hover-feedback"
+        name='hover-feedback'
         value={props.value}
         precision={1}
         getLabelText={getLabelText}
@@ -35,12 +26,22 @@ export default function HoverRating (props) {
         onChangeActive={(event, newHover) => {
           props.setHover(newHover);
         }}
-        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
       />
       {props.value !== null && (
-        <Box sx={{ ml: 2 }}>{labels[props.hover !== -1 ? props.hover : props.value]}</Box>
+        <Box sx={{ ml: 2 }}>
+          {labels[props.hover !== -1 ? props.hover : props.value]}
+        </Box>
       )}
-      <input type="hidden" name="rating" value={props.value} />
+      <input type='hidden' name='rating' value={props.value} />
     </Box>
   );
 }
+
+const labels = {
+  1: 'Bad',
+  2: 'Poor',
+  3: 'Ok',
+  4: 'Good',
+  5: 'Excellent',
+};

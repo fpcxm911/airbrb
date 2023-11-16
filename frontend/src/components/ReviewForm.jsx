@@ -8,11 +8,12 @@ import { Box, Button, styled, Typography, Grid } from '@mui/material';
 import { parseISO, format } from 'date-fns';
 import HoverRating from './HoverRating';
 import { apiCallBodyAuthen } from '../pages/Helper';
-const CommentTextArea = styled('textarea')({
-  resize: 'none'
-})
 
-export default function ReviewForm (props) {
+const CommentTextArea = styled('textarea')({
+  resize: 'none',
+});
+
+const ReviewForm = (props) => {
   const [option, setOption] = React.useState('');
   const [comment, setComment] = React.useState('');
   const [value, setValue] = React.useState(4);
@@ -24,15 +25,20 @@ export default function ReviewForm (props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const res = apiCallBodyAuthen(`listings/${props.listingId}/review/${option}`, localStorage.getItem('token'), {
-      review: {
-        userEmail: localStorage.getItem('email'),
-        bookingId: option,
-        rating: value,
-        comment,
-        date: new Date()
-      }
-    }, 'PUT')
+    const res = apiCallBodyAuthen(
+      `listings/${props.listingId}/review/${option}`,
+      localStorage.getItem('token'),
+      {
+        review: {
+          userEmail: localStorage.getItem('email'),
+          bookingId: option,
+          rating: value,
+          comment,
+          date: new Date(),
+        },
+      },
+      'PUT'
+    );
     if (res.error) {
       props.toastError(res.error);
     } else {
@@ -44,25 +50,27 @@ export default function ReviewForm (props) {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-      <Typography variant="h6" color="text.primary">
+    <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Typography variant='h6' color='text.primary'>
         Select your booking to review
       </Typography>
       <FormControl sx={{ my: 1 }} fullWidth>
-        <InputLabel id="bookings-option">
-          Your Bookings
-        </InputLabel>
+        <InputLabel id='bookings-option'>Your Bookings</InputLabel>
         <Select
-          labelId="bookings-option"
-          label="Your Booking"
-          id="bookings-selector"
+          labelId='bookings-option'
+          label='Your Booking'
+          id='bookings-selector'
           onChange={handleChange}
           value={option}
-          name="select"
+          name='select'
           required
         >
           {props.bookings.map((booking, index) => (
-            <MenuItem key={index} value={booking.id} disabled={booking.status !== 'accepted'}>
+            <MenuItem
+              key={index}
+              value={booking.id}
+              disabled={booking.status !== 'accepted'}
+            >
               <em>{`From ${format(
                 parseISO(booking.dateRange.start),
                 'MM/dd/yyyy'
@@ -73,23 +81,40 @@ export default function ReviewForm (props) {
             </MenuItem>
           ))}
         </Select>
-        <FormHelperText>Only accecpted booking could be reviewed</FormHelperText>
+        <FormHelperText>
+          Only accecpted booking could be reviewed
+        </FormHelperText>
       </FormControl>
       <FormControl fullWidth>
-        <Typography variant="h6" color="text.primary">
+        <Typography variant='h6' color='text.primary'>
           Give your comment
         </Typography>
-        <CommentTextArea id='comment-textarea' rows={5} sx={{ my: 1 }} name='comment' value = {comment} required onChange={(e) => setComment(e.target.value)}/>
+        <CommentTextArea
+          id='comment-textarea'
+          rows={5}
+          sx={{ my: 1 }}
+          name='comment'
+          value={comment}
+          required
+          onChange={(e) => setComment(e.target.value)}
+        />
       </FormControl>
-        <Grid item sx={{ mb: 4 }}>
-          <Typography variant="h6" color="text.primary" gutterBottom>
-            Rate your booking
-          </Typography>
-          <HoverRating value={value} setValue = {setValue} hover={hover} setHover = {setHover}/>
-        </Grid>
-      <Button type="submit" fullWidth variant="contained" name='submit'>
+      <Grid item sx={{ mb: 4 }}>
+        <Typography variant='h6' color='text.primary' gutterBottom>
+          Rate your booking
+        </Typography>
+        <HoverRating
+          value={value}
+          setValue={setValue}
+          hover={hover}
+          setHover={setHover}
+        />
+      </Grid>
+      <Button type='submit' fullWidth variant='contained' name='submit'>
         Comment
       </Button>
     </Box>
   );
-}
+};
+
+export default ReviewForm;

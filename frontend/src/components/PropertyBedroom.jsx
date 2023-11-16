@@ -1,6 +1,12 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import { Autocomplete, IconButton, Stack, TextField, DialogContentText } from '@mui/material';
+import {
+  Autocomplete,
+  IconButton,
+  Stack,
+  TextField,
+  DialogContentText,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 
@@ -90,7 +96,7 @@ const PropertyBedroom = () => {
     <>
       {bedrooms.map((bedroom, idx) => roomInputRow(bedroom, idx))}
       <DialogContentText color='error' sx={{ mb: 2 }}>
-          {errorMessage}
+        {errorMessage}
       </DialogContentText>
       <Button
         fullWidth

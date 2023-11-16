@@ -28,6 +28,6 @@ const PriceSlider = () => {
       <Input type='hidden' name='priceRange' value={hiddenPriceRange} />
     </>
   );
-}
+};
 
 export default PriceSlider;

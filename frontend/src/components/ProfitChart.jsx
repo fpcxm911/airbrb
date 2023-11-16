@@ -1,5 +1,14 @@
 import React from 'react';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from 'recharts';
 import { subDays, differenceInDays, format } from 'date-fns';
 import { apiCallGetAuthen } from '../pages/Helper';
 
@@ -15,20 +24,22 @@ const ProfitChart = (props) => {
     } else {
       const myBookings = bookingRes.bookings.filter(
         (x) =>
-          props.myListings.map(x => String(x.id)).includes(String(x.listingId)) && x.status === 'accepted'
+          props.myListings
+            .map((x) => String(x.id))
+            .includes(String(x.listingId)) && x.status === 'accepted'
       );
       setListBookings(myBookings);
     }
   }, [props.myListings]);
   const generateChart = () => {
     // Get the current date
-    const datas = []
+    const datas = [];
     const now = new Date();
-    const today = new Date(now.toISOString().split('T')[0])
+    const today = new Date(now.toISOString().split('T')[0]);
     for (let i = 0; i <= 30; i++) {
       const date = subDays(today, i);
-      const formatDate = format(date, 'MM/dd')
-      datas.push({ name: formatDate, profit: 0 })
+      const formatDate = format(date, 'MM/dd');
+      datas.push({ name: formatDate, profit: 0 });
     }
     for (const booking of listBookings) {
       const startDate = new Date(booking.dateRange.start);
@@ -47,19 +58,22 @@ const ProfitChart = (props) => {
       }
     }
     return datas;
-  }
+  };
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-    <BarChart data={generateChart()} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="profit" fill="#8884d8" />
-    </BarChart>
-  </ResponsiveContainer>
+    <ResponsiveContainer width='100%' height={400}>
+      <BarChart
+        data={generateChart()}
+        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+      >
+        <CartesianGrid strokeDasharray='3 3' />
+        <XAxis dataKey='name' />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey='profit' fill='#8884d8' />
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

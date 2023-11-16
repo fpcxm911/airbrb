@@ -29,26 +29,28 @@ const ListingCard = (props) => {
   const open = Boolean(anchorEl);
 
   const collectRatingByCategory = (category) => {
-    const categoryRatings = props.listing.reviews.filter(x => x.rating === category);
+    const categoryRatings = props.listing.reviews.filter(
+      (x) => x.rating === category
+    );
     return categoryRatings;
-  }
+  };
 
   const calculatePercentage = (ratings) => {
-    const percentage = (ratings.length / props.listing.reviews.length) * 100
+    const percentage = (ratings.length / props.listing.reviews.length) * 100;
     const convertPercentage = new Decimal(percentage);
     const convertedPercentage = convertPercentage.toFixed(1);
     return convertedPercentage;
-  }
+  };
 
   const prepareReviews = (category) => {
     setReviews(collectRatingByCategory(category));
-    setShowReview(true)
-    setReviewCategory(category)
-  }
+    setShowReview(true);
+    setReviewCategory(category);
+  };
   return (
     <>
       <CardMedia
-        component="div"
+        component='div'
         sx={{
           // 16:9
           pt: '56.25%',
@@ -57,18 +59,22 @@ const ListingCard = (props) => {
       />
       <CardContent sx={{ flexGrow: 1, ml: 1 }}>
         <Box sx={{ mb: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold' }} id={`title${props.index}`}>
+          <Typography
+            variant='h6'
+            sx={{ fontWeight: 'bold' }}
+            id={`title${props.index}`}
+          >
             {props.listing.title}
           </Typography>
         </Box>
-        <Typography variant="body2" gutterBottom id={`prop-type${props.index}`}>
+        <Typography variant='body2' gutterBottom id={`prop-type${props.index}`}>
           Property type : {props.listing.metadata.propertyType}
         </Typography>
-        <Typography variant="body2" gutterBottom id={`num-bath${props.index}`}>
+        <Typography variant='body2' gutterBottom id={`num-bath${props.index}`}>
           Number of bathrooms : {props.listing.metadata.numberOfBathrooms}
         </Typography>
 
-        <Typography variant="body2" gutterBottom id={`num-beds${props.index}`}>
+        <Typography variant='body2' gutterBottom id={`num-beds${props.index}`}>
           Number of beds : {calculateNumBeds(props.listing)}
         </Typography>
 
@@ -76,7 +82,7 @@ const ListingCard = (props) => {
           {props.listing.reviews.length === 0
             ? (
             <Box sx={{ pt: 3 }}>
-              <Typography variant="body2" gutterBottom>
+              <Typography variant='body2' gutterBottom>
                 No reviews yet
               </Typography>
             </Box>
@@ -106,17 +112,17 @@ const ListingCard = (props) => {
                     emptyIcon={
                       <StarIcon
                         sx={{ mb: 1, opacity: 0.55 }}
-                        fontSize="inherit"
+                        fontSize='inherit'
                       />
                     }
                   />
                 </Grid>
-                <Typography variant="body2" sx={{ ml: 2 }}>
+                <Typography variant='body2' sx={{ ml: 2 }}>
                   {calculateAverageRating(props.listing)}
                 </Typography>
               </Box>
               <Popover
-                id="mouse-over-popover"
+                id='mouse-over-popover'
                 sx={{
                   pointerEvents: 'none',
                 }}
@@ -144,38 +150,74 @@ const ListingCard = (props) => {
                         <StarIcon
                           style={{ opacity: 0.55 }}
                           sx={{ mb: 1 }}
-                          fontSize="inherit"
+                          fontSize='inherit'
                         />
                       }
                     />
-                    <Typography variant="subtitle" sx={{ ml: 2 }}>
+                    <Typography variant='subtitle' sx={{ ml: 2 }}>
                       {`${calculateAverageRating(props.listing)} out of 5`}
                     </Typography>
                   </Grid>
                   <Typography
-                    variant="body2"
+                    variant='body2'
                     sx={{ color: 'text.secondary', mb: 2 }}
                   >
                     {`${props.listing.reviews.length} global ratings`}
                   </Typography>
-                  <RatingCategory category={1} percentage={calculatePercentage(collectRatingByCategory(1))} prepare = {() => prepareReviews(1)} total = {collectRatingByCategory(1).length}/>
-                  <RatingCategory category={2} percentage={calculatePercentage(collectRatingByCategory(2))} prepare = {() => prepareReviews(2)} total = {collectRatingByCategory(2).length}/>
-                  <RatingCategory category={3} percentage={calculatePercentage(collectRatingByCategory(3))} prepare = {() => prepareReviews(3)} total = {collectRatingByCategory(3).length}/>
-                  <RatingCategory category={4} percentage={calculatePercentage(collectRatingByCategory(4))} prepare = {() => prepareReviews(4)} total = {collectRatingByCategory(4).length}/>
-                  <RatingCategory category={5} percentage={calculatePercentage(collectRatingByCategory(5))} prepare = {() => prepareReviews(5)} total = {collectRatingByCategory(5).length}/>
+                  <RatingCategory
+                    category={1}
+                    percentage={calculatePercentage(collectRatingByCategory(1))}
+                    prepare={() => prepareReviews(1)}
+                    total={collectRatingByCategory(1).length}
+                  />
+                  <RatingCategory
+                    category={2}
+                    percentage={calculatePercentage(collectRatingByCategory(2))}
+                    prepare={() => prepareReviews(2)}
+                    total={collectRatingByCategory(2).length}
+                  />
+                  <RatingCategory
+                    category={3}
+                    percentage={calculatePercentage(collectRatingByCategory(3))}
+                    prepare={() => prepareReviews(3)}
+                    total={collectRatingByCategory(3).length}
+                  />
+                  <RatingCategory
+                    category={4}
+                    percentage={calculatePercentage(collectRatingByCategory(4))}
+                    prepare={() => prepareReviews(4)}
+                    total={collectRatingByCategory(4).length}
+                  />
+                  <RatingCategory
+                    category={5}
+                    percentage={calculatePercentage(collectRatingByCategory(5))}
+                    prepare={() => prepareReviews(5)}
+                    total={collectRatingByCategory(5).length}
+                  />
                 </Grid>
               </Popover>
-              <Typography variant="body2" gutterBottom>
+              <Typography variant='body2' gutterBottom>
                 Number of reviews : {props.listing.reviews.length}
               </Typography>
             </>
               )}
         </Box>
-        <Typography variant="button" gutterBottom sx={{ fontWeight: 'bold' }} id={`price${props.index}`}>
+        <Typography
+          variant='button'
+          gutterBottom
+          sx={{ fontWeight: 'bold' }}
+          id={`price${props.index}`}
+        >
           Price : {props.listing.price} AUD / NIGHT
         </Typography>
       </CardContent>
-      {showReview && (<ReviewByCategory close={closeReviews} content = {reviews} category = {reviewCategory}/>)}
+      {showReview && (
+        <ReviewByCategory
+          close={closeReviews}
+          content={reviews}
+          category={reviewCategory}
+        />
+      )}
     </>
   );
 };
