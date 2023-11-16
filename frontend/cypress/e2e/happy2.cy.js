@@ -1,4 +1,4 @@
-describe("admin happy path", () => {
+describe("customer happy path", () => {
   it("should navigate to home screen successfully", () => {
     // navigate to home page
     cy.visit("localhost:3000/");
@@ -120,43 +120,6 @@ describe("admin happy path", () => {
     
   });
 
-  it("should edit a listing successfully - admin", () => {
-    cy.get('button[name="edit-list0"]').click();
-    // check url match with edit listing page
-    cy.url().should("include", "localhost:3000/hosted/edit");
-
-    cy.get('input[name="title"]').focus().clear().type("newTitle");
-
-    cy.get('input[name="prop"]').click();
-    cy.contains("li", "House").click();
-
-    cy.get("#bedNumberInput0").click();
-    cy.contains("li", "3").click();
-
-    cy.get("#roomTypeInput0").click();
-    cy.contains("li", "Private room").click();
-
-    cy.get('input[name="amen"]').click();
-    cy.contains("li", "Wifi").click();
-    cy.contains("li", "Oven").click();
-
-    cy.get('input[name="youtube"]').focus();
-
-    cy.get('input[name="thumbnail"]').selectFile("src/assets/2.jpg", {
-      force: true,
-    });
-    cy.get('button[name="submit"]').click();
-
-    // wait 1 second for fetching finished
-    cy.wait(1000)
-    // check listing basic detail, title has updated
-    cy.get('#title0').then(title => expect(title.text()).to.equal('newTitle'))
-    cy.get('#prop-type0').then(propType => expect(propType.text()).to.equal('Property type : House'))
-    cy.get('#num-bath0').then(numBath => expect(numBath.text()).to.equal('Number of bathrooms : 3'))
-    cy.get('#num-beds0').then(numBeds => expect(numBeds.text()).to.equal('Number of beds : 3'))
-    cy.get('#price0').then(price => expect(price.text()).to.equal('Price : 220 AUD / NIGHT'))
-  });
-
   it("should publish a listing successfully - admin", () => {
 
     cy.get('button[name="set-publish0"]').click();
@@ -250,7 +213,7 @@ describe("admin happy path", () => {
     cy.get('#leave-review').should("be.visible");
     cy.get('#booking-summary').should("be.visible");
     // check there is a successful booking notification
-    cy.contains('div', 'Your booking made at newTitle is successful.').should('exist');
+    cy.contains('div', 'Your booking made at randomTitle is successful.').should('exist');
   });
 
   it("should logout successfully - customer", () => {
@@ -303,25 +266,133 @@ describe("admin happy path", () => {
     cy.get('button[name="create-list"]').then(button => expect(button.text()).to.equal('Create new listing'))
   });
 
-  it("should unpublish a listing successfully - admin", () => {
+  it("should navigate to a bookings screen successfully - admin", () => {
     // check there should be one hosted listing
     cy.get("#hosted0").should("be.visible");
-    // check the listing should has been published
-    cy.get('button[name="set-publish0"]').should("not.be.exist");
-    cy.get('button[name="set-unpublish0"]').should("be.visible");
-    cy.get('button[name="set-unpublish0"]').click();
-    // check the button status after unpublish it
-    cy.get('button[name="set-publish0"]').should("be.visible");
-    cy.get('button[name="set-unpublish0"]').should("not.be.exist");
+    // check booking screen for created listing exist
+    cy.get('button[name="booking-list0"]').should("be.visible");
+    cy.get('button[name="booking-list0"]').then(button => expect(button.text()).to.equal('BOOKINGS'))
+    // navigate booking screen
+    cy.get('button[name="booking-list0"]').click();
+    // check url match with bookings page
+    cy.url().should("include", "localhost:3000/hosted/booking");
+    // check there are statistics
+    cy.get('#booked-days').should("be.visible");
+    cy.get('#booked-days').then(statistic => expect(statistic.text()).to.equal('0 Days'))
+    // should be $0 profit since the booking has not been accept
+    cy.get('#total-earning').should("be.visible");
+    cy.get('#total-earning').then(statistic => expect(statistic.text()).to.equal('$0'))
+
+    cy.get('#published-days').should("be.visible");
+    cy.get('#published-days').then(statistic => expect(statistic.text()).to.equal('0 Days'))
+
+    // check booking screen for created listing exist
+    cy.get('button[name="accept0"]').should("be.visible");
+    cy.get('button[name="accept0"]').then(button => expect(button.text()).to.equal('Accept'))
+
+    cy.get('button[name="deny0"]').should("be.visible");
+    cy.get('button[name="deny0"]').then(button => expect(button.text()).to.equal('Deny'))
+
+    
+  });
+
+  it("should accepted bookings screen successfully - admin", () => {
+
+    // check booking screen for created listing exist
+    cy.get('button[name="accept0"]').click();
+    // check there is no pending bookings
+    cy.get('button[name="accept0"]').should("not.be.exist");
+    cy.get('button[name="deny0"]').should("not.be.exist");
+    // check the total profit has been updated
+    cy.get('#total-earning').then(statistic => expect(statistic.text()).to.equal('$660'));
   });
 
   it("should logout successfully - admin", () => {
     cy.get('button[name="logout-btn"]').click();
+    // check has been logout, there should be a button to redirect to home page
     cy.get("#redirect").should("be.visible");
+    // click redirect button and check url match home page
     cy.get("#redirect").click();
-    // check url go back to home page
     cy.url().should("include", "localhost:3000/");
-    // check there is no published listing
-    cy.get("#listing0").should("not.be.exist");
+    // check login and signup button exist, and logout button does not exist
+    cy.get('button[name="register-btn"]').should("be.visible");
+    cy.get('button[name="login-btn"]').should("be.visible");
+    cy.get('button[name="logout-btn"]').should("not.be.exist");
+    // check there is a published listing
+    cy.get("#listing0").should("be.visible");
+  });
+
+  it("should navigate to login screen successfully", () => {
+    cy.get('button[name="login-btn"]').click();
+    // check url match with login page
+    cy.url().should("include", "localhost:3000/login");
+    cy.get('h1').then(h1 => expect(h1.text()).to.equal('Welcome Back'))
+  });
+
+  it("should login customer successfully", () => {
+    // login with first user again
+    cy.get('input[name="email"]').focus().type("randomEmail2@email.com");
+    cy.get('input[name="password"]').focus().type("randomPassword123");
+    cy.get('button[name="login"]').click();
+    // check url match with home page
+    cy.url().should("include", "localhost:3000/");
+    // check buttons
+    cy.get('button[name="register-btn"]').should("not.be.exist");
+    cy.get('button[name="login-btn"]').should("not.be.exist");
+    cy.get('button[name="logout-btn"]').should("be.visible");
+    cy.get('a[name="hosted-link"]').should("be.visible");
+    cy.get('a[name="all-listings-link"]').should("be.visible");
+  });
+
+  it("should view listing detail successfully - customer", () => {
+    // check there is a published listing
+    cy.get("#listing0").should("be.visible");
+
+    cy.get("#listing0").click();
+    // check url match with listing detail page
+    cy.url().should("include", "localhost:3000/listing");
+    // check logout button, hosted listings button, all listings button still exist
+    cy.get('button[name="logout-btn"]').should("be.visible");
+    cy.get('a[name="hosted-link"]').should("be.visible");
+    cy.get('a[name="all-listings-link"]').should("be.visible");
+    // check no leave review and booking summary yet
+    cy.get('#leave-review').should("be.visible");
+    cy.get('#booking-summary').should("be.visible");
+    // check no reviews yet
+    cy.get('#no-reviews-text').should("be.visible");
+    cy.get('#no-reviews-text').then(content => expect(content.text()).to.equal('No rating and reviews yet'))
+    cy.get('#reviews-display').should("not.be.exist");
+    
+  });
+
+  it("should leave a review successfully - customer", () => {
+    cy.get('#bookings-selector').click();
+    cy.contains("li", "From 12/20/2023 To 12/23/2023").click();
+    cy.get('#comment-textarea').focus().type("This is the best booking I have made so far !");
+    cy.get('input[name="hover-feedback"]:eq(5)').click( {
+      force: true,
+    });
+    cy.get('button[name="submit"]').click();
+    // check there is new reviews
+    cy.get('#no-reviews-text').should("not.be.exist");
+    cy.get('#reviews-display').should("be.visible");
+    
+  });
+
+  it("should logout successfully - customer", () => {
+    cy.get('button[name="logout-btn"]').click();
+    // check url still match listing detail page
+    cy.url().should("include", "localhost:3000/listing");
+    // check booking summary and leave review not exist after logout
+    cy.get('#leave-review').should("not.be.exist");
+    cy.get('#booking-summary').should("not.be.exist");
+    // check reviews still display
+    cy.get('#reviews-display').should("be.visible");
+    // check no booking button after logout
+    cy.get('button[name="booking"]').should("not.be.exist");
+    // check register buttons, login button visible, logout button disappear
+    cy.get('button[name="register-btn"]').should("be.visible");
+    cy.get('button[name="login-btn"]').should("be.visible");
+    cy.get('button[name="logout-btn"]').should("not.be.exist");
   });
 });
