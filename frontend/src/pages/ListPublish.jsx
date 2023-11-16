@@ -24,76 +24,90 @@ const ListPublish = (props) => {
   const handleSubmit = async (event) => {
     setErrorMessage('');
     event.preventDefault();
-    const datesRangeStrArr = JSON.parse(new FormData(event.currentTarget).get('dates'));
+    const datesRangeStrArr = JSON.parse(
+      new FormData(event.currentTarget).get('dates')
+    );
     const availability = createAvailbilityArray(datesRangeStrArr);
     const token = localStorage.getItem('token');
     const listingid = props.listingid;
-    const res = await apiCallBodyAuthen(`listings/publish/${listingid}`, token, { availability }, 'PUT');
+    const res = await apiCallBodyAuthen(
+      `listings/publish/${listingid}`,
+      token,
+      { availability },
+      'PUT'
+    );
     if (res.error) {
-      setErrorMessage(res.error)
+      setErrorMessage(res.error);
     } else {
       props.update();
       props.close();
     }
-  }
+  };
 
   const createAvailbilityArray = (datesStrArr) => {
     return sortDates(datesStrArr);
-  }
+  };
 
   const sortDates = (datesStrArr) => {
     const dates = [];
     datesStrArr.forEach((str) => {
       dates.push({
         start: new Date(str.start),
-        end: new Date(str.end)
-      })
+        end: new Date(str.end),
+      });
     });
     dates.sort((a, b) => a.start - b.start);
-    return (dates.map(dateObj => ({
+    return dates.map((dateObj) => ({
       start: dateObj.start.toISOString(),
-      end: dateObj.end.toISOString()
-    })));
-  }
+      end: dateObj.end.toISOString(),
+    }));
+  };
 
   return (
     <>
       <React.Fragment>
         <Dialog
-        onClose={props.close}
-        open
-        PaperProps={{ sx: { borderRadius: 6 } }}
+          onClose={props.close}
+          open
+          PaperProps={{ sx: { borderRadius: 6 } }}
         >
-        <IconButton
-          aria-label="close"
-          onClick={props.close}
-          size='small'
-          sx={{
-            position: 'absolute',
-            right: 7,
-            top: 7,
-          }}
-        >
+          <IconButton
+            aria-label='close'
+            onClick={props.close}
+            size='small'
+            sx={{
+              position: 'absolute',
+              right: 7,
+              top: 7,
+            }}
+          >
             <CloseIcon />
-        </IconButton>
-          <DialogContent dividers sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            ml: 1.5,
-            mr: 1.5,
-          }}>
+          </IconButton>
+          <DialogContent
+            dividers
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              ml: 1.5,
+              mr: 1.5,
+            }}
+          >
             <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
               <TodayOutlinedIcon />
             </Avatar>
             <Typography component='h1' variant='h5'>
               Publish your Listing
             </Typography>
-            <Box component='form' onSubmit={handleSubmit} sx={{ pt: 2, overflowY: 'auto' }}>
+            <Box
+              component='form'
+              onSubmit={handleSubmit}
+              sx={{ pt: 2, overflowY: 'auto' }}
+            >
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <AvailabilityRange setSubmit={setSubmitClickable}/>
+                  <AvailabilityRange setSubmit={setSubmitClickable} />
                 </Grid>
               </Grid>
               <Button
@@ -108,14 +122,13 @@ const ListPublish = (props) => {
               </Button>
             </Box>
             <DialogContentText color='error' sx={{ mb: 2 }}>
-                {errorMessage}
+              {errorMessage}
             </DialogContentText>
           </DialogContent>
         </Dialog>
       </React.Fragment>
     </>
-
   );
-}
+};
 
 export default ListPublish;

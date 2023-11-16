@@ -6,12 +6,17 @@ const NoPermission = () => {
 
   const handleClick = () => {
     navigate('/');
-  }
+  };
   return (
     <div>
       <p>You do not have permission to visit this page.</p>
-      <p>If you are not redirected, please click the button below which redirected to the homepage.</p>
-      <button onClick={handleClick} id='redirect'>Go to Home</button>
+      <p>
+        If you are not redirected, please click the button below which
+        redirected to the homepage.
+      </p>
+      <button onClick={handleClick} id='redirect'>
+        Go to Home
+      </button>
     </div>
   );
 };

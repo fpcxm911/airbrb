@@ -17,7 +17,6 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const SearchBar = (props) => {
   const [searchOption, setSearchOption] = React.useState('titleLocation');
-  // const [errorMessage, setErrorMessage] = React.useState('');
   const [clickable, setClickable] = React.useState(true);
 
   React.useEffect(() => {
@@ -26,14 +25,14 @@ const SearchBar = (props) => {
 
   const toastWarning = (msg) => {
     toast.warning(msg);
-  }
+  };
   const toastError = (msg) => {
     toast.error(msg);
-  }
+  };
 
   const handleSelectChange = (event) => {
     setSearchOption(event.target.value);
-  }
+  };
 
   const handleSearchSubmit = async (e) => {
     props.setNumberOfNights(null);
@@ -42,7 +41,6 @@ const SearchBar = (props) => {
     const res = await apiCallGetAuthen('listings');
     if (res.error) {
       toastError(res.error);
-      // setErrorMessage({ title: 'Error', body: res.error });
       console.error(res.error);
       return;
     }
@@ -51,35 +49,49 @@ const SearchBar = (props) => {
       const detailRes = await apiCallGetAuthen(`listings/${listing.id}`);
       if (detailRes.error) {
         toastError(detailRes.error);
-        // setErrorMessage({ title: 'Error', body: detailRes.error });
         return;
       }
       const collectListingData = detailRes.listing;
       collectListingData.id = listing.id;
       listingsDetail.push(collectListingData);
     }
-    const newList = await sortListings(listingsDetail.filter(x => x.published));
+    const newList = await sortListings(
+      listingsDetail.filter((x) => x.published)
+    );
     if (newList.error) {
       toastError(newList.error);
-      // setErrorMessage({ title: 'Error', body: newList.error });
       return;
     }
     let searchInput;
     let filteredList;
     switch (searchOption) {
       case 'titleLocation':
-        searchInput = data.get('title').toLowerCase().split(' ').filter(str => str !== '');
+        searchInput = data
+          .get('title')
+          .toLowerCase()
+          .split(' ')
+          .filter((str) => str !== '');
         filteredList = newList.filter((listing) => {
           const lowercaseTitle = listing.title.toLowerCase();
-          const lowercaseAddress = Object.entries(listing.address).map(([key, value]) => value).join(' ').toLowerCase();
-          return searchInput.some(keyword => lowercaseTitle.includes(keyword) || lowercaseAddress.includes(keyword));
+          const lowercaseAddress = Object.entries(listing.address)
+            .map(([key, value]) => value)
+            .join(' ')
+            .toLowerCase();
+          return searchInput.some(
+            (keyword) =>
+              lowercaseTitle.includes(keyword) ||
+              lowercaseAddress.includes(keyword)
+          );
         });
         props.update(filteredList);
         break;
       case 'bedrooms':
         searchInput = data.get('bedroomRange').split('-');
         filteredList = newList.filter((listing) => {
-          return listing.metadata.bedrooms.length >= Number(searchInput[0]) && listing.metadata.bedrooms.length <= Number(searchInput[1]);
+          return (
+            listing.metadata.bedrooms.length >= Number(searchInput[0]) &&
+            listing.metadata.bedrooms.length <= Number(searchInput[1])
+          );
         });
         props.update(filteredList);
         break;
@@ -89,23 +101,31 @@ const SearchBar = (props) => {
           for (const range of listing.availability) {
             const rangeStart = new Date(range.start);
             const rangeEnd = new Date(range.end);
-            if (new Date(searchInput.start) >= rangeStart && new Date(searchInput.end) <= rangeEnd) {
+            if (
+              new Date(searchInput.start) >= rangeStart &&
+              new Date(searchInput.end) <= rangeEnd
+            ) {
               return true;
             }
           }
           return false;
         });
-        console.log('cust stay for number of nights');
-        console.log(differenceInDays(new Date(searchInput.end), new Date(searchInput.start)));
-        console.log(typeof (differenceInDays(new Date(searchInput.end), new Date(searchInput.start))));
-        props.setNumberOfNights(differenceInDays(new Date(searchInput.end), new Date(searchInput.start)));
+        props.setNumberOfNights(
+          differenceInDays(
+            new Date(searchInput.end),
+            new Date(searchInput.start)
+          )
+        );
         props.update(filteredList);
         break;
       case 'price':
         searchInput = data.get('priceRange').split('-');
         filteredList = newList.filter((listing) => {
-          return Number(listing.price) >= Number(searchInput[0]) && Number(listing.price) <= Number(searchInput[1]);
-        })
+          return (
+            Number(listing.price) >= Number(searchInput[0]) &&
+            Number(listing.price) <= Number(searchInput[1])
+          );
+        });
         props.update(filteredList);
         break;
       default:
@@ -113,42 +133,48 @@ const SearchBar = (props) => {
         props.update(filteredList);
         break;
     }
-  }
+  };
 
   return (
     <>
       <Paper
-        component="form"
-        sx={{ p: '2px 6px', display: 'flex', alignItems: 'center', height: 95, minWidth: 395 }}
+        component='form'
+        sx={{
+          p: '2px 6px',
+          display: 'flex',
+          alignItems: 'center',
+          height: 95,
+          minWidth: 395,
+        }}
         onSubmit={handleSearchSubmit}
       >
-        {/* <IconButton sx={{ p: '10px' }} aria-label="menu">
-          <MenuIcon />
-        </IconButton> */}
         <Grid
           container
           spacing={1}
           wrap='nowrap'
           alignItems={'center'}
-          justifyContent={'center'}>
+          justifyContent={'center'}
+        >
           <Grid item xs={5} sx={{ alignItems: 'center' }}>
             <FormControl fullWidth>
               <InputLabel id='search-option-label'>Search Option</InputLabel>
               <Select
                 required
                 labelId='search-option-label'
-                label="Package Type"
+                label='Package Type'
                 id='search-option-select'
                 key='search-option-select'
                 value={searchOption}
                 onChange={handleSelectChange}
-                divider={<Divider orientation="vertical" flexItem />}
+                divider={<Divider orientation='vertical' flexItem />}
                 sx={{ width: 145, disableUnderline: true }}
               >
                 {optionsArray.map((option) => {
                   return (
-                    <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
-                  )
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
@@ -160,24 +186,27 @@ const SearchBar = (props) => {
                 type='text'
                 name='title'
                 sx={{ ml: 1, flex: 1 }}
-                placeholder="Search Listings"
+                placeholder='Search Listings'
                 variant='standard'
                 InputProps={{ disableUnderline: true }}
               />
             )}
-            {searchOption === 'bedrooms' && (
-              <BedroomRangeSlider />
-            )}
-            {/* // TODO eric search bar width gets too big when date range option is selected */}
+            {searchOption === 'bedrooms' && <BedroomRangeSlider />}
             {searchOption === 'date' && (
-              <DateSearch setSearch={setClickable} setErrorMessage={toastWarning} />
+              <DateSearch
+                setSearch={setClickable}
+                setErrorMessage={toastWarning}
+              />
             )}
-            {searchOption === 'price' && (
-              <PriceSlider />
-            )}
+            {searchOption === 'price' && <PriceSlider />}
           </Grid>
           <Grid item xs={1} sx={{ alignItems: 'center', pr: 2 }}>
-            <IconButton type="submit" aria-label="search" disabled={!clickable} sx={{ p: 0 }}>
+            <IconButton
+              type='submit'
+              aria-label='search'
+              disabled={!clickable}
+              sx={{ p: 0 }}
+            >
               <SearchIcon />
             </IconButton>
           </Grid>
@@ -185,17 +214,19 @@ const SearchBar = (props) => {
       </Paper>
       <ToastContainer
         position='top-center'
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar={false}
         closeOnClick
+        pauseOnFocusLoss={false}
+        limit={2}
       />
     </>
   );
-}
+};
 const optionsArray = [
   { value: 'titleLocation', label: 'Title location' },
   { value: 'bedrooms', label: 'Bedrooms' },
   { value: 'date', label: 'Date' },
-  { value: 'price', label: 'Price/night' }
-]
+  { value: 'price', label: 'Price/night' },
+];
 export default SearchBar;

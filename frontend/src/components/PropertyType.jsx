@@ -7,7 +7,9 @@ export default function PropertyType () {
     <Autocomplete
       disablePortal
       options={propertyOptions}
-      renderInput={(params) => <TextField {...params} label="Property type" name='prop' required/>}
+      renderInput={(params) => (
+        <TextField {...params} label='Property type' name='prop' required />
+      )}
     />
   );
 }
@@ -15,5 +17,5 @@ export default function PropertyType () {
 const propertyOptions = [
   { label: 'House' },
   { label: 'Apartment' },
-  { label: 'Loft', },
+  { label: 'Loft' },
 ];

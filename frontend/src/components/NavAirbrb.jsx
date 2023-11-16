@@ -17,14 +17,17 @@ import { useNavigate } from 'react-router-dom';
 import { apiCallBodyAuthen, checkLogin } from '../pages/Helper';
 import { useContext, Context } from '../Context';
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 export default function NavAirbrb () {
   const { setters } = useContext(Context);
   const handleLogout = async () => {
-    const res = await apiCallBodyAuthen('user/auth/logout', localStorage.getItem('token'), {}, 'POST');
+    const res = await apiCallBodyAuthen(
+      'user/auth/logout',
+      localStorage.getItem('token'),
+      {},
+      'POST'
+    );
     if (res.error) {
-      console.log(res.error);
+      console.error(res.error);
     } else {
       // clear token in local storage and props
       localStorage.clear();
@@ -43,59 +46,75 @@ export default function NavAirbrb () {
       />
       <CssBaseline />
       <AppBar
-        position="static"
-        color="default"
+        position='static'
+        color='default'
         elevation={0}
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+          <Typography variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
             AirBrb
           </Typography>
-          {checkLogin() && <nav>
-            <Link
-              variant="button"
-              name='hosted-link'
-              color="text.primary"
-              sx={{ my: 1, mx: 1.5, cursor: 'pointer' }}
+          {checkLogin() && (
+            <nav>
+              <Link
+                variant='button'
+                name='hosted-link'
+                color='text.primary'
+                sx={{ my: 1, mx: 1.5, cursor: 'pointer' }}
+                onClick={() => {
+                  navigate('/hosted');
+                }}
+              >
+                Hosted listings
+              </Link>
+              <Link
+                variant='button'
+                name='all-listings-link'
+                color='text.primary'
+                sx={{ my: 1, mx: 1.5, cursor: 'pointer' }}
+                onClick={() => {
+                  navigate('/');
+                }}
+              >
+                All listings
+              </Link>
+            </nav>
+          )}
+          {!checkLogin() && (
+            <Button
+              name='register-btn'
+              variant='outlined'
+              sx={{ my: 1, mx: 1.5 }}
               onClick={() => {
-                navigate('/hosted');
+                navigate('/register');
               }}
             >
-              Hosted listings
-            </Link>
-            <Link
-              variant="button"
-              name='all-listings-link'
-              color="text.primary"
-              sx={{ my: 1, mx: 1.5, cursor: 'pointer' }}
+              Register
+            </Button>
+          )}
+          {!checkLogin() && (
+            <Button
+              name='login-btn'
+              variant='contained'
+              sx={{ my: 1, mx: 1.5 }}
               onClick={() => {
-                navigate('/');
+                navigate('/login');
               }}
             >
-              All listings
-            </Link>
-          </nav>}
-          {!checkLogin() &&
-          <Button name= 'register-btn' variant="outlined" sx={{ my: 1, mx: 1.5 }} onClick={() => {
-            navigate('/register');
-          }}>
-            Register
-          </Button>
-          }
-          {!checkLogin() &&
-          <Button name= 'login-btn' variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={() => {
-            navigate('/login');
-          }}>
-            Login
-          </Button>
-          }
-          {checkLogin() &&
-          <Button name= 'logout-btn' variant="contained" sx={{ my: 1, mx: 1.5 }} onClick={handleLogout}>
-            Logout
-          </Button>
-          }
-
+              Login
+            </Button>
+          )}
+          {checkLogin() && (
+            <Button
+              name='logout-btn'
+              variant='contained'
+              sx={{ my: 1, mx: 1.5 }}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </div>

@@ -10,18 +10,16 @@ export default function ErrorDialog (props) {
   return (
     <React.Fragment>
       <Dialog
-        maxWidth = {'xs'}
+        maxWidth={'xs'}
         open
         onClose={props.close}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id="alert-dialog-title">
-          {props.content.title}
-        </DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{props.content.title}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-          {props.content.body}
+          <DialogContentText id='alert-dialog-description'>
+            {props.content.body}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -91,7 +91,6 @@ export default function Listcreate (props) {
 
   const handleJsonCreate = async (e) => {
     e.preventDefault();
-    console.log('receiving json file');
     const file = e.target.files[0];
     if (!e.target.files[0].name.endsWith('.json')) {
       toastError('Please upload only JSON file');
@@ -102,12 +101,18 @@ export default function Listcreate (props) {
       const contents = e.target.result;
       const json = JSON.parse(contents);
       if (!validateJson(json)) {
-        toastError('Fail to create listing: invalid data structure in JSON file');
+        toastError(
+          'Fail to create listing: invalid data structure in JSON file'
+        );
         e.currentTarget.value = '';
       } else {
-        console.log(json);
         const token = localStorage.getItem('token');
-        const res = await apiCallBodyAuthen('listings/new', token, json, 'POST');
+        const res = await apiCallBodyAuthen(
+          'listings/new',
+          token,
+          json,
+          'POST'
+        );
         if (res.error) {
           toastError(res.error);
         } else {
@@ -314,11 +319,7 @@ export default function Listcreate (props) {
                   startIcon={<ImageIcon />}
                 >
                   Upload Thumbnail
-                  <input
-                    type='file'
-                    hidden
-                    name='photo'
-                  />
+                  <input type='file' hidden name='photo' />
                 </Button>
               </Grid>
               <Grid item xs={12}>
@@ -355,9 +356,10 @@ export default function Listcreate (props) {
       </Dialog>
       <ToastContainer
         position='top-center'
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar={false}
         closeOnClick
+        pauseOnFocusLoss={false}
       />
     </React.Fragment>
   );

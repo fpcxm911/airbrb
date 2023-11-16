@@ -111,9 +111,6 @@ export default function HostedListing (props) {
     }
   }, [props.listingsUpdate]);
 
-  // console.log(getters.loggedIn);
-  // console.log(getters.token);
-  // console.log(getters.email);
   return (
     <>
       {getters.loggedIn
@@ -162,7 +159,7 @@ export default function HostedListing (props) {
                     Create new listing
                   </Button>
                   <Button variant="outlined" onClick={goBackMain}>
-                    Go back
+                    Return to main page
                   </Button>
                 </Stack>
               </Container>
@@ -173,7 +170,7 @@ export default function HostedListing (props) {
                 <Typography variant="h5" color="text.primary" paragraph>
                   Your last 30 days profits
                 </Typography>
-                <ProfitChart myListings={HostedLists} />
+                <ProfitChart myListings={HostedLists} toastError={toastError}/>
               </Box>
               <Grid container spacing={4}>
                 {HostedLists.map((listing, index) => (
@@ -254,9 +251,10 @@ export default function HostedListing (props) {
           {/* End footer */}
           <ToastContainer
             position='top-center'
-            autoClose={5000}
+            autoClose={4000}
             hideProgressBar={false}
             closeOnClick
+            pauseOnFocusLoss={false}
           />
           {showCreate && (
             <Listcreate close={closeCreate} update={props.update} />

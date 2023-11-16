@@ -5,15 +5,15 @@ import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
+const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
 export default function PropertyAmenities () {
   const [selectedAmenities, setSelectedAmenities] = React.useState([]);
   const [hiddenInputValue, setHiddenInputValue] = React.useState([]);
 
   React.useEffect(() => {
-    setHiddenInputValue((selectedAmenities.join(',')));
+    setHiddenInputValue(selectedAmenities.join(','));
   }, [selectedAmenities]);
 
   const handleAmenitiesChange = (event, values) => {
@@ -40,10 +40,15 @@ export default function PropertyAmenities () {
           </li>
         )}
         renderInput={(params) => (
-          <TextField {...params} label="Amenities (Optional)" name='amen' placeholder="Optional" />
+          <TextField
+            {...params}
+            label='Amenities (Optional)'
+            name='amen'
+            placeholder='Optional'
+          />
         )}
       />
-      <input type="hidden" name="amenities" value={hiddenInputValue} />
+      <input type='hidden' name='amenities' value={hiddenInputValue} />
     </>
   );
 }

@@ -8,9 +8,7 @@ import { Box, Grid, Rating } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import defaultImage from '../assets/man.png';
 import { parseISO, format } from 'date-fns';
-
 import Avatar from '@mui/material/Avatar';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 
 export default function ReviewByCategory (props) {
@@ -22,9 +20,9 @@ export default function ReviewByCategory (props) {
         PaperProps={{ sx: { borderRadius: 6 } }}
       >
         <IconButton
-          aria-label="close"
+          aria-label='close'
           onClick={props.close}
-          size="small"
+          size='small'
           sx={{
             position: 'absolute',
             right: 7,
@@ -47,22 +45,25 @@ export default function ReviewByCategory (props) {
           <Avatar sx={{ m: 1, bgcolor: '#00a3fa' }}>
             <RateReviewIcon />
           </Avatar>
-          <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
+          <Typography component='h1' variant='h5' sx={{ mb: 2 }}>
             {props.content.length
               ? `All ${props.category} rating reviews`
               : `There is no ${props.category} rating reviews yet`}
           </Typography>
           <Box sx={{ overflowY: 'auto' }}>
             {props.content.map((item, i) => (
-              <Box key={i} sx={{ mb: 5, '&:hover': { backgroundColor: '#eee' } }}>
+              <Box
+                key={i}
+                sx={{ mb: 5, '&:hover': { backgroundColor: '#eee' } }}
+              >
                 <Grid container alignItems={'center'} sx={{ mb: 1 }}>
                   <Avatar
-                    alt="Remy Sharp"
+                    alt='Remy Sharp'
                     src={defaultImage}
                     sx={{ width: 56, height: 56 }}
                   />
                   <Typography
-                    variant="body2"
+                    variant='body2'
                     color={'text.primary'}
                     sx={{ ml: 2 }}
                   >
@@ -78,19 +79,19 @@ export default function ReviewByCategory (props) {
                       emptyIcon={
                         <StarIcon
                           style={{ opacity: 0.55 }}
-                          fontSize="inherit"
+                          fontSize='inherit'
                         />
                       }
                     />
-                    <Typography variant="body2" sx={{ ml: 2 }}>
+                    <Typography variant='body2' sx={{ ml: 2 }}>
                       {' '}
                       {format(parseISO(item.date), 'do MMMM yyyy')}
                     </Typography>
                   </Grid>
                   <Typography
-                    variant="body2"
+                    variant='body2'
                     sx={{
-                      mt: 1
+                      mt: 1,
                     }}
                   >
                     {item.comment}

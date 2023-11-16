@@ -3,7 +3,7 @@ import Icon from '@mdi/react';
 import { Grid, Typography } from '@mui/material';
 import { mdiAlertCircleOutline } from '@mdi/js';
 
-const NoResult = () => {
+export default function NoResult () {
   return (
     <>
       <Grid
@@ -24,6 +24,4 @@ const NoResult = () => {
       </Grid>
     </>
   );
-};
-
-export default NoResult;
+}

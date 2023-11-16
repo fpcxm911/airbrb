@@ -19,30 +19,42 @@ const DateSearch = (props) => {
     const newDates = { ...dates };
     newDates.start = value;
     setDates(newDates);
-  }
+  };
   const handleEndDateChange = (value) => {
     const newDates = { ...dates };
     newDates.end = value;
     setDates(newDates);
-  }
+  };
 
   const checkDates = (item) => {
     if (item.start === '' || item.end === '') {
       return true;
+    }
+    if (
+      new Date(item.start) < new Date(new Date().toISOString().split('T')[0])
+    ) {
+      setErrorMessage('Start date must be today or in the future');
+      return false;
     }
     if (new Date(item.start) >= new Date(item.end)) {
       setErrorMessage('Start date must precede end date');
       return false;
     }
     return true;
-  }
+  };
 
   return (
     <>
-      <Grid container spacing={0.95} alignContent={'center'} justifyContent={'center'}>
+      <Grid
+        container
+        spacing={0.95}
+        alignContent={'center'}
+        justifyContent={'center'}
+      >
         <Grid item xs={12} sx={{ alignItems: 'center' }}>
           <TextField
             required
+            id='start_date_input'
             size='small'
             type='date'
             InputLabelProps={{ shrink: true }}
@@ -54,6 +66,7 @@ const DateSearch = (props) => {
         <Grid item xs={12} sx={{ alignItems: 'center' }}>
           <TextField
             required
+            id='end_date_input'
             size='small'
             type='date'
             InputLabelProps={{ shrink: true }}
@@ -63,9 +76,14 @@ const DateSearch = (props) => {
           />
         </Grid>
       </Grid>
-      <input type='hidden' name='dates' value={hiddenInput} />
+      <input
+        type='hidden'
+        name='dates'
+        id='search_dates_input'
+        value={hiddenInput}
+      />
     </>
-  )
-}
+  );
+};
 
 export default DateSearch;

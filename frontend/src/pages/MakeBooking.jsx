@@ -18,11 +18,6 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const ListingBooking = (props) => {
   const { getters } = useContext(Context);
-  // const [errorMessage, setErrorMessage] = React.useState({
-  //   title: '',
-  //   body: '',
-  // });
-  // const [showErrorModal, setShowErrorModal] = React.useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = React.useState(false);
   const [confirmMessage, setConfirmMessage] = React.useState('');
   const [submitClickable, setSubmitClickable] = React.useState(false);
@@ -61,13 +56,13 @@ const ListingBooking = (props) => {
   };
 
   const handleConfirm = async () => {
-    const totalPrice = (Math.abs(new Date(checkinISO) - new Date(checkoutISO)) /
+    const totalPrice =
+      (Math.abs(new Date(checkinISO) - new Date(checkoutISO)) /
         1000 /
         60 /
         60 /
         24) *
-        props.price;
-    console.log(typeof props.listingid);
+      props.price;
     const res = await apiCallBodyAuthen(
       `bookings/new/${props.listingid}`,
       getters.token,
@@ -138,7 +133,6 @@ const ListingBooking = (props) => {
                   availability={props.listingDetail.availability}
                 />
               </Grid>
-              {/* // TODO eric bouns for showing availability slots for user */}
             </Grid>
             <Button
               type='submit'
@@ -160,18 +154,13 @@ const ListingBooking = (props) => {
             title={'Confirmation'}
           />
         )}
-        {/* {showErrorModal && (
-          <ErrorDialog
-            close={() => setShowErrorModal(false)}
-            content={errorMessage}
-          />
-        )} */}
       </Dialog>
       <ToastContainer
         position='top-center'
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar={false}
         closeOnClick
+        pauseOnFocusLoss={false}
       />
     </React.Fragment>
   );

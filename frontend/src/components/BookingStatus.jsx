@@ -27,11 +27,11 @@ export default function BookingStatus (props) {
 
   return (
     <Grid width={'100%'}>
-      <Typography component="h2" variant="h6" gutterBottom>
+      <Typography component='h2' variant='h6' gutterBottom>
         Your Booking Summary
       </Typography>
       <TableContainer>
-        <Table size="large">
+        <Table size='large'>
           <TableHead>
             <TableRow>
               <TableCell>Owner Email</TableCell>
@@ -61,7 +61,7 @@ export default function BookingStatus (props) {
       <Grid container justifyContent={'center'} sx={{ mt: 2 }}>
         <Pagination
           count={totalPage}
-          color="primary"
+          color='primary'
           onChange={handlePageChange}
         />
       </Grid>

@@ -9,21 +9,22 @@ export default function Statistic ({ title, content, icon, sx, ...other }) {
     <Card
       component={Stack}
       spacing={3}
-      direction="row"
+      direction='row'
       sx={{
         px: 3,
         py: 5,
         borderRadius: 2,
         ...sx,
       }}
-
     >
       {icon && <Box sx={{ width: 64, height: 64 }}>{icon}</Box>}
 
       <Stack spacing={0.5}>
-        <Typography variant="h5" {...other} >{content}</Typography>
+        <Typography variant='h5' {...other}>
+          {content}
+        </Typography>
 
-        <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
+        <Typography variant='subtitle2' sx={{ color: 'text.disabled' }}>
           {title}
         </Typography>
       </Stack>

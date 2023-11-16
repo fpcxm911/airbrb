@@ -59,7 +59,6 @@ export default function Dashboard () {
   }
 
   const daysFromNow = (startTime) => {
-    console.log(startTime);
     const currentDate = new Date();
     const startDate = new Date(startTime);
     return differenceInDays(currentDate, startDate);
@@ -84,7 +83,6 @@ export default function Dashboard () {
   };
 
   const bookingHistories = (bookings) => {
-    console.log(params.id);
     const histories = bookings.filter(
       (x) => x.listingId === params.id && x.status !== 'pending'
     );
@@ -126,7 +124,6 @@ export default function Dashboard () {
     }
   }, []);
 
-  console.log(getters.loggedIn);
   return (
     <>
       {getters.loggedIn
@@ -145,7 +142,6 @@ export default function Dashboard () {
             <Toolbar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
               <Grid container spacing={3}>
-                {/* Chart */}
                 <Grid item xs={12} md={4} >
                     <Statistic
                         title={`${currentYear()} Booked Days`}
@@ -221,9 +217,10 @@ export default function Dashboard () {
           </Box>
           <ToastContainer
             position='top-center'
-            autoClose={5000}
+            autoClose={4000}
             hideProgressBar={false}
             closeOnClick
+            pauseOnFocusLoss={false}
           />
         </Box>
           )

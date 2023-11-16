@@ -34,12 +34,20 @@ const Pagelist = () => {
   return (
     <Context.Provider value={{ getters, setters }}>
       <Routes>
-        <Route path="/" element={<Home numberOfNights= {numberOfNights} setNumberOfNights = {setNumberOfNights}/>}>
-          <Route path="register" element={<SignUp />} />
-          <Route path="login" element={<Login />} />
+        <Route
+          path='/'
+          element={
+            <Home
+              numberOfNights={numberOfNights}
+              setNumberOfNights={setNumberOfNights}
+            />
+          }
+        >
+          <Route path='register' element={<SignUp />} />
+          <Route path='login' element={<Login />} />
         </Route>
         <Route
-          path="/hosted"
+          path='/hosted'
           element={
             <HostedListing
               listingsUpdate={listingsUpdate}
@@ -48,12 +56,15 @@ const Pagelist = () => {
           }
         >
           <Route
-            path="edit/:id"
+            path='edit/:id'
             element={<EditListing update={updateListing} />}
           />
         </Route>
-        <Route path="listing/:id" element={<ListingDetail numberOfNights = {numberOfNights}/>} />
-        <Route path="hosted/booking/:id" element={<Dashboard />} />
+        <Route
+          path='listing/:id'
+          element={<ListingDetail numberOfNights={numberOfNights} />}
+        />
+        <Route path='hosted/booking/:id' element={<Dashboard />} />
       </Routes>
     </Context.Provider>
   );

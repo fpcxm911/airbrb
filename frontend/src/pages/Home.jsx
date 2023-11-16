@@ -12,7 +12,11 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { calculateAverageRating } from '../pages/Helper';
 import Icon from '@mdi/react';
-import { mdiSortAlphabeticalAscending, mdiSortNumericAscending, mdiSortNumericDescending } from '@mdi/js';
+import {
+  mdiSortAlphabeticalAscending,
+  mdiSortNumericAscending,
+  mdiSortNumericDescending,
+} from '@mdi/js';
 import NoResult from '../components/NoResult';
 import Spinner from '../components/Spinner';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,7 +31,7 @@ const Home = (props) => {
 
   const toastError = (msg) => {
     toast.error(msg);
-  }
+  };
 
   const navigate = useNavigate();
   // fetch localstorage to context state prevent lossing data by refreshing
@@ -44,40 +48,43 @@ const Home = (props) => {
   const handleReset = () => {
     setSortOption('title');
     setReset(reset + 1);
-  }
+  };
   const sortListings = async (listings) => {
     // have login
     if (getters.loggedIn) {
-      const res = await apiCallGetAuthen('bookings', localStorage.getItem('token'));
+      const res = await apiCallGetAuthen(
+        'bookings',
+        localStorage.getItem('token')
+      );
       if (res.error) {
         toastError(res.error);
       } else {
-        const accecptPendingBookings = res.bookings.filter(x => (x.status === 'accepted' || x.status === 'pending') && x.owner === localStorage.getItem('email'));
-        const extractedLitingsId = accecptPendingBookings.map(x => x.listingId);
-        console.log(extractedLitingsId);
+        const accecptPendingBookings = res.bookings.filter(
+          (x) =>
+            (x.status === 'accepted' || x.status === 'pending') &&
+            x.owner === localStorage.getItem('email')
+        );
+        const extractedLitingsId = accecptPendingBookings.map(
+          (x) => x.listingId
+        );
         return listings.sort((a, b) => {
           const aIn = extractedLitingsId.includes(String(a.id));
           const bIn = extractedLitingsId.includes(String(b.id));
           if (aIn && !bIn) {
-            console.log('123');
             return -1;
           } else if (!aIn && bIn) {
-            console.log('456');
             return 1;
           } else if (aIn && bIn) {
-            console.log('789');
             return a.title.localeCompare(b.title);
           } else {
-            console.log('haha');
             return a.title.localeCompare(b.title);
           }
         });
       }
     } else {
-      console.log('noway');
       return listings.sort((a, b) => a.title.localeCompare(b.title));
     }
-  }
+  };
 
   // first load of home page
   React.useEffect(async () => {
@@ -85,18 +92,20 @@ const Home = (props) => {
     if (res.error) {
       toastError(res.error);
     } else {
-      const myListingsDetail = []
+      const myListingsDetail = [];
       for (const listing of res.listings) {
         const deatailRes = await apiCallGetAuthen(`listings/${listing.id}`);
         if (deatailRes.error) {
           toastError(deatailRes.error);
         } else {
           const collectListingData = deatailRes.listing;
-          collectListingData.id = listing.id
-          myListingsDetail.push(collectListingData)
+          collectListingData.id = listing.id;
+          myListingsDetail.push(collectListingData);
         }
       }
-      const newList = await sortListings(myListingsDetail.filter(x => x.published));
+      const newList = await sortListings(
+        myListingsDetail.filter((x) => x.published)
+      );
       setpublishedListings(newList);
     }
   }, [getters.loggedIn, reset]);
@@ -108,14 +117,18 @@ const Home = (props) => {
     switch (sortOption) {
       case 'ascending':
         unsortedListings.forEach((listing) => {
-          listing.averageRating = isNaN(calculateAverageRating(listing)) ? 999 : calculateAverageRating(listing);
+          listing.averageRating = isNaN(calculateAverageRating(listing))
+            ? 999
+            : calculateAverageRating(listing);
         });
         unsortedListings.sort((a, b) => a.averageRating - b.averageRating);
         setpublishedListings(unsortedListings);
         break;
       case 'descending':
         unsortedListings.forEach((listing) => {
-          listing.averageRating = isNaN(calculateAverageRating(listing)) ? -1 : calculateAverageRating(listing);
+          listing.averageRating = isNaN(calculateAverageRating(listing))
+            ? -1
+            : calculateAverageRating(listing);
         });
         unsortedListings.sort((a, b) => b.averageRating - a.averageRating);
         setpublishedListings(unsortedListings);
@@ -132,7 +145,9 @@ const Home = (props) => {
             myListingsDetail.push(collectListingData);
           }
         }
-        setpublishedListings(await sortListings(myListingsDetail.filter(x => x.published)));
+        setpublishedListings(
+          await sortListings(myListingsDetail.filter((x) => x.published))
+        );
         break;
     }
   }, [sortOption]);
@@ -155,54 +170,70 @@ const Home = (props) => {
       }
     }, 500);
     return () => clearTimeout(timeout);
-  }, [publishedListings])
+  }, [publishedListings]);
 
   const setNextOption = () => {
     const curIndex = optionList.indexOf(sortOption);
     const nextIndex = (curIndex + 1) % optionList.length;
     setSortOption(optionList[nextIndex]);
-  }
+  };
 
   return (
     <div>
-      <NavAirbrb/>
+      <NavAirbrb />
       <Grid container justifyContent={'center'} sx={{ mt: 4, mb: 3 }}>
-          <SearchBar update={setpublishedListings} setNumberOfNights={props.setNumberOfNights}/>
+        <SearchBar
+          update={setpublishedListings}
+          setNumberOfNights={props.setNumberOfNights}
+        />
       </Grid>
       <main>
-      <Box sx={{ py: 3, mx: { xs: 4, md: 10 } }} >
-        <Tooltip title={`Sort by: ${sortOption}`} placement="top">
-          <Button
-            variant="contained"
-            onClick={setNextOption}
-            sx={{ mb: 2, borderRadius: 8, mr: 2 }}
+        <Box sx={{ py: 3, mx: { xs: 4, md: 10 } }}>
+          <Tooltip title={`Sort by: ${sortOption}`} placement='top'>
+            <Button
+              variant='contained'
+              onClick={setNextOption}
+              sx={{ mb: 2, borderRadius: 8, mr: 2 }}
             >
-            Sorting by &nbsp;
-            { sortOption === optionList[0] && <Icon path={mdiSortAlphabeticalAscending} size={1} />}
-            { sortOption === optionList[1] && <Icon path={mdiSortNumericAscending} size={1} />}
-            { sortOption === optionList[2] && <Icon path={mdiSortNumericDescending} size={1} />}
-          </Button>
-        </Tooltip>
-        <Button
-          variant="contained"
-          onClick={handleReset}
-          sx={{ mb: 2, borderRadius: 8 }}
+              Sorting by &nbsp;
+              {sortOption === optionList[0] && (
+                <Icon path={mdiSortAlphabeticalAscending} size={1} />
+              )}
+              {sortOption === optionList[1] && (
+                <Icon path={mdiSortNumericAscending} size={1} />
+              )}
+              {sortOption === optionList[2] && (
+                <Icon path={mdiSortNumericDescending} size={1} />
+              )}
+            </Button>
+          </Tooltip>
+          <Button
+            variant='contained'
+            onClick={handleReset}
+            sx={{ mb: 2, borderRadius: 8 }}
           >
-          Reset
-        </Button>
+            Reset
+          </Button>
           {spinner && <Spinner />}
-          {/* End hero unit */}
           <Grid container spacing={4}>
             {publishedListings.map((listing, index) => (
-              <Grid item key={listing.owner + index} xs={12} sm={6} md={4} >
+              <Grid item key={listing.owner + index} xs={12} sm={6} md={4}>
                 <Card
                   id={`listing${index}`}
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    cursor: 'pointer',
+                  }}
                   onClick={() => navigate(`/listing/${listing.id}`)}
                 >
-                  <ListingCard listing = {listing} hotedPage = {false} index={index}/>
-                  <CardActions>
-                  </CardActions>
+                  <ListingCard
+                    listing={listing}
+                    hotedPage={false}
+                    index={index}
+                  />
+                  <CardActions></CardActions>
                 </Card>
               </Grid>
             ))}
@@ -212,14 +243,15 @@ const Home = (props) => {
       </main>
       <ToastContainer
         position='top-center'
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar={false}
         closeOnClick
+        pauseOnFocusLoss={false}
       />
       <Outlet />
     </div>
   );
-}
+};
 
 const optionList = ['title', 'ascending', 'descending'];
 
