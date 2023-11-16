@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
-import ListingCard from './ListingCard';
+import ListingCard from '../components/ListingCard';
 
 describe('ListingCard', () => {
   it('should render the listing card with no reviews', () => {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import BookingDisplay from './BookingDisplay';
+import BookingDisplay from '../components/BookingDisplay';
 
 describe('BookingDisplay', () => {
   it('should render a table with the correct columns', () => {

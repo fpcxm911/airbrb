@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import DateSearch from './DateSearch';
+import DateSearch from '../components/DateSearch';
 
 describe('DateSearch', () => {
   it('should render two date input fields with labels', () => {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import AvailabilityRange from './AvailabilityRange';
+import AvailabilityRange from '../components/AvailabilityRange';
 
 describe('AvailabilityRange', () => {
   it('should render a single date input row when props.singleRange is true', () => {
