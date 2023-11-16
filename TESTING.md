@@ -6,7 +6,7 @@
 ## UI Testing Approach
 For bookingReview UI testing, we aim to test booking system, and leaving review in our app
 
-*Note: The detail section contains more steps than main steps since there are more page transition and validation details*
+***Note: The detail section contains more steps than main steps since there are more page transition and validation details***
 ### Main Steps
 1. Registers admin successfully
 2. Admin creates a new listing successfully
