@@ -15,10 +15,15 @@ import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import { useContext, Context } from '../Context';
 
 const Login = () => {
+  // get context states setter
   const { setters } = useContext(Context);
+  // usetate to decide whether the login modal should open or not
   const [open, setOpen] = React.useState(true);
+  // usetate to store user email
   const [email, setEmail] = React.useState('');
+  // usetate to store user password
   const [password, setPassword] = React.useState('');
+  // usetate to record error message
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const navigate = useNavigate();
@@ -29,6 +34,7 @@ const Login = () => {
     navigate('/');
   };
 
+  // handle login submit event
   const handleLoginForm = async (e) => {
     e.preventDefault();
     if (validLoginInput()) {
@@ -39,8 +45,10 @@ const Login = () => {
       if (res.error) {
         setErrorMessage(res.error);
       } else {
+        // set token and email to localstorage
         localStorage.setItem('token', res.token);
         localStorage.setItem('email', email);
+        // set context state
         setters.setToken(res.token);
         setters.setEmail(email);
         setters.setLoggedIn(true);
@@ -50,6 +58,7 @@ const Login = () => {
     }
   };
 
+  // validate the login details
   const validLoginInput = () => {
     if (!EMAIL_REGEX.test(email)) {
       setErrorMessage('Enter a valid email.');

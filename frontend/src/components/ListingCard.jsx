@@ -12,22 +12,33 @@ import Decimal from 'decimal.js';
 import ReviewByCategory from './ReviewByCategory';
 
 const ListingCard = (props) => {
+  // usestate to record the position of hovering rating
   const [anchorEl, setAnchorEl] = React.useState(null);
+  // usestate to decide whether or not opening the review modal
   const [showReview, setShowReview] = React.useState(false);
+  // usestate to record the reviews should be present in review modal
   const [reviews, setReviews] = React.useState([]);
+  // usestate to record the rating category for present reviews in review modal
   const [reviewCategory, setReviewCategory] = React.useState([]);
+
+  // close review modal
   const closeReviews = () => {
     setShowReview(false);
   };
+
+  // hovering rating
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  // stop hovering rating
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
   const popoverAnchor = React.useRef(null);
   const open = Boolean(anchorEl);
 
+  // collect reviews by rating category (1-5 star)
   const collectRatingByCategory = (category) => {
     const categoryRatings = props.listing.reviews.filter(
       (x) => x.rating === category
@@ -35,6 +46,7 @@ const ListingCard = (props) => {
     return categoryRatings;
   };
 
+  // calculate the percentage current rating reviews in all reviews
   const calculatePercentage = (ratings) => {
     const percentage = (ratings.length / props.listing.reviews.length) * 100;
     const convertPercentage = new Decimal(percentage);
@@ -42,6 +54,7 @@ const ListingCard = (props) => {
     return convertedPercentage;
   };
 
+  // prepare to display ratings with given category in reivew modal
   const prepareReviews = (category) => {
     setReviews(collectRatingByCategory(category));
     setShowReview(true);

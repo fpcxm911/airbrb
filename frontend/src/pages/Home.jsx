@@ -22,18 +22,25 @@ import Spinner from '../components/Spinner';
 import { ToastContainer, toast } from 'react-toastify';
 
 const Home = (props) => {
+  // get context states setter and getter
   const { getters, setters } = useContext(Context);
+  // usestate to record published listing
   const [publishedListings, setpublishedListings] = React.useState([]);
+  // usestate to record current sort option
   const [sortOption, setSortOption] = React.useState('title');
+  // usestate to record when should reset sorting
   const [reset, setReset] = React.useState(0);
+  // usestate to record whether no result or not
   const [noResult, setNoResult] = React.useState(false);
   const [spinner, setSpinner] = React.useState(false);
 
+  // error display
   const toastError = (msg) => {
     toast.error(msg);
   };
 
   const navigate = useNavigate();
+
   // fetch localstorage to context state prevent lossing data by refreshing
   React.useEffect(() => {
     const email = localStorage.getItem('email');
@@ -45,10 +52,14 @@ const Home = (props) => {
     }
     props.setNumberOfNights(null);
   }, [reset]);
+
+  // handle reset sorting when user click reset
   const handleReset = () => {
     setSortOption('title');
     setReset(reset + 1);
   };
+
+  // sort listings
   const sortListings = async (listings) => {
     // have login
     if (getters.loggedIn) {
@@ -59,6 +70,7 @@ const Home = (props) => {
       if (res.error) {
         toastError(res.error);
       } else {
+        // find all current user's bookings
         const accecptPendingBookings = res.bookings.filter(
           (x) =>
             (x.status === 'accepted' || x.status === 'pending') &&
@@ -67,26 +79,32 @@ const Home = (props) => {
         const extractedLitingsId = accecptPendingBookings.map(
           (x) => x.listingId
         );
+        // sort listings
         return listings.sort((a, b) => {
           const aIn = extractedLitingsId.includes(String(a.id));
           const bIn = extractedLitingsId.includes(String(b.id));
+          // if one of the listing contains current user's accepted / pending booking but another does not, the one contains sort before
           if (aIn && !bIn) {
             return -1;
           } else if (!aIn && bIn) {
             return 1;
+          // if two listing both contains current user's accepted / pending booking, sort by title
           } else if (aIn && bIn) {
             return a.title.localeCompare(b.title);
+          // if two listing both do not contains current user's accepted / pending booking, sort by title
           } else {
             return a.title.localeCompare(b.title);
           }
         });
       }
+    // not login
     } else {
+      // sort by title
       return listings.sort((a, b) => a.title.localeCompare(b.title));
     }
   };
 
-  // first load of home page
+  // fetch listings with detail once user login status change or user click reset button
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings');
     if (res.error) {

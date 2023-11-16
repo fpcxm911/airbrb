@@ -11,10 +11,15 @@ import defaultImage from '../assets/man.png';
 import FullReview from './FullReview';
 
 export default function DisplayReview (props) {
+  // create a copied listings and reverse it so that lastest review become first element
   const copiedReviews = [...props.listing.reviews];
   const reversedReviews = copiedReviews.reverse();
+  // create usestate to record current review in Carousel
+  // create usestate to decide whether should open the full content review modal
   const [fullReview, setShowFullReview] = React.useState(false);
   const [reviewTarget, setReviewTarget] = React.useState(null);
+
+  // onclick handle if user click full content review button
   const handleOnclick = (item) => {
     setShowFullReview(true);
     setReviewTarget(item);

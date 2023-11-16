@@ -11,7 +11,9 @@ import { apiCallBodyAuthen, checkLogin } from '../pages/Helper';
 import { useContext, Context } from '../Context';
 
 export default function NavAirbrb () {
+  // get context state setter
   const { setters } = useContext(Context);
+  // handle logout if user click logout button
   const handleLogout = async () => {
     const res = await apiCallBodyAuthen(
       'user/auth/logout',
@@ -22,7 +24,7 @@ export default function NavAirbrb () {
     if (res.error) {
       console.error(res.error);
     } else {
-      // clear token in local storage and props
+      // clear localstorage, set context state to initial value
       localStorage.clear();
       setters.setToken(null);
       setters.setEmail(null);

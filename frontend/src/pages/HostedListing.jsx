@@ -22,11 +22,16 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const buttonFontSize = 12;
 export default function HostedListing (props) {
+  // get context states setter and getter
   const { getters, setters } = useContext(Context);
+  // usestate to record current user's hosted listing
   const [HostedLists, setHostedLists] = React.useState([]);
+  // usestate to decide whether should open listing create modal
   const [showCreate, setShowCreate] = React.useState(false);
+  // usestate to decide whether should open listing publish modal
   const [showPublish, setShowPublish] = React.useState([false, '']);
 
+  // fetch localstorage to context state prevent lossing data by refreshing
   React.useEffect(() => {
     const email = localStorage.getItem('email');
     const token = localStorage.getItem('token');
@@ -38,19 +43,26 @@ export default function HostedListing (props) {
   }, []);
 
   const navigate = useNavigate();
+
+  // error display
   const toastError = (msg) => toast.error(msg);
 
+  // navigate to home page
   const goBackMain = () => {
     navigate('/');
   };
+
+  // close listing create modal
   const closeCreate = () => {
     setShowCreate(false);
   };
 
+  // close listing publish modal
   const closePublish = () => {
     setShowPublish(false);
   };
 
+  // delete a hosted listing
   const deleteListing = async (listing) => {
     const res = await apiCallBodyAuthen(
       `listings/${listing.id}`,
@@ -61,11 +73,14 @@ export default function HostedListing (props) {
     if (res.error) {
       toastError(res.error);
     } else {
+      // update on the page by filter the element with deleted listing Id
       const newListings = HostedLists.filter((x) => x.id !== listing.id);
+      // update hosted listing usestate
       setHostedLists(newListings);
     }
   };
 
+  // unpublish a hosted listing
   const unpublishListing = async (listing) => {
     const res = await apiCallBodyAuthen(
       `listings/unpublish/${listing.id}`,
@@ -86,6 +101,7 @@ export default function HostedListing (props) {
     }
   };
 
+  // fetech listings once there is a update indicator
   React.useEffect(async () => {
     const res = await apiCallGetAuthen('listings');
     if (res.error) {

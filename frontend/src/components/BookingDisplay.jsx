@@ -11,13 +11,17 @@ import { Button, Grid, TableContainer } from '@mui/material';
 import { apiCallBodyAuthen } from '../pages/Helper';
 
 export default function BookingDisplay (props) {
+  // create usestate to record current page bookings for rendering and record the current page number
   const [renderList, setRenderLst] = React.useState([]);
   const [pageNum, setPageNum] = React.useState(1);
+  // calculate total page number base on all bookings, one page present 5 bookings
   const totalPage = Math.ceil(props.data.length / 5);
+  // update pagenumber after user click the pagination
   const handlePageChange = (event, newPageNumber) => {
     setPageNum(newPageNumber);
   };
 
+  // accpet booking
   const handleAccept = async (bookingId) => {
     const res = await apiCallBodyAuthen(
       `bookings/accept/${bookingId}`,
@@ -28,9 +32,12 @@ export default function BookingDisplay (props) {
     if (res.error) {
       props.toastError(res.error);
     } else {
+      // update state variable to responsive update the page after accept booking
       props.setBookingUpdate();
     }
   };
+
+  // deny booking
   const handleDeny = async (bookingId) => {
     const res = await apiCallBodyAuthen(
       `bookings/decline/${bookingId}`,
@@ -41,9 +48,12 @@ export default function BookingDisplay (props) {
     if (res.error) {
       props.toastError(res.error);
     } else {
+      // update state variable to responsive update the page after accept booking
       props.setBookingUpdate();
     }
   };
+
+  // set bookings to be rendered base on page number
   React.useEffect(() => {
     const start = (pageNum - 1) * 5;
     const end = pageNum * 5;
