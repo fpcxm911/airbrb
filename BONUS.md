@@ -1,65 +1,92 @@
-2.1. Feature Set 1. Admin Auth
+### 2.1. Feature Set 1. Admin Auth
 
-1. We provide form validation in register page to prevent user register our account with some invalid and unsafe info.
-(Usernames must be 3-20 characters long and can contain only letters, numbers, and underscores)
-(Passwords must be at least 8 characters long and include a letter, a digit, and may contain special characters)
-(also using regular expression check if email address user provide is valid email or not)
+1. additional validation is added to register page:
+    - Using regular expression to ensure email address is valid
+    - Username must be 3-20 characters long and can contain only letters, numbers, and underscores
+    - Password must be at least 8 characters long and include a letter, a digit, and may contain special characters
 
-2. We provide a nav bark with login and register button if user has not logged in, once user logged in , login and register button will not exist, but instead the hosted listings page button, all listings page button and logout button exist, this increase Usability & Accessibility and user experience so that user will not confused about their login status.
+2. A navigation bar is shown on all pages, and the nav bar renders according to user's authorization status:
+    - for unauthorized user, login and register buttons are provided.
+    - for login authorized user, hosted listings page button, all listings page button and logout button are provided.
 
-2.2. Feature Set 2. Creating & Editing & Publishing a Hosted Listing
+### 2.2. Feature Set 2. Creating & Editing & Publishing a Hosted Listing
 
-1. We provide Return to main page button which navigate to home page, it has same effect with all listings page button in navbar, but since it in the middle of the page, which could be more convenient.
+1. A 'Return to main page' button is provided at the centre of the page, which is convenient for user to interact.
 
-2. Conditional rendering Number of total reviews && SVG rating of the listing, if listing has no reviews yet, there should display a text indicate no reviews, otherwise show rating && number of reviews.
+2. Conditionally rendering the reviews & SVG ratings of the listing:
+    - if listing has no reviews, a text is displayed indicating that.
+    - Otherwise rating & No. of reviews are displayed
 
-3. For listing create, we provide a list of common property type to users select, which makes user provide more realistic and reliable infomation about their listing, similarly for amenities, we provide a list of common amenitities so that user will not provide some wired options in their amenitities.
+3. For listing create
+    - property types: a designated selection list is provided, guiding user to provide reliable infomation about the listing.
+    - amenities: a predefined list of common options is provided
+    - bedroom property:
+        - a default 'bedroom' input row is provided, which contains number of beds and bedroom type input fields. 
+        - provide add button to add more bedrooms
+        - provide delete buttons which allows user to delete certain bedroom input.
+        - form validation ensures at least one bedrooms input is needed to make the listing valid.
 
-4. For listing create, there is one default bedrooms section which contains number of beds and bedroom type, there is a button which let user add more bedrooms if they want, they are also delete button which let user delete the bedroom they want to delete before submit, but there should be at least one bedrooms info given.
+5. For listing publish:
+    - one row of availability range input field is provided by default
+    - validation to prevent availability date ranges overlap
+    - validation to ensure at least one availability date range provided
 
-5. For listing publishing, there is one default start and end date input to let user enter, we use default form validation with required attribute to check user has to enter dates before submit
+6. Listing create, edit, and delete are live responsive. User could see page updating without refreshing the page.
 
-6. Listing create, edit, delete are live responsive, user couold observe page change without refreshing the page.
+### 2.3. Feature Set 3. Landing Page: Listings and Search
 
-2.3. Feature Set 3. Landing Page: Listings and Search
+1. A reset button is provided, which allows user to clear the search result and go back to initial state of the listing page without refreshing
 
-1. Providing a reset button which let user reset their filtered listings with any order to default listing and default listing order. This increase Usability & Accessibility and user experience so that user could go back where they start without refresh the page if they did not search listings they want.
+2. Conditionally rendering Number of total reviews & SVG rating
+    - if listing has no reviews yet, a text is diplayed indicating no reviews
+    - otherwise, ratings & number of reviews are shown.
 
-2. Similar to hosted page, conditional rendering Number of total reviews && SVG rating of the listing, if listing has no reviews yet, there should display a text indicate no reviews, otherwise show rating && number of reviews.
+3. For listing showing, following additional info is shown to provide better UX
+    - Property Type
+    - Number of beds (not bedrooms)
+    - Number of bathrooms
+    - SVG rating of the listing (based on user ratings)
+    - Price (per night).
 
-3. For listing, we not only provide Title, Thumbnail of property , Number of total reviews, we also provide Property Type, Number of beds (not bedrooms), Number of bathrooms, SVG rating of the listing (based on user ratings), Price (per night).
+### 2.4. Feature Set 4. Viewing and Booking Listings 
 
-2.4. Feature Set 4. Viewing and Booking Listings 
+1. Use carousel to display listing's images with autoplay, which improves user experience
 
-1. Use carousel to display listing's images with autoplay, increase Usability & Accessibility and user experience.
+2. Conditionally rendering Number of total reviews && SVG rating of the listing, 
+    - if listing has no reviews yet, a text displayed indicating no reviews
+    - otherwise show reiews details using carousel.
 
-2. Conditional rendering Number of total reviews && SVG rating of the listing, if listing has no reviews yet, there should display a text indicate no reviews, otherwise show reiews using carousel.
+3. Only show at most 3 lines of long comments by default, a button is provided to read full review in a modal.
 
-3. Only show no more than 3 lines of the comments, but provide a button to let user read full content review in a modal, increase Usability & Accessibility and user experience.
+4. Conditionally render 'leave review' and 'bookings summary' sections
+    - if user is not logged in, these sections do not rendered
+    - if user do not have any bookings with the listing, these sections do not rendered.
 
-4. Conditional rendering leaving review and bookings summary , if user not loggin, they do not rendered, if user do not have any bookings, they do not rendered.
+5. Conditionally render 'book listing' button, if user do not login, the booking button does not render.
 
-5. Conditional rendering book listing button, if user do not login, it does not exist.
+6. when user makes a booking:
+    - submit button is disabled until user entered the valid dates, prompting user to provide accurate information
+    - input fields validates onChange, ensureing check-in date is in the future, and check-in date precedes check-out date
 
-6. When user book listing, submit button is disabled until user entered the dates, increase Usability & Accessibility and user experience.
+7. when user posts a review:
+    - a dropdown list is provided to select a booking they want to review for.
+    - pending and denied booking are disable in the dropdown list, ensuring user only posts review for valid accepted booking.
 
-7. When user leave review, give them a dropdown to select the bookings they want to review for, also disabled options if booking status is not accepted.
+### 2.5. Feature Set 5. Removing a Listing, Managing Booking Requests
 
-2.5. Feature Set 5. Removing a Listing, Managing Booking Requests
+1. Split bookings into two sections: history bookings and pending bookings. This provides a intuitive UI for host to mange booking requests.
 
-1. Split bookings to history bookings and pending bookings, user will not know where they are looking for when they use app, increase Usability & Accessibility and user experience.
+2. After accepting / denying a pending booking, page automatially updates (newly managed booking goes to booking summary section), so user could immediately see the bookings has been handled.
 
-2. After accept / denied a pending booking, page will automatially update (booking goes to booking summary section) so user will immediately see the bookings has been handled.
+### 2.6. Feature Set 6. Advanced Features 
 
-2.6. Feature Set 6. Advanced Features 
-
-1. On hover of star rating we also show the total number of reviews.
-
-2. On hover of star rating we have a progress bar to indicate the percentage of the specific rating reviews in all reviews.
+1. On hover of star ratings
+    - the total number of reviews is shown
+    - a progress bar is shown to indicate the percentage of the specific rating among all reviews.
 
 
-Addition:
+### Additional feature:
 
-1. On hosted page, hosted-bookings page, after user logout, they will navigate the no permission page, which has a redirect button could redirect them to home page.
+1. If user tries to access the authorized page by URL without login, no permission page will render and a button is given, which navigates un-authorized user to landing page.
 
-2. If user try to access our authorized page by url without login, no permission page will render.
+2. On hosted page, and manage-bookings page, after user logout, they will be navigated to 'no permission' page, which has a redirect button which redirects them to landing home page.

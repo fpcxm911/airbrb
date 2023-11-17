@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import BedroomRangeSlider from './BedroomRangeSlider';
+import BedroomRangeSlider from '../components/BedroomRangeSlider';
 
 describe('BedroomRangeSlider', () => {
   it('should render slider with 2 sliders, input field and default values', () => {

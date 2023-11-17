@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { render } from '@testing-library/react';
-import DisplayReview from './DisplayReview';
+import DisplayReview from '../components/DisplayReview';
 
 describe('DisplayReview', () => {
   // Renders the average rating of the listing
